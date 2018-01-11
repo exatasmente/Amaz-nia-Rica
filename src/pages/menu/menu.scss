@@ -1,0 +1,25 @@
+.menuHeader{
+    height: 150px;
+    background-color: #72b817;
+    position: center;
+    
+    img{
+        border-radius: 50%;
+    }
+    .label-md{
+        color: #bff304;
+    }
+    p{
+        color: #bff304;
+    }
+    ion-item{
+        padding-top: 20px;
+        
+    }
+}
+.menuHeaderSpacer{
+    height: 10px;
+    background-color: #bff304;
+    padding-bottom: 10px;
+}
+

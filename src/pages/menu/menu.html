@@ -1,0 +1,32 @@
+<ion-menu [content]="content">
+  <ion-content>
+    <div class="menuHeader">
+      <ion-item color="amazonia">
+          <ion-thumbnail item-left>
+            <img src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
+          </ion-thumbnail>
+          <span>
+          <h1>Bem Vindo(a)</h1>
+          </span>
+          <p>Toque Para Acessar</p>
+        </ion-item>
+      </div>
+      <div class="menuHeaderSpacer"></div>
+    <ion-list>
+      <ion-item text-wrap>
+        <ion-icon name="home" item-left color="amazonia" large></ion-icon>
+        <h2> Inicio </h2>
+      </ion-item>
+      
+    </ion-list>
+    <div style="margin-left: 40%;margin-top:100%;">
+        <ion-note>
+          V 0.0.0.0.1
+        </ion-note>
+  
+    </div>  
+  </ion-content>
+  
+</ion-menu>
+
+<ion-nav [root]="homePage" #content ></ion-nav>
