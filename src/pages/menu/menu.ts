@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
+import { ModalController } from 'ionic-angular/components/modal/modal-controller';
+import { CartPage } from '../cart/cart';
 
 @Component({
   selector: 'page-menu',
@@ -10,12 +12,15 @@ import { HomePage } from '../home/home';
 export class MenuPage {
   homePage : any
   
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public modalCrtl : ModalController , public navCtrl: NavController, public navParams: NavParams) {
     this.homePage = HomePage;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MenuPage');
-  }
+    openHomePage(){
+      this.navCtrl.setRoot(HomePage);
 
+    }
+    openCartPage(){
+      this.navCtrl.push(CartPage);
+    }
 }

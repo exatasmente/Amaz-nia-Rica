@@ -13,11 +13,14 @@
       </div>
       <div class="menuHeaderSpacer"></div>
     <ion-list>
-      <ion-item text-wrap>
+      <ion-item text-wrap menuClose="" (click)="openHomePage">
         <ion-icon name="home" item-left color="amazonia" large></ion-icon>
         <h2> Inicio </h2>
       </ion-item>
-      
+      <ion-item text-wrap menuClose="" (click)="openCartPage()">
+          <ion-icon name="cart" item-left color="amazonia" large></ion-icon>
+          <h2> Carrinho </h2>
+        </ion-item>
     </ion-list>
     <div style="margin-left: 40%;margin-top:100%;">
         <ion-note>

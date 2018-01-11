@@ -70,6 +70,7 @@ export class HomePage {
     }
   }
   loadMoreProducts(event){
+    console.log("carrega Mais")
     if(event == null){
       this.page = 2;
       this.moreProducts = [];
@@ -78,16 +79,16 @@ export class HomePage {
     }
     
     this.WooCommerce.getAsync("products?page="+this.page).then ( (data)=>{
-      console.log(JSON.parse(data.body));
+      console.log(JSON.parse(data.body).products);
       this.moreProducts = this.moreProducts.concat(JSON.parse(data.body).products);
       if(event != null){
-        //event.complete();
+        event.complete();
         
         if(JSON.parse(data.body).products.length < 10){
           event.enable(false);
           this.toastCtrl.create({
             message:"Sem mais Produtos",
-            duration:5000}).present();
+            duration:2000}).present();
         }
       }
 
