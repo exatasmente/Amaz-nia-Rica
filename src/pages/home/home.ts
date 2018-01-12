@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 
-import * as WC from 'woocommerce-api';
+
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { ProductDetailsPage } from '../product-details/product-details';
 import { ProductsbyCategoryPage } from '../productsby-category/productsby-category';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { CartPage } from '../cart/cart';
+import { WooProvider } from '../../providers/woo/woo';
 
 
 
@@ -26,13 +27,8 @@ export class HomePage {
   
   
   WooCommerce : any;
-  constructor(public navCtrl: NavController, public loadingCrtl: LoadingController, public toastCtrl : ToastController, public modalCtrl : ModalController ) {
-    this.WooCommerce = WC({
-      url:"http://amazoniaricaapi.000webhostapp.com/",
-      consumerKey:"ck_e5127b8d77116b6a7b28bad8fc4134a2bf09348d",
-      consumerSecret:"cs_760cc16a471d6e39c556b5ad4e718dd2c698d16a",
-      
-    });
+  constructor(public WC : WooProvider, public navCtrl: NavController, public loadingCrtl: LoadingController, public toastCtrl : ToastController, public modalCtrl : ModalController ) {
+    this.WooCommerce = this.WC.init();
     
     this.page = 2;
     this.categories = [];

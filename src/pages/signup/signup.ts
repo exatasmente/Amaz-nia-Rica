@@ -7,6 +7,7 @@ import { Http } from '@angular/http';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { Storage } from '@ionic/storage/dist/storage';
 import { MenuPage } from '../menu/menu';
+import { WooProvider } from '../../providers/woo/woo';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class SignupPage {
 
   billing_shipping_same: boolean;
 
-  constructor(public storage : Storage, public loadingCtrl : LoadingController, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, public http : Http) {
+  constructor(public WC : WooProvider ,public storage : Storage, public loadingCtrl : LoadingController, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, public http : Http) {
 
     this.newUser.billing_address = {};
     this.newUser.shipping_address = {};
@@ -37,12 +38,7 @@ export class SignupPage {
 
     this.newUser.cpf = "";
 
-    this.WooCommerce = WC({
-      url:"http://amazoniaricaapi2.000webhostapp.com/",
-      consumerKey:"ck_28dcf620b43da4f18cfcdec2cf64fa2fe0b6962c",
-      consumerSecret:"cs_53de2296470c647c17657fca469d6af1dea697cb",
-      
-    });
+    this.WooCommerce = this.WC.init();
   }
 
   setBillingToShipping(){

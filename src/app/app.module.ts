@@ -19,6 +19,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { CartPage } from '../pages/cart/cart';
 import { SignupPage } from '../pages/signup/signup';
 import { LoginPage } from '../pages/login/login';
+import { WooProvider } from '../providers/woo/woo';
 
 
 
@@ -54,7 +55,8 @@ import { LoginPage } from '../pages/login/login';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    WooProvider
   ]
 })
 export class AppModule {}
