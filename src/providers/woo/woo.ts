@@ -13,6 +13,6 @@ export class WooProvider {
     });
   }
   init(){
-    return this.init;
+    return this.wooCommerce;
   }
 }
