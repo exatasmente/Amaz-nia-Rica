@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
+import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 
 
 
@@ -13,7 +14,7 @@ export class CartPage {
   cartItens : any[] = [];
   total :any;
   emptyCart : any;
-    constructor(public toastCtrl : ToastController , public navCtrl: NavController, public navParams: NavParams, public storage : Storage) {
+    constructor(public toastCtrl : ToastController , public navCtrl: NavController, public navParams: NavParams, public storage : Storage, public loadingCtrl : LoadingController) {
       this.total = 0;
       
       this.storage.ready().then( ()=>{
@@ -67,21 +68,26 @@ export class CartPage {
   removeFromCart(item,i){
     let price = item.product.price;
     let qty = item.qty;
+    this.loadingCtrl.create({
+      duration:500
+    }).present().then( ()=>{
+      this.cartItens.splice(i,1);
 
-    this.cartItens.splice(i,1);
+      this.storage.set("cart",this.cartItens).then(  ()=>{
+        this.total = this.total - (price*qty);
 
-    this.storage.set("cart",this.cartItens).then(  ()=>{
-      this.total = this.total - (price*qty);
+        this.toastCtrl.create({
+          message:"Produto Removido",
+          duration: 2000,
+          position:"top"
+        }).present();
 
-      this.toastCtrl.create({
-        message:"Produto Removido",
-        duration: 2000,
-        position:"top"
-      }).present();
-
+      });
+       if(this.cartItens.length == 0){
+        this.emptyCart = true;
+        }
+    
     });
-    if(this.cartItens.length == 0){
-      this.emptyCart = true;
-    }
   }
+
 }

@@ -1,14 +1,20 @@
 <ion-menu [content]="content">
   <ion-content>
     <div class="menuHeader">
-      <ion-item color="amazonia">
+      <ion-item color="amazonia" (click) ="openPageAvatar()">
           <ion-thumbnail item-left>
             <img src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
           </ion-thumbnail>
           <span>
-          <h1>Bem Vindo(a)</h1>
+            <div *ngIf="hasLogin" >
+                <h2>Olá {{userData.user.firstname}}</h2>    
+            </div>
+            
+          <h2 *ngIf="!hasLogin">Bem Vindo(a)</h2>
           </span>
-          <p>Toque Para Acessar</p>
+          
+          <p *ngIf="!hasLogin">Toque Para Entrar</p>
+          <p *ngIf="hasLogin">Toque Para Acessar</p>
         </ion-item>
       </div>
       <div class="menuHeaderSpacer"></div>
@@ -20,11 +26,15 @@
       <ion-item text-wrap menuClose="" (click)="openCartPage()">
           <ion-icon name="cart" item-left color="amazonia" large></ion-icon>
           <h2> Carrinho </h2>
+      </ion-item>
+      <ion-item *ngIf="haslogin" text-wrap menuClose="" (click)="openCartPage()" >
+          <ion-icon name="cube" item-left color="amazonia" large></ion-icon>
+          <h2> Pedidos </h2>
         </ion-item>
     </ion-list>
     <div style="margin-left: 40%;margin-top:100%;">
         <ion-note>
-          V 0.0.0.5
+          V 0.0.0.6
         </ion-note>
   
     </div>  

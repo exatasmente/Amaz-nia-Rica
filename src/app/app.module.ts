@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
+import {HttpModule} from '@angular/http';
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -15,6 +17,8 @@ import { ProductsbyCategoryPage } from '../pages/productsby-category/productsby-
 
 import { IonicStorageModule } from '@ionic/storage';
 import { CartPage } from '../pages/cart/cart';
+import { SignupPage } from '../pages/signup/signup';
+import { LoginPage } from '../pages/login/login';
 
 
 
@@ -25,14 +29,16 @@ import { CartPage } from '../pages/cart/cart';
     HomePage,
     MenuPage,
     ProductDetailsPage,
-    
+    SignupPage,    
     ProductsbyCategoryPage,
-    CartPage
+    CartPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -41,7 +47,9 @@ import { CartPage } from '../pages/cart/cart';
     MenuPage,
     ProductDetailsPage,
     ProductsbyCategoryPage,
-    CartPage
+    CartPage,
+    SignupPage,
+    LoginPage
   ],
   providers: [
     StatusBar,

@@ -28,9 +28,9 @@ export class HomePage {
   WooCommerce : any;
   constructor(public navCtrl: NavController, public loadingCrtl: LoadingController, public toastCtrl : ToastController, public modalCtrl : ModalController ) {
     this.WooCommerce = WC({
-      url:"http://amazoniaricaapi2.000webhostapp.com/",
-      consumerKey:"ck_28dcf620b43da4f18cfcdec2cf64fa2fe0b6962c",
-      consumerSecret:"cs_53de2296470c647c17657fca469d6af1dea697cb",
+      url:"http://amazoniaricaapi.000webhostapp.com/",
+      consumerKey:"ck_e5127b8d77116b6a7b28bad8fc4134a2bf09348d",
+      consumerSecret:"cs_760cc16a471d6e39c556b5ad4e718dd2c698d16a",
       
     });
     
