@@ -21,11 +21,12 @@ export class MenuPage {
     
   }
 
-  ionViewDidiEnter(){
+  ionViewDidEnter(){
     this.storage.ready().then(()=>{
-      let aux = this.storage.get("userLoginInfo").then( (userInfo)=>{
+      this.storage.get("userLoginInfo").then( (userInfo)=>{
         if(userInfo != null){
           this.userData = userInfo;
+          
           this.hasLogin = true;
         }else{
           this.hasLogin = false;
@@ -45,5 +46,12 @@ export class MenuPage {
   }
   openCartPage(){
     this.navCtrl.push(CartPage);
+  }
+
+  logout(){
+    this.storage.remove("userLoginInfo").then( ()=>{
+      this.userData = null;
+      this.hasLogin = false;
+    });
   }
 }

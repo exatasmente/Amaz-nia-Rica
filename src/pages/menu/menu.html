@@ -6,11 +6,8 @@
             <img src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
           </ion-thumbnail>
           <span>
-            <div *ngIf="hasLogin" >
-                <h2>Olá {{userData.user.firstname}}</h2>    
-            </div>
-            
-          <h2 *ngIf="!hasLogin">Bem Vindo(a)</h2>
+            <h2 *ngIf="hasLogin" >Olá {{userData.user.firstname}}</h2>                
+            <h2 *ngIf="!hasLogin">Bem Vindo(a)</h2>
           </span>
           
           <p *ngIf="!hasLogin">Toque Para Entrar</p>
@@ -27,14 +24,18 @@
           <ion-icon name="cart" item-left color="amazonia" large></ion-icon>
           <h2> Carrinho </h2>
       </ion-item>
-      <ion-item *ngIf="haslogin" text-wrap menuClose="" (click)="openCartPage()" >
+      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="openCartPage()" >
           <ion-icon name="cube" item-left color="amazonia" large></ion-icon>
           <h2> Pedidos </h2>
         </ion-item>
+      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="logout()" >
+        <ion-icon name="log-out" item-left color="amazonia" large></ion-icon>
+          <h2> Sair </h2>
+      </ion-item>
     </ion-list>
     <div style="margin-left: 40%;margin-top:100%;">
         <ion-note>
-          V 0.0.0.6
+          V 0.0.0.6.1
         </ion-note>
   
     </div>  
