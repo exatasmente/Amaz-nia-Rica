@@ -8,6 +8,7 @@ import { LoadingController } from 'ionic-angular/components/loading/loading-cont
 import { Storage } from '@ionic/storage/dist/storage';
 import { MenuPage } from '../menu/menu';
 import { WooProvider } from '../../providers/woo/woo';
+import { LoginPage } from '../login/login';
 
 
 @Component({
@@ -94,25 +95,14 @@ export class SignupPage {
               let resp2 = JSON.parse(d3);
               if(resp2.status == "ok"){
                   loading.dismiss().then(()=>{
-                    this.http.get("http://amazoniaricaapi2.000webhostapp.com/api/get_nonce/?controller=user&method=generate_auth_cookie").subscribe( (data4)=>{
-                      let nonce2 = data4.json().nonce;
-
-                      if(nonce2 != null){
-                          this.http.get("https://amazoniaricaapi2.000webhostapp.com/api/user/generate_auth_cookie/?username="+this.newUser.email+"&password="+this.newUser.password).subscribe( (data5)=>{
-                            let response = data5.json();
-                            this.storage.set("userLoginInfo",response);
-                          })
-                      }
-                    })
-
-
+                    
                     this.alertCtrl.create({
                       title: "Conta Criada",
                       message: "Conta criada com sucesso!",
                       buttons: [{
                         text: "Ok",
                         handler: ()=> {
-                          this.navCtrl.setRoot(MenuPage);
+                          this.navCtrl.setRoot(LoginPage,{signup:true});
                         }
                       }]
                     }).present();

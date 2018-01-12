@@ -1,10 +1,23 @@
 .menuHeader{
-    height: 150px;
-    background-color: #72b817;
-    position: center;
+[padding] h1:first-child,
+[padding] h2:first-child,
+[padding] h3:first-child,
+[padding] h4:first-child,
+[padding] h5:first-child,
+[padding] h6:first-child {
+  margin-top: 0px;
+}
+
+h1 + h2,
+h1 + h3,
+h2 + h3 {
+  margin-top: 0px;
+}
+
     
     img{
         border-radius: 50%;
+
     }
     .label-md{
         color: #bff304;
@@ -12,14 +25,51 @@
     p{
         color: #bff304;
     }
-    ion-item{
-        padding-top: 20px;
-        
+    
+    @media screen and (max-width: 640px) { 
+        .item-md h2 {
+            font-size: 25px;  
+            
+        }
+        ion-item{
+            margin-left: 0px !important;
+            padding-left: 10px !important;
+            padding-top: 0px !important;
+            background-color:#72b817 !important;
+            opacity: 0.94;
+            height: 160px;
+            
+        }
     }
+    @media screen and (max-width: 320px) { 
+        .item-md h2 {
+            font-size: 21px;  
+            
+        }
+        
+        ion-item{
+            margin-left: 0px !important;
+            padding-left: 10px !important;
+            padding-top: 0px !important;
+            background-color:#72b817 !important;
+            opacity: 0.94;
+            height: 150px;
+            
+        }
+    }
+    
+
+   
 }
 .menuHeaderSpacer{
     height: 10px;
     background-color: #bff304;
     padding-bottom: 10px;
+
+ 
+}
+
+.menuHeaderSpacer2{
+    display: unset
 }
 

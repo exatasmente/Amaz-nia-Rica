@@ -5,17 +5,18 @@
           <ion-thumbnail item-left>
             <img src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
           </ion-thumbnail>
-          <span>
+          
             <h2 *ngIf="hasLogin" >Olá {{userData.user.firstname}}</h2>                
             <h2 *ngIf="!hasLogin">Bem Vindo(a)</h2>
-          </span>
-          
           <p *ngIf="!hasLogin">Toque Para Entrar</p>
           <p *ngIf="hasLogin">Toque Para Acessar</p>
         </ion-item>
+      
       </div>
-      <div class="menuHeaderSpacer"></div>
+      <div class="menuHeaderSpacer2"></div>
+      
     <ion-list>
+        
       <ion-item text-wrap menuClose="" (click)="openHomePage">
         <ion-icon name="home" item-left color="amazonia" large></ion-icon>
         <h2> Inicio </h2>
@@ -35,7 +36,7 @@
     </ion-list>
     <div style="margin-left: 40%;margin-top:100%;">
         <ion-note>
-          V 0.0.0.6.2
+          V 0.0.0.6.3
         </ion-note>
   
     </div>  

@@ -18,6 +18,7 @@ export class LoginPage {
   constructor(public toastCtrl : ToastController  ,public loadingCtrl: LoadingController ,public http: Http , public storage: Storage, public navCtrl: NavController, public navParams: NavParams) {
     this.username = "";
     this.password = "";
+    
   }
 
   login(){
@@ -44,8 +45,9 @@ export class LoginPage {
               console.log(response);
               this.storage.set("userLoginInfo",response);
               loading.dismiss().then( ()=>{
-
-                if(!this.navParams.get("next")){
+                if (this.navParams.get("signup")){
+                  this.navCtrl.setRoot(MenuPage);
+                }else if(!this.navParams.get("next")){
                   this.navCtrl.pop();
                 }else{
                   this.navCtrl.push(this.navParams.get("next"));
