@@ -1,8 +1,12 @@
 {
-  "name": "prototipo",
+  "name": "Amazonia Rica App",
   "app_id": "",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "proxies": [{
+    "path": "/api",
+    "proxyUrl": "http://amazoniaricaapi2.000webhostapp.com"
+  }]
 }

@@ -51,7 +51,7 @@
                   <img [src]="product.featured_src">
                 <h1>{{product.title}}</h1>
 
-                <p [innerHTML]="product.short_description"></p>
+                <p [innerHTML]="product.short_description.substr(0,50)+'...'"></p>
               </ion-card>
             </ion-slide>
           </ion-slides>

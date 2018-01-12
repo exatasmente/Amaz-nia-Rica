@@ -16,6 +16,8 @@ import { CartPage } from '../cart/cart';
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+  
   opcao:string = "destaques";
   products: any[];
   moreProducts : any[];
@@ -26,9 +28,9 @@ export class HomePage {
   WooCommerce : any;
   constructor(public navCtrl: NavController, public loadingCrtl: LoadingController, public toastCtrl : ToastController, public modalCtrl : ModalController ) {
     this.WooCommerce = WC({
-      url:"http://localhost/wordpress/",
-      consumerKey:"ck_b1f1da1ef6a70e5eced146e4e43c56a42d2c127d",
-      consumerSecret:"cs_da59e5f5927b0b63d44fcccbd41e02fa56f5d116"
+      url:"http://amazoniaricaapi2.000webhostapp.com/",
+      consumerKey:"ck_28dcf620b43da4f18cfcdec2cf64fa2fe0b6962c",
+      consumerSecret:"cs_53de2296470c647c17657fca469d6af1dea697cb",
       
     });
     
@@ -70,7 +72,7 @@ export class HomePage {
     }
   }
   loadMoreProducts(event){
-    console.log("carrega Mais")
+    console.log("carrega Mais");
     if(event == null){
       this.page = 2;
       this.moreProducts = [];
