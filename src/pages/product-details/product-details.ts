@@ -119,7 +119,7 @@ export class ProductDetailsPage {
     }))
   }
   openDetails(item){
-    this.navCtrl.push(ProductDetailsPage,{product:item.id});
+    this.navCtrl.push(ProductDetailsPage,{product:item});
   }
 
   openCart(){
