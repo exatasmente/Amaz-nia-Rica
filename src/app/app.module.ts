@@ -5,7 +5,11 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import {HttpModule} from '@angular/http';
 
 import { MyApp } from './app.component';
+
 import { HomePage } from '../pages/home/home';
+import { DestaquesPage } from '../pages/destaques/destaques';
+import { CategoriasPage } from '../pages/categorias/categorias';
+
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,6 +28,7 @@ import { WooProvider } from '../providers/woo/woo';
 
 
 
+
 @NgModule({
   declarations: [
     MyApp,
@@ -33,12 +38,15 @@ import { WooProvider } from '../providers/woo/woo';
     SignupPage,    
     ProductsbyCategoryPage,
     CartPage,
-    LoginPage
+    LoginPage,
+    DestaquesPage,
+    CategoriasPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp,{tabsPlacement: 'top',tabsHideOnSubPages: true}),
     IonicStorageModule.forRoot(),
+    
     HttpModule
   ],
   bootstrap: [IonicApp],
@@ -50,13 +58,16 @@ import { WooProvider } from '../providers/woo/woo';
     ProductsbyCategoryPage,
     CartPage,
     SignupPage,
-    LoginPage
+    LoginPage,
+    DestaquesPage,
+    CategoriasPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     WooProvider
+    
   ]
 })
 export class AppModule {}

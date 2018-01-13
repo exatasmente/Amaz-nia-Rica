@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar color="amazonia" align-title="center">
+  <button ion-button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>
+      Amazônia Rica
+  </ion-title>
+</ion-navbar>
+</ion-header>
+
+<ion-content  (swipe)="swipe($event)">
+    <ion-fab right bottom  >
+        <button ion-fab  color="amazonia">
+          <ion-icon name="more"></ion-icon>
+        </button>
+        <ion-fab-list side="top">
+            <button ion-fab color="amazonia" ><ion-icon name="search"></ion-icon></button>
+            <button ion-fab color="amazonia" (click)="openCart()">
+                <ion-icon name="cart"></ion-icon>
+            </button>
+        </ion-fab-list>
+    </ion-fab>
+  <ion-list>
+    <ion-item *ngFor="let cat of categories" (click)="openCategoryProductPage(cat)">
+      <ion-icon item-right name="arrow-forward" color="amazonia"></ion-icon>
+        <h2>{{cat.name}}</h2>
+      </ion-item>
+  </ion-list>
+
+</ion-content>

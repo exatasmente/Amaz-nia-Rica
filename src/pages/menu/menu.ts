@@ -41,7 +41,7 @@ export class MenuPage {
     }
   }
   openHomePage(){
-      this.navCtrl.setRoot(HomePage);
+      this.navCtrl.popToRoot();
 
   }
   openCartPage(){

@@ -6,6 +6,8 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 
 import {CartPage} from '../cart/cart';
+import { WooProvider } from '../../providers/woo/woo';
+import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 
 
 @Component({
@@ -15,16 +17,46 @@ import {CartPage} from '../cart/cart';
 export class ProductDetailsPage {
   modal: any;
   product :any;
-  constructor(public modalCtrl : ModalController, public navCtrl: NavController, public navParams: NavParams, public storage : Storage, public toastCtrl : ToastController) {
-    this.product = this.navParams.get("product");
+  WooCommerce : any;
+  related : any[] = [];
+  ready:any 
+  atual = "Visão Geral";
+
+  constructor(public loadingCtrl : LoadingController, public WC : WooProvider, public modalCtrl : ModalController, public navCtrl: NavController, public navParams: NavParams, public storage : Storage, public toastCtrl : ToastController) {
+    this.ready = false;
+    this.WooCommerce = WC.init();
+    this.product =this.navParams.get("product");
+    this.loadRelated(null);
     let temp = this.navParams.get("modal");
-    console.log(temp);
+    
     if(temp != null){
       this.modal = true;
     }else{
       this.modal = false;
     }
-    console.log(this.product);
+    
+  }
+
+  loadRelated(event){
+    let i= 0;
+    let loading = this.loadingCtrl.create({
+      spinner: 'dots',
+      content: 'Carregando'
+    });
+
+    loading.present();
+    this.product.related_ids.forEach(id => {
+      i++;
+      
+      this.WooCommerce.getAsync("products/"+id).then ( (data2)=>{        
+      this.related.push( (JSON.parse(data2.body)).product );
+      if(i == this.product.related_ids.length){
+        loading.dismiss();
+        this.ready = true;
+        
+      }
+    });
+  }); 
   }
 
   closeModal(){
@@ -86,7 +118,9 @@ export class ProductDetailsPage {
       console.log(err);
     }))
   }
-
+  openDetails(item){
+    this.navCtrl.push(ProductDetailsPage,{product:item.id});
+  }
 
   openCart(){
     this.modalCtrl.create(CartPage).present();

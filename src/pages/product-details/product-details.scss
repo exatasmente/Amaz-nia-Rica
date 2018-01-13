@@ -1,7 +1,19 @@
 page-product-details {
+    .geral{
     ion-card{
-        margin: 0 !important;
+
+        margin-top: 100px !important;
         width: 100% !important;
+    }
+    }
+    .relatedItens{
+        ion-card img{
+            height: 150px;
+            width: 150px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 
 }
