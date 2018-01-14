@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Alert } from 'ionic-angular/components/alert/alert';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
@@ -8,6 +8,7 @@ import { ModalController } from 'ionic-angular/components/modal/modal-controller
 import {CartPage} from '../cart/cart';
 import { WooProvider } from '../../providers/woo/woo';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
+import { NgZone } from '@angular/core';
 
 
 @Component({
@@ -22,11 +23,12 @@ export class ProductDetailsPage {
   ready:any 
   atual = "Visão Geral";
 
-  constructor(public loadingCtrl : LoadingController, public WC : WooProvider, public modalCtrl : ModalController, public navCtrl: NavController, public navParams: NavParams, public storage : Storage, public toastCtrl : ToastController) {
+  constructor(public zone : NgZone ,public loadingCtrl : LoadingController, public WC : WooProvider, public modalCtrl : ModalController, public navCtrl: NavController, public navParams: NavParams, public storage : Storage, public toastCtrl : ToastController) {
     this.ready = false;
+    
     this.WooCommerce = WC.init();
     this.product =this.navParams.get("product");
-    this.loadRelated(null);
+    
     let temp = this.navParams.get("modal");
     
     if(temp != null){
@@ -39,21 +41,25 @@ export class ProductDetailsPage {
 
   loadRelated(event){
     let i= 0;
-    let loading = this.loadingCtrl.create({
-      spinner: 'dots',
-      content: 'Carregando'
-    });
+    let aux : any[];
+    aux = [];
 
-    loading.present();
     this.product.related_ids.forEach(id => {
       i++;
       
       this.WooCommerce.getAsync("products/"+id).then ( (data2)=>{        
-      this.related.push( (JSON.parse(data2.body)).product );
+      aux.push( (JSON.parse(data2.body)).product );
       if(i == this.product.related_ids.length){
-        loading.dismiss();
-        this.ready = true;
+        this.zone.run(()=>{
+          this.ready = true;
+          this.related = aux;
+          event.complete();
+          event.enable(false);
+        });
         
+        
+        
+       
       }
     });
   }); 

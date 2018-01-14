@@ -83,7 +83,10 @@
             </ion-slides>
           </ion-card>
         </div>
-      
+        <ion-infinite-scroll *ngIf="!ready" (ionInfinite)="loadRelated($event)" >
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
     </div>
     <div *ngSwitchCase="'Informações'">
       <ion-card >
