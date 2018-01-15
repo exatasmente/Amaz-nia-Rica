@@ -25,6 +25,8 @@ import { SignupPage } from '../pages/signup/signup';
 import { LoginPage } from '../pages/login/login';
 import { WooProvider } from '../providers/woo/woo';
 import { NuvemShopApiProvider } from '../providers/nuvem-shop-api/nuvem-shop-api';
+import { OrdersPage } from '../pages/orders/orders';
+import { OrderDetailsPage } from '../pages/order-details/order-details';
 //import { HTTP } from '@ionic-native/http';
 
 
@@ -42,7 +44,9 @@ import { NuvemShopApiProvider } from '../providers/nuvem-shop-api/nuvem-shop-api
     CartPage,
     LoginPage,
     DestaquesPage,
-    CategoriasPage
+    CategoriasPage,
+    OrdersPage,
+    OrderDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +65,9 @@ import { NuvemShopApiProvider } from '../providers/nuvem-shop-api/nuvem-shop-api
     SignupPage,
     LoginPage,
     DestaquesPage,
-    CategoriasPage
+    CategoriasPage,
+    OrdersPage,
+    OrderDetailsPage
   ],
   providers: [
     StatusBar,

@@ -3,7 +3,8 @@
     <div class="menuHeader">
       <ion-item color="amazonia" (click) ="openPageAvatar()">
           <ion-thumbnail item-left>
-            <img src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
+              <img *ngIf="userData" [src]="userData.user.avatar === null ?'assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png' : userData.user.avatar" />
+            <img *ngIf="!userData" src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
           </ion-thumbnail>
           
             <h2 *ngIf="hasLogin" >Olá {{userData.user.firstname}}</h2>                
@@ -25,7 +26,7 @@
           <ion-icon name="cart" item-left color="amazonia" large></ion-icon>
           <h2> Carrinho </h2>
       </ion-item>
-      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="openCartPage()" >
+      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="openOrdersPage()" >
           <ion-icon name="cube" item-left color="amazonia" large></ion-icon>
           <h2> Pedidos </h2>
         </ion-item>
@@ -36,7 +37,7 @@
     </ion-list>
     <div style="margin-left: 40%;margin-top:100%;">
         <ion-note>
-          V 0.0.0.7.4
+          V 0.0.0.8
         </ion-note>
   
     </div>  

@@ -7,6 +7,7 @@ import { CartPage } from '../cart/cart';
 import { SignupPage } from '../signup/signup';
 import { Storage } from '@ionic/storage/dist/storage';
 import { LoginPage } from '../login/login';
+import { OrdersPage } from '../orders/orders';
 
 @Component({
   selector: 'page-menu',
@@ -46,6 +47,9 @@ export class MenuPage {
   }
   openCartPage(){
     this.navCtrl.push(CartPage);
+  }
+  openOrdersPage(){
+    this.navCtrl.push(OrdersPage);
   }
 
   logout(){

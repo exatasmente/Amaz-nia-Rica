@@ -1,0 +1,231 @@
+
+<ion-header>
+    <ion-navbar  color="amazonia">
+        <ion-buttons end >
+            <button ion-button icon-only (click)="closeModal()">
+                <ion-icon item-left  name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+      <ion-title>Detalhes Encomenda</ion-title>
+    </ion-navbar>
+    <ion-toolbar color="amazonia">
+      <ion-segment [(ngModel)]="atual" color="amazoniaText" >
+        <ion-segment-button value="Visão Geral">
+         Visão Geral
+        </ion-segment-button>
+        <ion-segment-button value="Entrega">
+          Entrega
+        </ion-segment-button>
+        <ion-segment-button value="Pagamento">
+            Pagamento
+          </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="page-product-details" >
+      <ion-fab right bottom  >
+          <button ion-fab  color="amazonia">
+            <ion-icon name="more"></ion-icon>
+          </button>
+          <ion-fab-list side="top">
+              <button ion-fab color="amazonia" ><ion-icon name="search"></ion-icon></button>
+              <button ion-fab color="amazonia" (click)="openCart()"><ion-icon name="cart"></ion-icon></button>
+          </ion-fab-list>
+      </ion-fab>
+
+    <div [ngSwitch]="atual">
+    <div *ngSwitchCase="'Visão Geral'">
+      <ion-card>
+        <ion-card-content>
+          <ion-card-title>
+           Encomenda Nº: {{order.id}} &nbsp;
+          </ion-card-title>
+          <p>
+              Status : {{order.status}}
+          </p>
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-6 style="text-align:left !important;">
+                       <h2>QTD Produtos:</h2>
+                    </ion-col>
+                    <ion-col col-6 style="text-align:right !important;">
+                       <p>{{order.total_line_items_quantity}}</p>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                      <ion-col col-6 style="text-align:left !important;">
+                         <h2>Valor Produtos:</h2>
+                      </ion-col>
+                      <ion-col col-6 style="text-align:right !important;">
+                         <p>{{order.subtotal}}</p>
+                      </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col col-6 style="text-align:left !important;">
+                       <h2>Valor de Entrega:</h2>
+                    </ion-col>
+                    <ion-col col-6 style="text-align:right !important;">
+                       <p>{{order.total_shipping}}</p>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col col-6 style="text-align:left !important;">
+                     <h2>Valor Total:</h2>
+                  </ion-col>
+                  <ion-col col-6 style="text-align:right !important;">
+                     <p>{{order.total}}</p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+        </ion-card-content>
+      </ion-card>
+      <button *ngIf="!ready" ion-button block outline large color="amazonia" (click)="loadProducts()">
+          Mostrar Produtos
+      </button>
+      <ion-list>
+      <ion-item *ngFor="let product of products">
+          <ion-thumbnail item-left>
+              <img [src]="product.featured_src">
+            </ion-thumbnail>
+        <h2>{{product.name}} &nbsp;</h2>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-6 style="text-align:left !important;">
+               <h2>Preco:</h2>
+            </ion-col>
+            <ion-col col-6 style="text-align:right !important;">
+               <p>$ {{product.price}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col col-6 style="text-align:left !important;">
+                 <h2>Quantidade:</h2>
+              </ion-col>
+              <ion-col col-6 style="text-align:left !important;">
+                 <p>{{product.quantity}}</p>
+              </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+      
+    </div>
+    <div *ngSwitchCase="'Entrega'">
+      <ion-item>
+        <h1>Detalhes de Envio</h1>
+        
+      </ion-item>
+      <ion-card >
+        <ion-item>
+          <h2>Código de Rastreamento:</h2>
+          <p *ngIf="order.correios_tracking_code">
+            {{order.correios_tracking_code}}
+          </p>
+          <p *ngIf="!order.correios_tracking_code">
+            Indisponivél
+          </p>
+        </ion-item>
+
+        <ion-item>
+            <ion-grid>
+                <ion-row style="text-align:left !important;">
+                  <h2>Forma de Envio :</h2>
+                </ion-row>
+                <ion-row style="text-align:left !important;">
+                  <p>{{order.shipping_lines[0].method_title}}</p>
+                </ion-row>
+            </ion-grid>  
+        </ion-item>
+          
+      </ion-card>
+      <ion-item>
+          <h1>Endereço de Entrega</h1>
+      </ion-item>
+      <ion-item>
+        <ion-grid>
+          <ion-row style="text-align:left !important;">
+            <h2>Nome :</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.first_name}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>Sobre Nome:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.last_name}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>Endereço Linha 1:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.address_1}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>Endereço Linha 2:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.address_2}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>Cidade:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.city}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>Estado:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;"> 
+            <p>{{order.shipping_address.state}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>CEP:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.postcode}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>País:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{order.shipping_address.country}}</p>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </div>
+    
+    <div *ngSwitchCase="'Pagamento'">
+        <ion-item>
+            <h1>Detalhes de Pagamento</h1>
+        </ion-item>
+        <ion-item>
+          <ion-grid>
+            <ion-row style="text-align:left !important;">
+              <h2>Forma de Pagamento :</h2>
+            </ion-row>
+            <ion-row style="text-align:left !important;">
+              <p>{{order.payment_details.method_title}}</p>
+            </ion-row>
+            <ion-row style="text-align:left !important;">
+              <h2>Pagamento:</h2>
+            </ion-row>
+            <ion-row style="text-align:left !important;">
+              <p>{{order.payment_details.paid ? "Aceito" : "Negado ou Em Processamento" }}</p>
+            </ion-row>
+            <ion-row style="text-align:left !important;">
+              <h2>Moeda:</h2>
+            </ion-row>
+            <ion-row style="text-align:left !important;">
+              <p>{{order.currency}}</p>
+            </ion-row>
+            
+          </ion-grid>
+        </ion-item>          
+    </div>
+    
+
+  </div>
+  </ion-content>
+  

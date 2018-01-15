@@ -22,17 +22,13 @@ export class DestaquesPage {
   constructor(public zone : NgZone, public WC : WooProvider, public navCtrl: NavController, public loadingCrtl: LoadingController , public toastCtrl : ToastController, public modalCtrl : ModalController ) {
     this.WooCommerce = this.WC.init();
     
-    this.WooCommerce.getAsync("orders").then( (data)=>{
-        console.log( JSON.parse(data.body));
-    });
-
     let loading = this.loadingCrtl.create({content:'Carregando Produtos'});
     loading.present();
     
     this.WooCommerce.getAsync("products").then ( (data)=>{
         try{
         console.log(JSON.parse(data.body));
-        this.products = JSON.parse(data.body).products;
+        this.products = JSON.parse(data.body).product;
         loading.dismiss();
         }catch(e){
           loading.dismiss();

@@ -101,12 +101,20 @@
    <ion-grid>
      <ion-row>
        <ion-col col-6 style="text-align:left !important;">
-          <h1><b>SubTotal:</b></h1>
+          <h2><b>SubTotal:</b></h2>
        </ion-col>
        <ion-col col-6 style="text-align:right !important;">
-          <h1><b>{{total.toFixed(2)}}</b></h1>
+          <h2><b>{{total.toFixed(2)- shipmentValue}}</b></h2>
        </ion-col>
      </ion-row>
+     <ion-row>
+        <ion-col col-6 style="text-align:left !important;">
+           <h1><b>Total:</b></h1>
+        </ion-col>
+        <ion-col col-6 style="text-align:right !important;">
+           <h1><b>{{total.toFixed(2)}}</b></h1>
+        </ion-col>
+      </ion-row>
    </ion-grid>
  </ion-item>
 </ion-card>

@@ -43,12 +43,7 @@ export class LoginPage {
               })
 
             }else{
-              this.http.post("http://amazoniaricaapi.000webhostapp.com/api/posts/create_post/",{nonce:nonce,
-              author: response.user.username,},{ headers : new Headers ({cookie : response.cookie,cookie_name : response.cookie_name })}).subscribe( (teste)=>
-              {
-                console.log(teste.json());
-              });
-              console.log(response);
+              
               this.storage.set("userLoginInfo",response);
               loading.dismiss().then( ()=>{
                 if (this.navParams.get("signup")){
