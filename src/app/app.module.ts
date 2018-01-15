@@ -24,6 +24,8 @@ import { CartPage } from '../pages/cart/cart';
 import { SignupPage } from '../pages/signup/signup';
 import { LoginPage } from '../pages/login/login';
 import { WooProvider } from '../providers/woo/woo';
+import { NuvemShopApiProvider } from '../providers/nuvem-shop-api/nuvem-shop-api';
+//import { HTTP } from '@ionic-native/http';
 
 
 
@@ -46,7 +48,6 @@ import { WooProvider } from '../providers/woo/woo';
     BrowserModule,
     IonicModule.forRoot(MyApp,{tabsPlacement: 'top',tabsHideOnSubPages: true}),
     IonicStorageModule.forRoot(),
-    
     HttpModule
   ],
   bootstrap: [IonicApp],
@@ -67,6 +68,8 @@ import { WooProvider } from '../providers/woo/woo';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     WooProvider
+    //HTTP,
+    //NuvemShopApiProvider
     
   ]
 })

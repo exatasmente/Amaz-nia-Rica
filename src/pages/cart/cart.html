@@ -70,10 +70,33 @@
 
  
  <ion-card>
+    <ion-item >
+        
+        <ion-input color="amazonia" required type="number" placeholder="Seu Cep" clearInput [(ngModel)]="cep"></ion-input>
+    </ion-item>
    <button  disabled="{{emptyCart}}" block ion-button outline (click)="calculateShipment()" color="amazonia">
       Calcular Frete e Prazo de Entrega
    </button>
- 
+   <div *ngIf="shipmentValue > 0">
+   <ion-grid >
+     <ion-row>
+        <ion-col col-6 style="text-align:left !important;">
+            <b>Valor:</b>
+         </ion-col>
+         <ion-col col-6 style="text-align:right !important;">
+            <b>{{shipmentValue.toFixed(2)}}</b>
+         </ion-col>
+     </ion-row>
+     <ion-row>
+        <ion-col col-6 style="text-align:left !important;">
+            <b>Prazo:</b>
+         </ion-col>
+         <ion-col col-6 style="text-align:right !important;">
+            <b>{{shipmentDate}} Dias</b>
+         </ion-col>
+     </ion-row>
+   </ion-grid>
+  </div>
  <ion-item>
    <ion-grid>
      <ion-row>

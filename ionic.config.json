@@ -4,9 +4,6 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  },
-  "proxies": [{
-    "path": "/api",
-    "proxyUrl": "http://amazoniaricaapi2.000webhostapp.com"
-  }]
+  }
+  
 }

@@ -54,11 +54,11 @@ export class SignupPage {
       content:"Aguarde.."
     })
     loading.present();
-    this.http.get("http://amazoniaricaapi2.000webhostapp.com/api/get_nonce/?controller=user&method=register").subscribe( (data=>{
+    this.http.get("http://amazoniaricaapi.000webhostapp.com/api/get_nonce/?controller=user&method=register").subscribe( (data=>{
       let d1 = JSON.parse(JSON.stringify(data))._body;
       let nonce = JSON.parse(d1).nonce;
       if(nonce != null){
-        this.http.get("https://amazoniaricaapi2.000webhostapp.com/api/user/register/?username="+
+        this.http.get("https://amazoniaricaapi.000webhostapp.com/api/user/register/?username="+
         this.newUser.email+
         "&nonce="+nonce+
         "&email="+this.newUser.email+
@@ -71,7 +71,7 @@ export class SignupPage {
           let resp = JSON.parse(d);
           if(resp.status == "ok"){
               let cookie = resp.cookie;
-              this.http.get("https://amazoniaricaapi2.000webhostapp.com/api/user/update_user_meta_vars/?cookie="+cookie+
+              this.http.get("https://amazoniaricaapi.000webhostapp.com/api/user/update_user_meta_vars/?cookie="+cookie+
               "&billing_first_name="+this.newUser.billing_address.first_name+
               "&billing_last_name="+this.newUser.billing_address.last_name+
               "&billing_address_1="+this.newUser.billing_address.address_1+
