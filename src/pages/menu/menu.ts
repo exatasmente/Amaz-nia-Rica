@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage/dist/storage';
 import { LoginPage } from '../login/login';
 import { OrdersPage } from '../orders/orders';
 
+
 @Component({
   selector: 'page-menu',
   templateUrl: 'menu.html',

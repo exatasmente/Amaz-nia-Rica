@@ -1,0 +1,67 @@
+<!--
+  Generated template for the PaymentModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="amazonia">
+      <ion-buttons end >
+          <button ion-button icon-only (click)="closeModal()">
+              <ion-icon item-left  name="close"></ion-icon>
+          </button>
+      </ion-buttons>
+    <ion-title>Dados do Cartão</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content >
+    <ion-list>
+        <ion-item>
+            <ion-label floating> Numero Cartão </ion-label>
+          <ion-input color="amazonia" type="number" [(ngModel)]="paymentMethod.cardNumber" (ionBlur)="getBrand()" ></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating> CVV </ion-label>
+            <ion-input color="amazonia" type="number"  [(ngModel)]="paymentMethod.cardCVV" ></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Validade</ion-label>
+            <ion-select (ionChange)="monthChange($event)" interface="popover">
+              <ion-option value="01" >01</ion-option>
+              <ion-option value="02">02</ion-option>
+              <ion-option value="03" >03</ion-option>
+              <ion-option value="04">04</ion-option>
+              <ion-option value="05">05</ion-option>
+              <ion-option value="06">06</ion-option>
+              <ion-option value="07">07</ion-option>
+              <ion-option value="08">08</ion-option>
+              <ion-option value="09">09r</ion-option>
+              <ion-option value="10">10</ion-option>
+              <ion-option value="11">11</ion-option>
+              <ion-option value="12">12</ion-option>
+            </ion-select>
+            <ion-select (ionChange)="yearChange($event)" interface="popover" >
+              <ion-option value="2018" >2018</ion-option>
+              <ion-option value="2019">2019</ion-option>
+              <ion-option value="2020">2020</ion-option>
+              <ion-option value="2021">2021</ion-option>
+              <ion-option value="2022">2022</ion-option>
+              <ion-option value="2023">2023</ion-option>
+              <ion-option value="2024">2024</ion-option>
+              <ion-option value="2025">2025</ion-option>
+              
+            </ion-select>
+          </ion-item>
+          <ion-item *ngIf="parcelas.length > 0 ">
+              <ion-label>Parcelas</ion-label>
+              <ion-select (ionChange)="parcelasChange($event)"  okText="OK" cancelText="Fechar">
+                  <ion-option *ngFor="let p of parcelas, index" [value]="index" >{{p.quantity}} x {{p.installmentAmount}} {{p.interestFree ? ' S/Juros' : ' C/Juros'}}</ion-option>                  
+              </ion-select>
+          </ion-item>
+      </ion-list>
+</ion-content>
+<ion-footer>
+  <button ion-button block color="amazonia" (click)="closeModal()">OK</button>
+</ion-footer>

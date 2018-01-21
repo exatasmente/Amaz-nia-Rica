@@ -1,3 +1,20 @@
 page-checkout {
-
+    
+        .segment-button{
+            font-size : 1.0rem !important; 
+        }    
+        .formasPagamento{
+            ion-icon {
+                display: block;
+                font-size: 6em;
+                margin-left: 21%;
+            }
+            p{
+                font-size: 13px;
+                color: rgb(211, 211, 211);
+                text-align: center;
+            }
+        }
+    
+    
 }

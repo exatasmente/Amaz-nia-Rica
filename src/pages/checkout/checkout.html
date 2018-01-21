@@ -1,18 +1,282 @@
-<!--
-  Generated template for the CheckoutPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>checkout</ion-title>
+  <ion-navbar color="amazonia">
+    <ion-title>Pedido</ion-title>
   </ion-navbar>
-
+  <ion-toolbar color="amazonia">
+      <ion-segment [(ngModel)]="atual" color="amazoniaText" >
+        <ion-segment-button value="aba1">
+         Dados Pessoais
+        </ion-segment-button>
+        <ion-segment-button value="aba2">
+          Endereços
+        </ion-segment-button>
+        <ion-segment-button value="aba3">
+            Pagamento
+          </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
 </ion-header>
 
+<ion-content class="page-checkout">
+    <div [ngSwitch]="atual">
+      <div *ngSwitchCase="'aba1'">
+      <ion-list>
+        <ion-item-divider color="dark">Dados Pessoais</ion-item-divider>
+        <ion-item>
+          <ion-input type="text" placeholder="Nome" [(ngModel)]="newOrder.billing_address.first_name"></ion-input>
+        </ion-item>
 
-<ion-content padding>
+        <ion-item>
+          
+          <ion-input type="text" placeholder="Sobre Nome" [(ngModel)]="newOrder.billing_address.last_name"></ion-input>
+        </ion-item>
 
+        <ion-item>
+          
+        <ion-input readonly type="email" placeholder="Email" [(ngModel)]="newOrder.email"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input type="number" placeholder="CPF" [(ngModel)]="newOrder.cpf" ></ion-input>
+          </ion-item>
+      </ion-list>      
+      </div>
+      <div *ngSwitchCase="'aba2'">
+        <ion-list>
+        <ion-item-divider color="dark">Endereço de Cobrança</ion-item-divider>
+        <ion-item>
+            
+            <ion-textarea type="text" placeholder="Endereço Linha 1" maxlength="80" [(ngModel)]="newOrder.billing_address.address_1"></ion-textarea>
+          </ion-item>
+          <ion-item>
+            
+            <ion-textarea type="text" placeholder="Endereço linha 2" maxlength="80" [(ngModel)]="newOrder.billing_address.address_2"></ion-textarea>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>
+              Pais
+            </ion-label>
+            <ion-select [(ngModel)]="newOrder.billing_address.country">
+              <ion-option value="Brasil" selected="true">Brasil</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Estado</ion-label>
+            <ion-select [(ngModel)]="newOrder.billing_address.state">
+              <ion-option value="Pará">Pará</ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            
+            <ion-input placeholder="Cidade" type="text" [(ngModel)]="newOrder.billing_address.city"></ion-input>        
+          </ion-item>
+
+          <ion-item>
+            
+            <ion-input placeholder="CEP" type="number" clearInput [(ngModel)]="newOrder.billing_address.postcode"></ion-input>        
+          </ion-item>
+
+          <ion-item>
+            
+            <ion-input placeholder="Telefone" type="tel" clearInput [(ngModel)]="newOrder.billing_address.phone"></ion-input>        
+          </ion-item>
+        <ion-item>
+          <ion-label>Mesmo Endereço de Entrega</ion-label>
+          <ion-checkbox (ionChange)="setBillingToShipping()"></ion-checkbox>
+        </ion-item>
+
+        <ion-item-divider color="dark" *ngIf="!billing_shipping_same">Endereço de Entrega</ion-item-divider>
+        
+        <ion-item *ngIf="!billing_shipping_same">
+          
+          <ion-input placeholder="Nome" type="text" [(ngModel)]="newOrder.shipping_address.first_name"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+        
+          <ion-input placeholder="Sobre Nome" type="text" [(ngModel)]="newOrder.shipping_address.last_name"></ion-input>
+        </ion-item>
+        
+        <ion-item *ngIf="!billing_shipping_same">
+          
+          <ion-textarea placeholder="Endereço Linha 1" type="text" maxlength="80" [(ngModel)]="newOrder.shipping_address.address_1"></ion-textarea>
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+          
+          <ion-textarea placeholder="Endereço Linha 2" type="text" maxlength="80" [(ngModel)]="newOrder.shipping_address.address_2"></ion-textarea>
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+          <ion-label>Pais</ion-label>
+          <ion-select [(ngModel)]="newOrder.shipping_address.country">
+            <ion-option value="Brasil" selected="true">Brasil</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+          <ion-label>Estado</ion-label>
+          <ion-select [(ngModel)]="newOrder.shipping_address.state">
+            <ion-option value="Pará">Pará</ion-option>
+            
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+          
+          <ion-input placeholder="Cidade" type="text" [(ngModel)]="newOrder.shipping_address.city"></ion-input>        
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+          
+          <ion-input placeholder="CEP" type="number" clearInput [(ngModel)]="newOrder.shipping_address.postcode"></ion-input>        
+        </ion-item>
+
+        <ion-item *ngIf="!billing_shipping_same">
+          
+          <ion-input placeholder="Telefone" type="tel" clearInput [(ngModel)]="newOrder.shipping_address.phone"></ion-input>        
+        </ion-item>
+        </ion-list>
+        
+      </div>
+    <div *ngSwitchCase="'aba3'">
+      <ion-list>
+        <ion-item-divider color="dark">Forma de Pagamento</ion-item-divider>
+        <div class="formasPagamento" *ngIf="paymentMethod.payment_id =='nan'">
+        <ion-grid>
+          <ion-row>
+            <ion-col col-6 (click)="setPaymentMethod('card')">
+              <ion-row>
+                  <ion-icon large color="amazonia" name="ios-card"></ion-icon>
+              </ion-row>
+              <ion-row>
+                  <p>Cartão de Crédito</p>
+              </ion-row>
+            </ion-col>
+            
+            <ion-col col-6 (click)="setPaymentMethod('boleto')" >
+              <ion-row>
+                <ion-icon large color="amazonia" name="document"></ion-icon>
+              </ion-row>
+              <ion-row>
+              <p>Boleto Bancário</p>
+            </ion-row>
+            </ion-col>
+          </ion-row>
+          
+        </ion-grid>
+      </div>
+      <div *ngIf="paymentMethod.cardNumber">
+        
+        <ion-list>
+          <ion-item>
+              <ion-thumbnail *ngIf="cardBrandImage" item-end style="min-width : 72px  !important; min-height:0px !important; ">
+                <img [src]="cardBrandImage" style="width:auto !important; height: auto !important; ">
+              </ion-thumbnail>
+            <ion-label>{{paymentMethod.cardNumber}} </ion-label>            
+          </ion-item>
+          <ion-item>
+              <ion-label>CVV :</ion-label>
+              <ion-label>{{paymentMethod.cardCVV}}</ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>Validade :</ion-label>
+              <ion-label>{{paymentMethod.cardExpMonth}}/{{paymentMethod.cardExpYear}}</ion-label>            
+            </ion-item>
+            <ion-item>
+                <ion-label>Parcelas :</ion-label>
+                  <ion-label>{{paymentMethod.parcela.quantity}} x {{paymentMethod.parcela.installmentAmount}} {{paymentMethod.parcela.interestFree ? ' S/Juros' : ' C/Juros'}}</ion-label>            
+                </ion-item>
+        </ion-list>
+        <button ion-button block outline color="dark" (click)="paymentMethod.cardNumber = null ; paymentMethod.payment_id = 'nan'" >Trocar Forma Pagamento </button>
+      </div>
+      <div *ngIf="paymentMethod.payment_id == 'boleto'">
+          <ion-item>
+              <ion-label>CPF :</ion-label>
+              <ion-label>{{newOrder.cpf}}</ion-label>            
+          </ion-item>
+          <button ion-button block outline color="dark" (click)="paymentMethod.payment_id = 'nan' " >Trocar Forma Pagamento </button>
+      </div>
+      <ion-item-divider color="dark">Forma de Envio</ion-item-divider>
+        <div class="formasPagamento">
+            <ion-list radio-group [(ngModel)]="shippingMethod" (ionChange)="calculateShipment()">
+            <ion-grid>
+              <ion-row>
+                <ion-col col-6>
+                  <ion-row>
+                      <ion-icon large color="amazonia" name="cube"></ion-icon>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col col-10>
+                      <ion-label>Correios PAC</ion-label>
+                    </ion-col>
+                    <ion-col col-2 style="padding-top: 16px;">
+                      <ion-radio color="amazonia" value="pac" checked="true"></ion-radio>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                
+                <ion-col col-6>
+                  <ion-row>
+                    <ion-icon large color="amazonia" name="cube"></ion-icon>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col col-10>
+                      <ion-label>Correios SEDEX</ion-label>
+                    </ion-col>
+                    <ion-col col-2 style="padding-top: 16px;">
+                      <ion-radio color="amazonia" value="sedex" ></ion-radio>
+                    </ion-col>
+                </ion-row>
+                </ion-col>
+              </ion-row>
+              
+            </ion-grid>
+            </ion-list>
+            <div *ngIf="cartData.shippingData.shipmentValue > 0">
+                <ion-grid >
+                  <ion-row>
+                     <ion-col col-6 style="text-align:left !important;">
+                         <b>Valor:</b>
+                      </ion-col>
+                      <ion-col col-6 style="text-align:right !important;">
+                         <b>{{cartData.shippingData.shipmentValue.toFixed(2)}}</b>
+                      </ion-col>
+                  </ion-row>
+                  <ion-row>
+                     <ion-col col-6 style="text-align:left !important;">
+                         <b>Prazo:</b>
+                      </ion-col>
+                      <ion-col col-6 style="text-align:right !important;">
+                         <b>{{cartData.shippingData.shipmentDate}} Dias</b>
+                      </ion-col>
+                  </ion-row>
+                </ion-grid>
+               </div>
+          </div>      
+        </ion-list>
+        
+      
+      </div>
+  
+  </div>
+  <div style="height: 50px; text-align: center;"></div>
 </ion-content>
+<ion-footer>
+    <div [ngSwitch]="atual">
+        <div *ngSwitchCase="'aba1'">
+          <button ion-button block color="amazonia" (click)="atual = 'aba2' ">Continuar</button>
+        </div>
+        <div *ngSwitchCase="'aba2'">
+            <button ion-button block color="amazonia" (click)="atual='aba3'">Continuar</button>
+            <button ion-button block outline color="dark" (click)="atual= 'aba1' ">Voltar</button>
+        </div>
+        <div *ngSwitchCase="'aba3'">
+            <button ion-button block color="amazonia" (click)="placeOrder()">Continuar</button>
+            <button ion-button block outline color="dark" (click)="atual= 'aba2' ">Voltar</button>
+        </div>  
+    </div>
+    <div style="height: 17px; text-align: center;"><ion-note>Pagamento Processado por PagSeguro </ion-note></div>
+</ion-footer>

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Storage } from '@ionic/storage/dist/storage';
+import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { Http } from '@angular/http';
 
 import xml2js from 'xml2js';
+import { CheckoutPage } from '../checkout/checkout';
 
 
 
@@ -26,6 +27,7 @@ export class CartPage {
       
       this.storage.ready().then( ()=>{
           this.storage.get("cart").then( (data=>{
+            console.log(data);
             if(data != null){
               this.cartItens = data;
               
@@ -169,6 +171,15 @@ export class CartPage {
         
       });
       
+  }
+
+  checkout(){
+    this.navCtrl.push(CheckoutPage,{
+      cartData: {
+        cartItens : this.cartItens,
+        shippingData : {price : this.shipmentValue, date : this.shipmentDate },
+        total : this.total
+    }});
   }
 
 }
