@@ -25,7 +25,7 @@ export class DestaquesPage {
     let loading = this.loadingCrtl.create({content:'Carregando Produtos'});
     loading.present();
     
-    
+    loading.dismiss();
     this.WooCommerce.getAsync("products").then ( (data)=>{
         try{
         this.zone.run(()=>{

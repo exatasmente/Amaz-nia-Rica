@@ -82,7 +82,8 @@ export class PaymentModalPage {
     this.paymentMethod.cardExpYear = val;
   }
   parcelasChange(val : any){
-    this.paymentMethod.parcela = this.parcelas[parseInt(val)];
+    
+    this.paymentMethod.parcela = this.parcelas[parseInt(val)-1];
   }
   
 }

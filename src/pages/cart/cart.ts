@@ -178,7 +178,7 @@ export class CartPage {
       cartData: {
         cartItens : this.cartItens,
         shippingData : {price : this.shipmentValue, date : this.shipmentDate },
-        total : this.total
+        total : this.total - this.shipmentValue
     }});
   }
 

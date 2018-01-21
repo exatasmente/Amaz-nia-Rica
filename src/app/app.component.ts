@@ -24,13 +24,11 @@ export class MyApp {
   }
 
   initializeApp() {
-    this.http.post("https://ws.pagseguro.uol.com.br/v2/sessions?email=radiogamerbr@gmail.com&token=58741EDAC9314736BF4E9D4B8A150481",{}
+    this.http.get("http://localhost/api?opt=session"
     ).subscribe( (data)=>{
-      xml2js.parseString(data.text(), (err,rep)=>{
-        let session =JSON.parse(JSON.stringify(rep)).session.id[0];
-        PagSeguroDirectPayment.setSessionId(session);
-      });
-    })
+        let session = data.json();
+        PagSeguroDirectPayment.setSessionId(session.id);
+    });
     this.platform.ready().then(() => {
       
       this.statusBar.styleDefault();
