@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import {NavController} from 'ionic-angular';
 import { WooProvider } from '../../providers/woo/woo';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';

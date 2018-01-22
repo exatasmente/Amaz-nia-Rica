@@ -3,14 +3,14 @@
     <div class="menuHeader">
       <ion-item color="amazonia" (click) ="openPageAvatar()">
           <ion-thumbnail item-left>
-              <img *ngIf="userData" [src]="userData.user.avatar === null ?'assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png' : userData.user.avatar" />
+              <img *ngIf="userData" [src]="userData.avatar_url === null ?'assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png' : userData.avatar_url" />
             <img *ngIf="!userData" src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
           </ion-thumbnail>
           
-            <h2 *ngIf="hasLogin" >Olá {{userData.user.firstname}}</h2>                
+            <h2 *ngIf="hasLogin" >Olá {{userData.first_name}}</h2>                
             <h2 *ngIf="!hasLogin">Bem Vindo(a)</h2>
           <p *ngIf="!hasLogin">Toque Para Entrar</p>
-          <p *ngIf="hasLogin">Toque Para Acessar</p>
+          
         </ion-item>
       
       </div>
@@ -37,7 +37,7 @@
     </ion-list>
     <div style="margin-left: 20%;margin-top:100%;">
         <ion-note>
-          Versão : 2M2140+16b
+          Versão : 2M 2206-20 b
         </ion-note>
   
     </div>  

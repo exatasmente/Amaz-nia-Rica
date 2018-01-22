@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
 import { Http } from '@angular/http';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { MenuPage } from '../menu/menu';
 import { SignupPage } from '../signup/signup';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
-import { Headers } from '@angular/http';
+import { CheckoutPage } from '../checkout/checkout';
+import { MyApp } from '../../app/app.component';
 
 
 @Component({
@@ -31,34 +32,36 @@ export class LoginPage {
       let nonce = data.json().nonce;
       if(nonce != null){
           this.http.get("https://amazoniaricaapi.000webhostapp.com/api/user/generate_auth_cookie/?username="+this.username +"&password="+this.password).subscribe( (data1)=>{
-            let response = data1.json();
             
-            if(response.error){
-              loading.dismiss().then( ()=>{              
-                this.toastCtrl.create({
-                  message : response.error,
-                  showCloseButton : true,
-                  closeButtonText : "OK"
-                }).present();
-              })
-
-            }else{
-              
-              this.storage.set("userLoginInfo",response);
-              loading.dismiss().then( ()=>{
-                if (this.navParams.get("signup")){
-                  this.navCtrl.setRoot(MenuPage);
-                }else if(!this.navParams.get("next")){
-                  this.navCtrl.pop();
-                }else{
-                  this.navCtrl.push(this.navParams.get("next"));
-                }
-              });
-            }
+            this.http.get("http://localhost:8100/storeApi?opt=1&endpoint=customers/"+data1.json().user.id).subscribe( rep =>{
+              let response = rep.json();
+              if(response.error){
+                loading.dismiss().then( ()=>{              
+                  this.toastCtrl.create({
+                    message : response.error,
+                    showCloseButton : true,
+                    closeButtonText : "OK"
+                  }).present();
+                })
+  
+              }else{
+                
+                this.storage.set("userLoginInfo",response);
+                loading.dismiss().then( ()=>{
+                  if(this.navParams.get("cartData")){
+                    this.navCtrl.push(CheckoutPage,{"cartData":this.navParams.get("cartData")});
+                  }else{
+                    this.navCtrl.popToRoot();
+                    
+                  }
+                });
+              }
+            });
+            
           },(err)=>{
             loading.dismiss().then( ()=>{              
               this.toastCtrl.create({
-                message : err.json().error,
+                message : err.json(),
                 showCloseButton : true,
                 closeButtonText : "OK"
               }).present();

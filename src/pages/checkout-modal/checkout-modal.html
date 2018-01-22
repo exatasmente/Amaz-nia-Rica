@@ -1,0 +1,49 @@
+
+<ion-header>
+  <ion-navbar color="amazonia">
+    <ion-buttons end >
+        <button ion-button icon-only (click)="closeModal()">
+            <ion-icon item-left  name="close"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="page-checkout-modal">
+  <ion-card>
+    <ion-item>
+    <ion-icon *ngIf="!data.error" large name="checkmark-circle" color="amazonia"></ion-icon>
+    <div style="margin-left:33% !important;">
+        <h2 *ngIf="!data.error" ><b>SUCESSO</b></h2>
+    </div>
+    <ion-icon *ngIf="data.error" large name="warning" color="danger"></ion-icon>
+    <div style="margin-left:33% !important;">
+      <h2 *ngIf="data.error"><b>ERRO</b></h2>
+    </div>
+  </ion-item>
+    <ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6 style="text-align: left !important;">
+          <p>Forma de Pagamento :</p>  
+        </ion-col>
+        <ion-col col-6 style="text-align: right !important;">
+            {{data.paymentMethod.type == 2 ? 'Boleto' : 'Cartão'}}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col col-6 style="text-align: left !important;">
+              <p>Valor Total :</p>  
+            </ion-col>
+            <ion-col col-6 style="text-align: right !important;">
+                {{data.grossAmount}}
+            </ion-col>
+      </ion-row>
+      
+    </ion-grid>
+  </ion-item>
+  <button  ion-button block color="amazonia" (click)="getBoleto()">Baixar Boleto</button>
+  </ion-card>
+
+
+</ion-content>

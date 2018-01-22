@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import {NavController, NavParams, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Http } from '@angular/http';
 import { WooProvider } from '../../providers/woo/woo';
 import { NgZone } from '@angular/core';
-import * as pagseguro from 'pagseguro';
+
 import { OnInit } from '@angular/core';
 
 import xml2js from 'xml2js';
 import { ModalController } from 'ionic-angular';
 import { PaymentModalPage } from '../payment-modal/payment-modal';
 import { ToastController } from 'ionic-angular';
-import { componentFactoryName } from '@angular/compiler';
+import { CheckoutModalPage } from '../checkout-modal/checkout-modal';
+
 
 declare var PagSeguroDirectPayment;
 
@@ -20,7 +21,7 @@ declare var PagSeguroDirectPayment;
   templateUrl: 'checkout.html',
 })
 export class CheckoutPage implements OnInit {
-
+  editar : any = false;
   WooCommerce: any;
   newOrder: any;
   paymentMethods: any[];
@@ -28,7 +29,7 @@ export class CheckoutPage implements OnInit {
   shippingMethods: any[];
   shippingMethod: any;
   billing_shipping_same: boolean;
-  userInfo: any;
+  
   cardBrandImage: any;
   atual: any = 'aba1';
   cartData: any;
@@ -48,17 +49,26 @@ export class CheckoutPage implements OnInit {
     this.zone.run( ()=>{
       this.paymentMethod.payment_id = 'nan';
     })
+    this.storage.get("userLoginInfo").then( userData =>{
+      this.newOrder.user.firstName = userData.first_name;
+      this.newOrder.user.lastName = userData.last_name;
+      this.newOrder.cardData.address.rua = userData.billing.address_1;
+      this.newOrder.cardData.address.complemento = userData.billing.address_2;
+      this.newOrder.cardData.address.cidade = userData.billing.city;
+      this.newOrder.cardData.address.estado = userData.billing.state;
+      this.newOrder.cardData.address.pais = userData.billing.country;
+      this.newOrder.user.email = userData.email;
+      this.newOrder.cardData.address.cep = userData.billing.postcode;
+      console.log(this.newOrder);
+    });
     this.WooCommerce = WC.init();
     this.billing_shipping_same = false;
-    this.storage.get("userLoginInfo").then((userLoginInfo) => {
-      this.userInfo = userLoginInfo.user;
-    
-    })
+
 
   }
 
   ngOnInit(): any {
-
+    
     PagSeguroDirectPayment.getPaymentMethods({
       success: response => {
         let paymentMethods = response.paymentMethods;
@@ -98,7 +108,7 @@ export class CheckoutPage implements OnInit {
           console.log(cardData.cardtoken);
           cardData.parcelas = {
             qty : this.paymentMethod.parcela.quantity,
-            qtysjuros : this.paymentMethod.parcela.quantity < 6 ? this.paymentMethod.parcela.quantity : 6,
+            qtysjuros : this.paymentMethod.parcela.quantity > 1 ? this.paymentMethod.parcela.quantity : 6,
             valor : this.paymentMethod.parcela.installmentAmount
           };
           
@@ -158,8 +168,8 @@ export class CheckoutPage implements OnInit {
       "&valueData="+JSON.stringify(valueData)+
       "&cardData="+JSON.stringify(cardData),{}
       ).subscribe( data =>{
-        //let rep = data.json();
-        console.log(data);
+        this.navCtrl.push(CheckoutModalPage,{data: data.json()});
+      
       })
         },
         error: (response) => {
@@ -207,8 +217,7 @@ export class CheckoutPage implements OnInit {
       "&comprador="+JSON.stringify(comprador)+
       "&valueData="+JSON.stringify(valueData),{}
       ).subscribe( data =>{
-        let rep = data.json();
-        console.log(rep);
+        this.modalCtrl.create(CheckoutModalPage,{data: data.json()}).present();
       })
     }
 
@@ -230,7 +239,7 @@ export class CheckoutPage implements OnInit {
               cardBin: this.paymentMethod.cardNumber,
               success: response => {
                 this.zone.run(() => {
-                  //this.cardBrandImage = newOrder.shippings://stc.pagseguro.uol.com.br" + this.paymentMethods["CREDIT_CARD"].options[response.brand.name.toUpperCase()].images["SMALL"].path;
+                  this.cardBrandImage = "stc.pagseguro.uol.com.br" + this.paymentMethods["CREDIT_CARD"].options[response.brand.name.toUpperCase()].images["SMALL"].path;
                 });
       
               }

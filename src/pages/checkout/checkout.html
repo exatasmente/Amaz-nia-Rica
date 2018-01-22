@@ -15,6 +15,7 @@
             Pagamento
           </ion-segment-button>
       </ion-segment>
+      
     </ion-toolbar>
 </ion-header>
 
@@ -72,14 +73,14 @@
             <ion-label>
               Pais
             </ion-label>
-            <ion-select [(ngModel)]="newOrder.cardData.address.pais">
+            <ion-select [(ngModel)]="newOrder.cardData.address.pais" doneText="OK" cancelText="Cancela" color="amazonia">
               <ion-option value="BRA" >Brasil</ion-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label>Estado</ion-label>
-            <ion-select [(ngModel)]="newOrder.cardData.address.estado">
+            <ion-select [(ngModel)]="newOrder.cardData.address.estado" doneText="OK" cancelText="Cancela" color="amazonia">
               <ion-option value="PA">Pará</ion-option>
             </ion-select>
           </ion-item>
@@ -127,14 +128,14 @@
             <ion-label>
               Pais
             </ion-label>
-            <ion-select [(ngModel)]="newOrder.shipping.pais">
+            <ion-select [(ngModel)]="newOrder.shipping.pais" doneText="OK" cancelText="Cancela" color="amazonia">
               <ion-option value="BRA" selected="true">Brasil</ion-option>
             </ion-select>
           </ion-item>
 
           <ion-item>
             <ion-label>Estado</ion-label>
-            <ion-select [(ngModel)]="newOrder.shipping.estado">
+            <ion-select [(ngModel)]="newOrder.shipping.estado" doneText="OK" cancelText="Cancela" color="amazonia">
               <ion-option value="PA">Pará</ion-option>
             </ion-select>
           </ion-item>
@@ -294,7 +295,7 @@
             <button ion-button block outline color="dark" (click)="atual= 'aba1' ">Voltar</button>
         </div>
         <div *ngSwitchCase="'aba3'">
-            <button ion-button block color="amazonia" (click)="placeOrder()">Continuar</button>
+            <button  ion-button block color="amazonia" (click)="placeOrder()">Concluir</button>
             <button ion-button block outline color="dark" (click)="atual= 'aba2' ">Voltar</button>
         </div>  
     </div>

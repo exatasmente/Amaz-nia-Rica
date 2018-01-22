@@ -6,7 +6,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {MenuPage} from '../pages/menu/menu'
 import { Http } from '@angular/http';
 
-import xml2js from 'xml2js';
 declare var PagSeguroDirectPayment;
 
 @Component({

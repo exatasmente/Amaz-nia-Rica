@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {NavController, NavParams } from 'ionic-angular';
 import { WooProvider } from '../../providers/woo/woo';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
@@ -31,17 +31,14 @@ export class OrdersPage {
         let resp = JSON.parse(data.body).orders;
         for(let i = 0 ; i < resp.length ; i++){
           
-          if(resp[i].customer_id == userInfo.user.id){
-            this.zone.run( ()=>{
+          if(resp[i].customer_id == userInfo.id){
               this.userOrders.push(resp[i]);
-              
-            })
             
           }
         }
-        loading.dismiss();
+     
       });
-        
+      loading.dismiss();   
         
       }catch(e){
           

@@ -24,11 +24,12 @@ import { CartPage } from '../pages/cart/cart';
 import { SignupPage } from '../pages/signup/signup';
 import { LoginPage } from '../pages/login/login';
 import { WooProvider } from '../providers/woo/woo';
-import { NuvemShopApiProvider } from '../providers/nuvem-shop-api/nuvem-shop-api';
+
 import { OrdersPage } from '../pages/orders/orders';
 import { OrderDetailsPage } from '../pages/order-details/order-details';
 import { CheckoutPage } from '../pages/checkout/checkout';
 import { PaymentModalPage } from '../pages/payment-modal/payment-modal';
+import { CheckoutModalPage } from '../pages/checkout-modal/checkout-modal';
 //import { HTTP } from '@ionic-native/http';
 
 
@@ -50,6 +51,7 @@ import { PaymentModalPage } from '../pages/payment-modal/payment-modal';
     OrdersPage,
     OrderDetailsPage,
     CheckoutPage,
+    CheckoutModalPage,
     PaymentModalPage
   ],
   imports: [
@@ -73,6 +75,7 @@ import { PaymentModalPage } from '../pages/payment-modal/payment-modal';
     OrdersPage,
     OrderDetailsPage,
     CheckoutPage,
+    CheckoutModalPage,
     PaymentModalPage
   ],
   providers: [

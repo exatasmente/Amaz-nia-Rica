@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {NavController, NavParams } from 'ionic-angular';
 import { ProductDetailsPage } from '../product-details/product-details';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';

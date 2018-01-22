@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Alert } from 'ionic-angular/components/alert/alert';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 

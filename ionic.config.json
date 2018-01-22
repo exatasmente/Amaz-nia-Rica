@@ -7,7 +7,10 @@
   },
   "proxies": [{
     "path": "/api",
-    "proxyUrl": "http://localhost/api.php/"
+    "proxyUrl": "http://192.168.0.7/api.php/"
+  },{
+    "path": "/storeApi",
+    "proxyUrl": "http://192.168.0.7/storeApi.php/"
   }]
   
 }

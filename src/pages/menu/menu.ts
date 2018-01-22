@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {NavController, NavParams } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 import { CartPage } from '../cart/cart';
-import { SignupPage } from '../signup/signup';
+
 import { Storage } from '@ionic/storage/dist/storage';
 import { LoginPage } from '../login/login';
 import { OrdersPage } from '../orders/orders';
@@ -24,11 +24,12 @@ export class MenuPage {
   }
 
   ionViewDidEnter(){
+    
     this.storage.ready().then(()=>{
       this.storage.get("userLoginInfo").then( (userInfo)=>{
         if(userInfo != null){
           this.userData = userInfo;
-          
+          console.log(this.userData);
           this.hasLogin = true;
         }else{
           this.hasLogin = false;
