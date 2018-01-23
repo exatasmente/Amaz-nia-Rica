@@ -99,7 +99,7 @@ export class SignupPage {
     });
     loading.present()
 
-    this.http.get("http://localhost:8100/storeApi?opt=2&endpoint=customers&data=" + JSON.stringify(customer)).subscribe((data) => {
+    this.http.get("http://192.168.0.7/storeApi.php?opt=2&endpoint=customers&data=" + JSON.stringify(customer)).subscribe((data) => {
       loading.dismiss();
       let rep = data.json();
 

@@ -30,8 +30,8 @@ import { OrderDetailsPage } from '../pages/order-details/order-details';
 import { CheckoutPage } from '../pages/checkout/checkout';
 import { PaymentModalPage } from '../pages/payment-modal/payment-modal';
 import { CheckoutModalPage } from '../pages/checkout-modal/checkout-modal';
-//import { HTTP } from '@ionic-native/http';
 
+import { Ionic2RatingModule } from "ionic2-rating";
 
 
 
@@ -58,7 +58,8 @@ import { CheckoutModalPage } from '../pages/checkout-modal/checkout-modal';
     BrowserModule,
     IonicModule.forRoot(MyApp,{tabsPlacement: 'top',tabsHideOnSubPages: true}),
     IonicStorageModule.forRoot(),
-    HttpModule
+    HttpModule,
+    Ionic2RatingModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

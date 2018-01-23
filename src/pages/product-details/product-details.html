@@ -119,7 +119,15 @@
     </div>
     
     <div *ngSwitchCase="'Avaliações'">
-      Avaliações
+      <rating [(ngModel)]="rate" 
+        readOnly="false" 
+        max="5" 
+        emptyStarIconName="star-outline" 
+        halfStarIconName="star-half" 
+        starIconName="star" 
+        nullable="false" 
+        > 
+    </rating>
     </div>
     
 

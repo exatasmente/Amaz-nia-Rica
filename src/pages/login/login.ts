@@ -33,7 +33,7 @@ export class LoginPage {
       if(nonce != null){
           this.http.get("https://amazoniaricaapi.000webhostapp.com/api/user/generate_auth_cookie/?username="+this.username +"&password="+this.password).subscribe( (data1)=>{
             
-            this.http.get("http://localhost:8100/storeApi?opt=1&endpoint=customers/"+data1.json().user.id).subscribe( rep =>{
+            this.http.get("http://192.168.0.7/storeApi.php?opt=1&endpoint=customers/"+data1.json().user.id).subscribe( rep =>{
               let response = rep.json();
               if(response.error){
                 loading.dismiss().then( ()=>{              

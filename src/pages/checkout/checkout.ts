@@ -12,6 +12,7 @@ import { ModalController } from 'ionic-angular';
 import { PaymentModalPage } from '../payment-modal/payment-modal';
 import { ToastController } from 'ionic-angular';
 import { CheckoutModalPage } from '../checkout-modal/checkout-modal';
+import { LoadingController } from 'ionic-angular';
 
 
 declare var PagSeguroDirectPayment;
@@ -33,7 +34,7 @@ export class CheckoutPage implements OnInit {
   cardBrandImage: any;
   atual: any = 'aba1';
   cartData: any;
-  constructor(public toastCtrl : ToastController, public modalCtrl: ModalController, public zone: NgZone, public WC: WooProvider, public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public alertCtrl: AlertController, public http: Http) {
+  constructor(public loadingCtrl : LoadingController, public toastCtrl : ToastController, public modalCtrl: ModalController, public zone: NgZone, public WC: WooProvider, public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public alertCtrl: AlertController, public http: Http) {
     this.cartData = this.navParams.get("cartData");
     this.newOrder = {};
     this.newOrder.phone = {};
@@ -94,6 +95,10 @@ export class CheckoutPage implements OnInit {
     let produtos : any[] = [];
     let valueData : any = {};
     comprador.cobranca = {};
+    let loading = this.loadingCtrl.create({
+      content: "Aguarde..."
+    });
+    loading.present();
     comprador.senderHash = PagSeguroDirectPayment.getSenderHash();
     console.log(this.paymentMethod.payment_id);
     if(this.paymentMethod.payment_id == 'card'){
@@ -162,17 +167,22 @@ export class CheckoutPage implements OnInit {
         valorEntrega : this.newOrder.valorEntrega
       };      
       console.log(JSON.stringify(cardData));
-      this.http.post("http://localhost/api?opt=transactions/cartao&produtos="+
+      this.http.get("http://192.168.0.7/api.php?opt=transactions/cartao&produtos="+
       JSON.stringify(produtos)+
       "&comprador="+JSON.stringify(comprador)+
       "&valueData="+JSON.stringify(valueData)+
-      "&cardData="+JSON.stringify(cardData),{}
+      "&cardData="+JSON.stringify(cardData)
       ).subscribe( data =>{
+        loading.dismiss();
+        this.storage.remove("cart");
+        console.log(data.json());
         this.navCtrl.push(CheckoutModalPage,{data: data.json()});
       
       })
         },
         error: (response) => {
+          console.log(response);
+          loading.dismiss();
         },
       }
       PagSeguroDirectPayment.createCardToken(param);
@@ -212,11 +222,13 @@ export class CheckoutPage implements OnInit {
         tipoEntrega : this.newOrder.tipoEntrega,
         valorEntrega : this.newOrder.valorEntrega
       };
-      this.http.post("http://localhost/api?opt=transactions/boleto&produtos="+
+      this.http.get("http://192.168.0.7/api.php?opt=transactions/boleto&produtos="+
       JSON.stringify(produtos)+
       "&comprador="+JSON.stringify(comprador)+
-      "&valueData="+JSON.stringify(valueData),{}
+      "&valueData="+JSON.stringify(valueData)
       ).subscribe( data =>{
+        loading.dismiss();
+        this.storage.remove("cart");
         this.modalCtrl.create(CheckoutModalPage,{data: data.json()}).present();
       })
     }
@@ -239,7 +251,7 @@ export class CheckoutPage implements OnInit {
               cardBin: this.paymentMethod.cardNumber,
               success: response => {
                 this.zone.run(() => {
-                  this.cardBrandImage = "stc.pagseguro.uol.com.br" + this.paymentMethods["CREDIT_CARD"].options[response.brand.name.toUpperCase()].images["SMALL"].path;
+                  this.cardBrandImage = "http://stc.pagseguro.uol.com.br" + this.paymentMethods["CREDIT_CARD"].options[response.brand.name.toUpperCase()].images["SMALL"].path;
                 });
       
               }

@@ -23,7 +23,7 @@ export class MyApp {
   }
 
   initializeApp() {
-    this.http.get("http://localhost/api?opt=session"
+    this.http.get("http://192.168.0.7/api.php?opt=session"
     ).subscribe( (data)=>{
         let session = data.json();
         PagSeguroDirectPayment.setSessionId(session.id);

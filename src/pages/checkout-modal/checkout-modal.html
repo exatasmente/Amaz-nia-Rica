@@ -12,13 +12,16 @@
 <ion-content class="page-checkout-modal">
   <ion-card>
     <ion-item>
-    <ion-icon *ngIf="!data.error" large name="checkmark-circle" color="amazonia"></ion-icon>
+    <ion-icon *ngIf="!data.error && status == 'processing'" large name="checkmark-circle" color="amazonia"></ion-icon>
     <div style="margin-left:33% !important;">
-        <h2 *ngIf="!data.error" ><b>SUCESSO</b></h2>
+        <h2 *ngIf="!data.error && status == 'processing'  " ><b>SUCESSO</b></h2>
     </div>
-    <ion-icon *ngIf="data.error" large name="warning" color="danger"></ion-icon>
+    <ion-icon *ngIf="data.error || status != 'processing' " large name="warning" color="danger"></ion-icon>
     <div style="margin-left:33% !important;">
-      <h2 *ngIf="data.error"><b>ERRO</b></h2>
+      <h2 *ngIf="data.error || status != 'processing' "><b>ERRO</b></h2>
+    </div>
+    <div style="margin-left:10% !important;">
+      <h3 *ngIf="data.error || status != 'processing' "> {{status}}</h3>
     </div>
   </ion-item>
     <ion-item>
