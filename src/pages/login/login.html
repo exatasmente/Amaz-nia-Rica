@@ -12,27 +12,51 @@
 
 </ion-header>
 <ion-content>
-    <div style="height: 100px !important; width: 100% ; margin: 20px;" ></div>
-    <!--<img src="assets/img/SXbWxVmYSUWfEbxSwJJR_logo.png" style="display:block;width:100%;height:auto;margin-left:auto;margin-right:auto;" />
-    -->
-    <form id="login-form1">
-      <ion-item id="login-input2">
-        
-        <ion-input type="text"  [(ngModel)]="username" placeholder="Nome de Usuário" name="usuario"></ion-input>
-      </ion-item>
-      <ion-item id="login-input3">
-        
-        <ion-input type="password"  [(ngModel)]="password" placeholder="Sua Senha" name="senha"></ion-input>
-      </ion-item>
-    </form>
+  <img src="assets/img/logo.png" style="display:block;width:auto;height:auto;margin-left:auto;margin-right:auto;" />
+  
+  <form [formGroup]="authForm" (ngSubmit)="onSubmit(authForm.value)">
+    <ion-item [ngClass]="{'error-border':!authForm.controls.username.valid && authForm.controls.username.touched}">
+      <ion-label stacked>Nome de Usuário</ion-label>
+      <ion-input formControlName="username" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="authForm.controls.username.hasError('required') && authForm.controls.username.touched">
+      <p>Campo Obrigatório!</p>
+    </ion-item>
+    <!--
+        <ion-item *ngIf="authForm.controls.username.hasError('pattern') && authForm.controls.username.touched">
+            <p>Sorry, only small and capital letters are allowed!</p>
+        </ion-item>
+        <ion-item *ngIf="authForm.controls.username.hasError('minlength') && authForm.controls.username.touched">
+            <p>Sorry, minimum username length is 8!</p>
+        </ion-item>
+        <ion-item *ngIf="authForm.controls.username.hasError('maxlength') && authForm.controls.username.touched">
+            <p>Sorry, maximum username length is 30!</p>
+        </ion-item>
+        -->
+    <ion-item [ngClass]="{'error-border':!authForm.controls.password.valid && authForm.controls.password.touched}">
+      <ion-label stacked>Senha</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="authForm.controls.password.hasError('required') && authForm.controls.password.touched">
+      <p>Campo obrigatório!</p>
+    </ion-item>
+    <!--
+        <ion-item *ngIf="authForm.controls.password.hasError('minlength') && authForm.controls.password.touched">
+            <p>Sorry, minimum password length is 8!</p>
+        </ion-item>                
+        -->
     <div style="margin-bottom:10px;"></div>
-    <button id="login-button1" ion-button color="amazonia" block large (click)="login()">
+    <button [disabled]="!authForm.valid" style="margin-top: 20px;" type="submit" ion-button color="amazonia" block large>
       Login
     </button>
-    <button id="login-button2" ion-button color="amazoniaText" block (click)="signup()">
-        Cadastre-se
-      </button>
-    <button id="login-button2" ion-button color="danger"  outline block>
+    <button  ion-button color="amazoniaText" block (click)="signup()">
+      Cadastre-se
+    </button>
+    <button ion-button color="danger" outline block>
       Esqueceu sua senha ?
     </button>
-  </ion-content>
+    
+  </form>
+
+</ion-content>

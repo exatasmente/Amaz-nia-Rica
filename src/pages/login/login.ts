@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
 import { Http } from '@angular/http';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
@@ -8,6 +8,7 @@ import { SignupPage } from '../signup/signup';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { CheckoutPage } from '../checkout/checkout';
 import { MyApp } from '../../app/app.component';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 
 @Component({
@@ -15,71 +16,73 @@ import { MyApp } from '../../app/app.component';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  username : string;
-  password : string;
-  constructor(public toastCtrl : ToastController  ,public loadingCtrl: LoadingController ,public http: Http , public storage: Storage, public navCtrl: NavController, public navParams: NavParams) {
-    this.username = "";
-    this.password = "";
-    
+  authForm: FormGroup;
+  constructor(public formBuilder: FormBuilder, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public http: Http, public storage: Storage, public navCtrl: NavController, public navParams: NavParams) {
+
+    this.authForm = formBuilder.group({
+      username: ['', Validators.compose([Validators.required])],
+      password: ['', Validators.compose([Validators.required])]
+    });
+
+
+  }
+  onSubmit(value: any): void {
+    if (this.authForm.valid) {
+      console.log(value);
+      this.login(value.username, value.password);
+    }
   }
 
-  login(){
+  login(username, password) {
     let loading = this.loadingCtrl.create({
-      content:"Aguarde..."
+      content: "Aguarde..."
     });
     loading.present();
-    this.http.get("http://amazoniaricaapi.000webhostapp.com/api/get_nonce/?controller=user&method=generate_auth_cookie").subscribe( (data)=>{
-      let nonce = data.json().nonce;
-      if(nonce != null){
-          this.http.get("https://amazoniaricaapi.000webhostapp.com/api/user/generate_auth_cookie/?username="+this.username +"&password="+this.password).subscribe( (data1)=>{
-            
-            this.http.get("http://192.168.0.7/storeApi.php?opt=1&endpoint=customers/"+data1.json().user.id).subscribe( rep =>{
-              let response = rep.json();
-              if(response.error){
-                loading.dismiss().then( ()=>{              
-                  this.toastCtrl.create({
-                    message : response.error,
-                    showCloseButton : true,
-                    closeButtonText : "OK"
-                  }).present();
-                })
-  
-              }else{
-                
-                this.storage.set("userLoginInfo",response);
-                loading.dismiss().then( ()=>{
-                  if(this.navParams.get("cartData")){
-                    this.navCtrl.push(CheckoutPage,{"cartData":this.navParams.get("cartData")});
-                  }else{
-                    this.navCtrl.popToRoot();
-                    
-                  }
-                });
+    this.http.get("http://paranoidlab.xyz/amazoniarica/api/user/generate_auth_cookie?insecure=cool&username=" + username + "&password=" + password).subscribe((data1) => {
+      if (data1.json().status == "error") {
+        loading.dismiss().then(() => {
+          this.toastCtrl.create({
+            message: "Nome de usuário ou email Inválido",
+            showCloseButton: true,
+            closeButtonText: "OK"
+          }).present();
+
+        });
+      } else {
+        this.http.get("http://paranoidlab.xyz/storeApi.php?opt=1&endpoint=customers/" + data1.json().user.id).subscribe(rep => {
+          let response = rep.json();
+          if (response.error) {
+            loading.dismiss().then(() => {
+              this.toastCtrl.create({
+                message: response.error,
+                showCloseButton: true,
+                closeButtonText: "OK"
+              }).present();
+            });
+
+          } else {
+
+            this.storage.set("userLoginInfo", response);
+            loading.dismiss().then(() => {
+              if (this.navParams.get("cartData")) {
+                this.navCtrl.push(CheckoutPage, { "cartData": this.navParams.get("cartData") });
+              } else {
+                this.navCtrl.popToRoot();
+
               }
             });
-            
-          },(err)=>{
-            loading.dismiss().then( ()=>{              
-              this.toastCtrl.create({
-                message : err.json(),
-                showCloseButton : true,
-                closeButtonText : "OK"
-              }).present();
-            })
-          });
+          }
+        });
       }
-    },(err)=>{
-      loading.dismiss().then( ()=>{              
-        this.toastCtrl.create({
-          message : err.json().error,
-          showCloseButton : true,
-          closeButtonText : "OK"
-        }).present();
-      })
+
     });
-  } 
-  signup(){
-      this.navCtrl.push(SignupPage);
-  } 
+
+
+
+
+  }
+  signup() {
+    this.navCtrl.push(SignupPage);
+  }
 
 }

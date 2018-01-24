@@ -17,8 +17,8 @@ export class CheckoutModalPage {
   constructor(public storage: Storage, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
     this.data = this.navParams.get('data');
     this.status = "processing";
-    this.http.get("http://192.168.0.7/api.php?opt=getTransaction&code="+this.data.code).subscribe( resp =>{
-      let pagseguro = resp;
+    this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=getTransaction&code="+this.data.code).subscribe( resp =>{
+      let pagseguro = resp.json();
 
       this.data = pagseguro;
       console.log(this.data);
@@ -113,7 +113,7 @@ export class CheckoutModalPage {
   
             console.log(wooData);
   
-            this.http.get("http://192.168.0.7/storeApi.php?opt=2&endpoint=orders&data=" + JSON.stringify(wooData)).subscribe(rep => {
+            this.http.get("http://paranoidlab.xyz/storeApi.php?opt=2&endpoint=orders&data=" + JSON.stringify(wooData)).subscribe(rep => {
               console.log(rep.json());
             });
   
@@ -137,7 +137,7 @@ export class CheckoutModalPage {
     
   }
   getBoleto() {
-    this.http.get('http://192.168.0.7/api.php?opt=getBoleto&code=' + this.data.code).subscribe(data => {
+    this.http.get('http://paranoidlab.xyz/amazoniarica/api.php?opt=getBoleto&code=' + this.data.code).subscribe(data => {
       this.boleto = data;
       console.log(data);
     });

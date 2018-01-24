@@ -6,9 +6,9 @@ export class WooProvider {
   wooCommerce : any;
   constructor() {
     this.wooCommerce = WC({
-      url:"http://amazoniaricaapi.000webhostapp.com/",
-      consumerKey:"ck_e5127b8d77116b6a7b28bad8fc4134a2bf09348d",
-      consumerSecret:"cs_760cc16a471d6e39c556b5ad4e718dd2c698d16a"
+      url:"http://paranoidlab.xyz/amazoniarica/",
+      consumerKey:"ck_96a8b9b00a27b30508ce7d300df990d489e1b5d8",
+      consumerSecret:"cs_0e9ab93f40e26ac82febf970ea6c1138223b5488"
       
     });
   }

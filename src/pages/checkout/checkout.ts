@@ -14,6 +14,7 @@ import { ToastController } from 'ionic-angular';
 import { CheckoutModalPage } from '../checkout-modal/checkout-modal';
 import { LoadingController } from 'ionic-angular';
 
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
 declare var PagSeguroDirectPayment;
 
@@ -24,51 +25,120 @@ declare var PagSeguroDirectPayment;
 export class CheckoutPage implements OnInit {
   editar : any = false;
   WooCommerce: any;
-  newOrder: any;
+  newOrder: any  = {};
   paymentMethods: any[];
-  paymentMethod: any;
+  paymentMethod: any = {};
   shippingMethods: any[];
-  shippingMethod: any;
+  shippingMethod: any = {};
   billing_shipping_same: boolean;
   
   cardBrandImage: any;
+  user: FormGroup;
   atual: any = 'aba1';
+  billing: FormGroup;
+  shipping: FormGroup;
+  valido: any = false;
+  authForm : FormGroup;
+
   cartData: any;
-  constructor(public loadingCtrl : LoadingController, public toastCtrl : ToastController, public modalCtrl: ModalController, public zone: NgZone, public WC: WooProvider, public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public alertCtrl: AlertController, public http: Http) {
+  constructor(public formBuilder: FormBuilder,public loadingCtrl : LoadingController, public toastCtrl : ToastController, public modalCtrl: ModalController, public zone: NgZone, public WC: WooProvider, public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public alertCtrl: AlertController, public http: Http) {
     this.cartData = this.navParams.get("cartData");
     this.newOrder = {};
-    this.newOrder.phone = {};
-    this.newOrder.cardData = {};
-    this.newOrder.cardData.phone = {};
-    this.newOrder.cardData.parcelas ={};
-    this.newOrder.cardData.user = {};
-    this.newOrder.cardData.address = {};
-    this.newOrder.shipping = {};
-    this.newOrder.shipping.phone = {};
-    this.newOrder.user = {};
-    this.paymentMethod = {};
+    this.authForm = formBuilder.group({
+      username: ['', Validators.compose([Validators.required,Validators.minLength(8)])],
+      password: ['', Validators.compose([Validators.required,Validators.minLength(8)])]
+    });
+    
+    this.billing_shipping_same = false;
+
     this.zone.run( ()=>{
       this.paymentMethod.payment_id = 'nan';
     })
-    this.storage.get("userLoginInfo").then( userData =>{
-      this.newOrder.user.firstName = userData.first_name;
-      this.newOrder.user.lastName = userData.last_name;
-      this.newOrder.cardData.address.rua = userData.billing.address_1;
-      this.newOrder.cardData.address.complemento = userData.billing.address_2;
-      this.newOrder.cardData.address.cidade = userData.billing.city;
-      this.newOrder.cardData.address.estado = userData.billing.state;
-      this.newOrder.cardData.address.pais = userData.billing.country;
-      this.newOrder.user.email = userData.email;
-      this.newOrder.cardData.address.cep = userData.billing.postcode;
-      console.log(this.newOrder);
-    });
+    
     this.WooCommerce = WC.init();
     this.billing_shipping_same = false;
 
 
   }
 
+  prosseguir(next) {
+    if(next == 'aba2'){
+      if (this.user.valid) {
+        this.atual = next;
+      } else {
+        this.toastCtrl.create({
+          message: "Verifique todos os campos e preençha corretamente",
+          showCloseButton: true,
+          closeButtonText: "OK",
+          duration: 2000
+        }).present();
+      }
+    }else if (next == 'aba3') {
+      console.log(this.valid());
+      if (this.valid()) {
+        this.atual = next;
+      } else {
+        this.toastCtrl.create({
+          message: "Verifique todos os campos e preençha corretamente",
+          showCloseButton: true,
+          closeButtonText: "OK",
+          duration: 2000
+        }).present();
+      }
+
+
+    }
+
+
+  }
+  valid() {
+    if (this.billing_shipping_same) {
+      
+      return (this.billing.valid && this.user.valid) ;
+    } else {
+      
+      return (this.billing.valid && this.shipping.valid) && this.user.valid;
+    }
+  }
+  
+
   ngOnInit(): any {
+    this.storage.get("userLoginInfo").then( userData =>{
+      this.billing = this.formBuilder.group({
+        rua: [userData.billing.address_1, Validators.compose([Validators.required])],
+        numero: [, Validators.compose([Validators.required])],
+        complemento: [userData.billing.address_2, Validators.compose([Validators.required])],
+        pais: [userData.billing.country, Validators.compose([Validators.required])],
+        estado: [userData.billing.state, Validators.compose([Validators.required])],
+        cidade: [userData.billing.city, Validators.compose([Validators.required])],
+        bairro: ['', Validators.compose([Validators.required])],
+        cep: [userData.billing.postcode, Validators.compose([Validators.required])],
+        ddd: ['', Validators.compose([Validators.required])],
+        telefone: ['', Validators.compose([Validators.required])]
+      });
+      this.user = this.formBuilder.group({
+        firstName: [userData.first_name, Validators.compose([Validators.required])],
+        lastName: [userData.last_name, Validators.compose([Validators.required])],
+        email: [userData.email, Validators.compose([Validators.required, Validators.email])],
+        cpf: ['', Validators.compose([Validators.required])],
+        birthDate: ['', Validators.compose([Validators.required])],
+        sex: ['', Validators.compose([Validators.required])]
+      });
+      
+      this.shipping = this.formBuilder.group({
+        rua: ['', Validators.compose([Validators.required])],
+        numero: ['', Validators.compose([Validators.required])],
+        complemento: ['', Validators.compose([Validators.required])],
+        pais: ['', Validators.compose([Validators.required])],
+        estado: ['', Validators.compose([Validators.required])],
+        cidade: ['', Validators.compose([Validators.required])],
+        bairro: ['', Validators.compose([Validators.required])],
+        cep: ['', Validators.compose([Validators.required])],
+        ddd: ['', Validators.compose([Validators.required])],
+        telefone: ['', Validators.compose([Validators.required])]
+      });
+      this.editar = true;
+    });
     
     PagSeguroDirectPayment.getPaymentMethods({
       success: response => {
@@ -81,15 +151,17 @@ export class CheckoutPage implements OnInit {
     });
   }
 
-  setBillingToShipping() {
-    if (this.billing_shipping_same) {
-      this.newOrder.shipping  = this.newOrder.cardData.address;
-      this.newOrder.shipping.phone = this.newOrder.cardData.phone;
-    }
-
-  }
 
   placeOrder() {
+    let user = this.user.value;
+    let billing = this.billing.value;
+    let shipping = this.shipping.value;
+    user.birthDate= user.birthDate.split('-').reverse().join('/');
+    console.log(user);
+    
+    if(this.billing_shipping_same){
+      shipping = billing;
+    }
     let cardData : any = {};
     let comprador : any = {};
     let produtos : any[] = [];
@@ -108,8 +180,8 @@ export class CheckoutPage implements OnInit {
         expirationMonth: this.paymentMethod.cardExpMonth,
         expirationYear: this.paymentMethod.cardExpYear,
         success: (response) => {  
-          this.newOrder.cardData.token = response.card.token;
-          cardData.cardtoken = this.newOrder.cardData.token;
+          this.newOrder.token = response.card.token;
+          cardData.cardtoken = this.newOrder.token;
           console.log(cardData.cardtoken);
           cardData.parcelas = {
             qty : this.paymentMethod.parcela.quantity,
@@ -117,57 +189,57 @@ export class CheckoutPage implements OnInit {
             valor : this.paymentMethod.parcela.installmentAmount
           };
           
-          cardData.holdername =  this.newOrder.user.firstName + " " + this.newOrder.user.lastName;;
-          cardData.holdercpf = this.newOrder.user.cpf;;
-          cardData.holderbirthdate = this.newOrder.user.birthDate;
+          cardData.holdername =  user.firstName + " " + user.lastName;;
+          cardData.holdercpf = user.cpf;
+          cardData.holderbirthdate = user.birthDate;
           cardData.phone = {
-            area : this.newOrder.cardData.phone.area,
-            number : this.newOrder.cardData.phone.number
+            area : user.ddd,
+            number : user.telefone
           };
           cardData.address = {
-            rua : this.newOrder.cardData.address.rua,
-            numero : this.newOrder.cardData.address.numero,
-            complemento : this.newOrder.cardData.address.complemento,
-            bairro : this.newOrder.cardData.address.bairro,
-            cidade : this.newOrder.cardData.address.cidade,
-            pais : this.newOrder.cardData.address.pais,
-            cep : this.newOrder.cardData.address.cep,
-            estado : this.newOrder.cardData.address.estado
+            rua : billing.rua,
+            numero : billing.numero,
+            complemento : billing.complemento,
+            bairro : billing.bairro,
+            cidade : billing.cidade,
+            pais : billing.pais,
+            cep : billing.cep,
+            estado : billing.estado
         };
       
       comprador.cobranca.phone = { 
-        area : this.newOrder.cardData.phone.area, 
-        number : this.newOrder.cardData.phone.number
+        area : billing.ddd, 
+        number : billing.telefone
       };
-      comprador.birthDate  = this.newOrder.user.birthDate;
-      comprador.cpf = this.newOrder.user.cpf;
-      comprador.nome = this.newOrder.user.firstName + " " + this.newOrder.user.lastName;
-      comprador.email = this.newOrder.user.email;
+      comprador.birthDate  =user.birthDate;
+      comprador.cpf = user.cpf;
+      comprador.nome = user.firstName + " " + user.lastName;
+      comprador.email = user.email;
       this.cartData.cartItens.forEach(p => {
         produtos.push({
           id : p.product.id, 
           title : p.product.title , 
-          amount: p.amount , 
+          amount: p.amount.toFixed(2),
           qty : p.qty 
         });
       });
           
       comprador.shipping = {
-        rua : this.newOrder.shipping.rua,
-        numero : this.newOrder.shipping.numero,
-        complemento : this.newOrder.shipping.complemento,
-        bairro : this.newOrder.shipping.bairro,
-        cidade : this.newOrder.shipping.cidade,
-        pais : this.newOrder.shipping.pais,
-        cep : this.newOrder.shipping.cep,
-        estado : this.newOrder.shipping.estado
+        rua : shipping.rua,
+        numero : shipping.numero,
+        complemento : shipping.complemento,
+        bairro : shipping.bairro,
+        cidade : shipping.cidade,
+        pais : shipping.pais,
+        cep : shipping.cep,
+        estado : shipping.estado
       };
       valueData = { 
         tipoEntrega : this.newOrder.tipoEntrega,
         valorEntrega : this.newOrder.valorEntrega
       };      
       console.log(JSON.stringify(cardData));
-      this.http.get("http://192.168.0.7/api.php?opt=transactions/cartao&produtos="+
+      this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=transactions/cartao&produtos="+
       JSON.stringify(produtos)+
       "&comprador="+JSON.stringify(comprador)+
       "&valueData="+JSON.stringify(valueData)+
@@ -191,38 +263,40 @@ export class CheckoutPage implements OnInit {
       
       console.log(comprador.senderHash);
       comprador.cobranca.phone = { 
-        area : this.newOrder.cardData.phone.area, 
-        number : this.newOrder.cardData.phone.number
+        area : user.ddd, 
+        number : user.telefone
       };
-      comprador.birthDate  = this.newOrder.user.birthDate;
-      comprador.cpf = this.newOrder.user.cpf;
-      comprador.nome = this.newOrder.user.firstName + " " + this.newOrder.user.lastName;
-      comprador.email = this.newOrder.user.email;
+      comprador.birthDate  = user.birthDate;
+      comprador.cpf = user.cpf;
+      comprador.nome = user.firstName + " " + user.lastName;
+      comprador.email = user.email;
       this.cartData.cartItens.forEach(p => {
         produtos.push({
           id : p.product.id, 
           title : p.product.title , 
-          amount: p.amount , 
+          amount: p.amount.toFixed(2) , 
           qty : p.qty 
         });
       });
 
       comprador.shipping = {
-        rua : this.newOrder.shipping.rua,
-        numero : this.newOrder.shipping.numero,
-        complemento : this.newOrder.shipping.complemento,
-        bairro : this.newOrder.shipping.bairro,
-        cidade : this.newOrder.shipping.cidade,
-        pais : this.newOrder.shipping.pais,
-        cep : this.newOrder.shipping.cep,
-        estado : this.newOrder.shipping.estado
+        rua : shipping.rua,
+        numero : shipping.numero,
+        complemento : shipping.complemento,
+        bairro : shipping.bairro,
+        cidade : shipping.cidade,
+        pais : shipping.pais,
+        cep : shipping.cep,
+        estado : shipping.estado
         
       };
       valueData = { 
         tipoEntrega : this.newOrder.tipoEntrega,
         valorEntrega : this.newOrder.valorEntrega
       };
-      this.http.get("http://192.168.0.7/api.php?opt=transactions/boleto&produtos="+
+      console.log(comprador);
+      console.log(valueData);
+      this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=transactions/boleto&produtos="+
       JSON.stringify(produtos)+
       "&comprador="+JSON.stringify(comprador)+
       "&valueData="+JSON.stringify(valueData)
@@ -241,9 +315,12 @@ export class CheckoutPage implements OnInit {
       modal.onDidDismiss(() => {
         this.storage.get("CardData").then((cardData) => {
           this.zone.run( ()=>{
-            this.paymentMethod = cardData;
-            this.paymentMethod.payment_id = 'card';        
-            
+            if(cardData.cardNumber != ''){
+              this.paymentMethod = cardData;
+              this.paymentMethod.payment_id = 'card';        
+            }else{
+              this.paymentMethod.payment_id = 'nan';        
+            }
             console.log(this.paymentMethod);
             this.storage.remove("CardData");
           });
@@ -272,7 +349,7 @@ export class CheckoutPage implements OnInit {
 
   calculateShipment(){
     
-    if(!this.newOrder.shipping.cep || !this.shippingMethod){
+    if(!this.shipping.value.cep || !this.shippingMethod){
       return ;
     }
     this.newOrder.tipoEntrega = this.shippingMethod;
@@ -291,7 +368,7 @@ export class CheckoutPage implements OnInit {
     this.http.get("http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdServico="+
         (this.shippingMethod == "pac" ? '41106' : '40010')
         +"&nCdEmpresa&sDsSenha&sCepDestino="+
-        this.newOrder.shipping.cep+
+        this.shipping.value.cep+
         "&sCepOrigem=66065310&nVlAltura="
         +(height >= 2 ? height : 2)+
         "&nVlLargura="+(width >= 11 ? width : 11)+
@@ -349,9 +426,6 @@ export class CheckoutPage implements OnInit {
       });
       
   }
-  getDate(val : any){
-    this.newOrder.user.birthDate = val._text;
-  }
-
+  
 }
 

@@ -25,7 +25,7 @@
         </ion-fab-list>
     </ion-fab>
   <ion-card>
-    <ion-slides autoplay="3000" pager>
+    <ion-slides autoplay="3000" >
       <ion-slide *ngFor="let image of [1,2,3,4]">
         <img src="http://placehold.it/350x200">
       </ion-slide>
@@ -34,7 +34,7 @@
   <div class="menuHeaderSpacer"></div>
   <ion-grid>
     <ion-row>
-      <ion-slides pager>
+      <ion-slides speed="600" effect="fade" pager paginationType="progress" parallax >
         <ion-slide *ngFor="let product of products" (click)="openProductPage(product)">
           <ion-card>
             <img [src]="product.featured_src">

@@ -6,8 +6,13 @@
   </ion-navbar>
 
 </ion-header>
-
-<ion-content >
+<ion-content *ngIf="userOrders.length == 0">
+    <div class="semProdutos">
+        <ion-icon large color="amazonia" name="alert"></ion-icon>
+      <h1>Sem Encomendas</h1>
+    
+    </div>
+<ion-content *ngIf="userOrders.length > 0" >
     <ion-fab right bottom  >
         <button ion-fab  color="amazonia">
           <ion-icon name="more"></ion-icon>

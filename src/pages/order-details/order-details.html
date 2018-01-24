@@ -42,7 +42,7 @@
            Encomenda Nº: {{order.id}} &nbsp;
           </ion-card-title>
           <p>
-              Status : {{order.status}}
+              Status : {{order.status == 'prossessing' ? 'Em Processamento' : order.status == '' }}
           </p>
             <ion-grid>
                 <ion-row>
@@ -212,7 +212,7 @@
               <h2>Pagamento:</h2>
             </ion-row>
             <ion-row style="text-align:left !important;">
-              <p>{{order.payment_details.paid ? "Aceito" : "Negado ou Em Processamento" }}</p>
+              <p>{{order.payment_details.paid ? "Aceito" : "Em Processamento" }}</p>
             </ion-row>
             <ion-row style="text-align:left !important;">
               <h2>Moeda:</h2>

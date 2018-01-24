@@ -9,6 +9,9 @@ import { Storage } from '@ionic/storage/dist/storage';
 
 import { WooProvider } from '../../providers/woo/woo';
 import { LoginPage } from '../login/login';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { NgZone } from '@angular/core';
 
 
 @Component({
@@ -16,194 +19,247 @@ import { LoginPage } from '../login/login';
   templateUrl: 'signup.html',
 })
 export class SignupPage {
-  newUser: any = {
-
-  };
+  user: FormGroup;
   atual: any = 'aba1';
-  DECIMAL_SEPARATOR = ".";
-  GROUP_SEPARATOR = ",";
-  pureResult: any;
-  maskedId: any;
-  val: any;
-  v: any;
-
+  billing: FormGroup;
+  shipping: FormGroup;
   WooCommerce: any;
 
   billing_shipping_same: boolean;
+  valido: any = false;
+  authForm : FormGroup;
+  constructor(public zone: NgZone, public formBuilder: FormBuilder, public WC: WooProvider, public storage: Storage, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, public http: Http) {
+    this.authForm = formBuilder.group({
+      username: ['', Validators.compose([Validators.required,Validators.minLength(8)])],
+      password: ['', Validators.compose([Validators.required,Validators.minLength(8)])]
+    });
 
-  constructor(public WC: WooProvider, public storage: Storage, public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, public alertCtrl: AlertController, public http: Http) {
+    this.user = formBuilder.group({
+      firstName: ['', Validators.compose([Validators.required])],
+      lastName: ['', Validators.compose([Validators.required])],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      cpf: ['', Validators.compose([Validators.required])],
+      birthDate: ['', Validators.compose([Validators.required])],
+      sex: ['', Validators.compose([Validators.required])]
+    });
+    this.billing = formBuilder.group({
+      rua: ['', Validators.compose([Validators.required])],
+      numero: ['', Validators.compose([Validators.required])],
+      complemento: ['', Validators.compose([Validators.required])],
+      pais: ['', Validators.compose([Validators.required])],
+      estado: ['', Validators.compose([Validators.required])],
+      cidade: ['', Validators.compose([Validators.required])],
+      bairro: ['', Validators.compose([Validators.required])],
+      cep: ['', Validators.compose([Validators.required])],
+      ddd: ['', Validators.compose([Validators.required])],
+      telefone: ['', Validators.compose([Validators.required])]
+    });
+    this.shipping = formBuilder.group({
+      rua: ['', Validators.compose([Validators.required])],
+      numero: ['', Validators.compose([Validators.required])],
+      complemento: ['', Validators.compose([Validators.required])],
+      pais: ['', Validators.compose([Validators.required])],
+      estado: ['', Validators.compose([Validators.required])],
+      cidade: ['', Validators.compose([Validators.required])],
+      bairro: ['', Validators.compose([Validators.required])],
+      cep: ['', Validators.compose([Validators.required])],
+      ddd: ['', Validators.compose([Validators.required])],
+      telefone: ['', Validators.compose([Validators.required])]
+    });
 
-    this.newUser.billing = {};
-    this.newUser.billing.phone = {};
-    this.newUser.shipping = {};
-    this.newUser.shipping.phone = {};
-    this.newUser.user = {};
-    this.newUser.user.sex = "M";
-    this.newUser
     this.billing_shipping_same = false;
 
 
     this.WooCommerce = this.WC.init();
   }
-
-  setBillingToShipping() {
-    if (this.billing_shipping_same) {
-      this.newUser.shipping  = this.newUser.billing;
-      this.newUser.shipping.phone = this.newUser.billing.phone;
-    }
-  }
-
-
-  
-  signup() {
-    let customer = {
-      "email": this.newUser.user.email,
-      "first_name": this.newUser.user.firstName,
-      "last_name": this.newUser.user.lastName,
-      "username": this.newUser.user.userName,
-      "password": this.newUser.user.password,
-      "billing": {
-        "first_name": this.newUser.user.firstName,
-        "last_name": this.newUser.lastName,
-        "address_1": this.newUser.billing.rua,
-        "address_2": this.newUser.billing.complemento,
-        "city": this.newUser.billing.cidade,
-        "state": this.newUser.billing.estado,
-        "postcode": this.newUser.billing.cep,
-        "country": this.newUser.billing.pais,
-        "email": this.newUser.user.email,
-        "phone": "("+this.newUser.billing.phone.area+")"+ this.newUser.billing.phone.number,
-        "number": this.newUser.billing.numero,
-        "neighborhood": this.newUser.billing.bairro,
-        "persontype": "F",
-        "cpf": this.newUser.user.cpf,
-        "birthdate": this.newUser.user.birthDate,
-        "sex": this.newUser.user.sex,
-      },
-      "shipping": {
-        "first_name": this.newUser.user.firstName,
-        "last_name": this.newUser.user.lastName,
-        "address_1": this.newUser.shipping.rua,
-        "address_2": this.newUser.shipping.complemento,
-        "city": this.newUser.shipping.cidade,
-        "state": this.newUser.shipping.estado,
-        "postcode": this.newUser.shipping.cep,
-        "country": this.newUser.shipping.pais,
-        "number": this.newUser.shipping.numero,
-        "neighborhood": this.newUser.shipping.bairro,
-      }
-    }
-
-    let loading = this.loadingCtrl.create({
-      content: "Aguarde..."
-    });
-    loading.present()
-
-    this.http.get("http://192.168.0.7/storeApi.php?opt=2&endpoint=customers&data=" + JSON.stringify(customer)).subscribe((data) => {
-      loading.dismiss();
-      let rep = data.json();
-
-      if (rep.error) {
+  prosseguir(next) {
+    if(next == 'aba2'){
+      
+      
+    
+      if (this.user.valid) {
+        this.atual = next;
+      } else {
         this.toastCtrl.create({
-          message: rep.error,
-          dismissOnPageChange: true,
+          message: "Verifique todos os campos e preençha corretamente",
           showCloseButton: true,
           closeButtonText: "OK",
           duration: 2000
-
-        }).present()
+        }).present();
+      }
+    }else if (next == 'aba3') {
+      console.log(this.valid());
+      if (this.valid()) {
+        this.atual = next;
       } else {
-        this.alertCtrl.create({
-          title: "Sucesso",
-          message: "Sua Conta foi Criada com Sucesso",
-          buttons: [{
-            text: "Login",
-            handler: () => {
-              if (this.navCtrl.getPrevious().component.name == "LoginPage") {
-                this.navCtrl.pop();
-              }else{
-                this.navCtrl.push(LoginPage,{"cartData":this.navParams.get("cartData")});
-              }
-            }
-          }]
+        this.toastCtrl.create({
+          message: "Verifique todos os campos e preençha corretamente",
+          showCloseButton: true,
+          closeButtonText: "OK",
+          duration: 2000
         }).present();
       }
 
-    });
+
+    }
+
 
   }
-  getDate(val: any) {
-    console.log(val);
-    this.newUser.user.birthDate = val._text;
+  valid() {
+    if (this.billing_shipping_same) {
+      
+      return this.billing.valid;
+    } else {
+      
+      return (this.billing.valid && this.shipping.valid);
+    }
   }
+  
+    signup() {
+      let user = this.user.value;
+      let auth = this.authForm.value;
+      let billing = this.billing.value;
+      let shipping = this.shipping.value;
+      
+      user.birthDate= user.birthDate.split('-').reverse().join('/');
+      console.log(user);
+      
 
-  emailCheck() {
-    let validEmail = false;
-    let reg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-    if (reg.test(this.newUser.email)) {
-      this.WooCommerce.getAsync("customers/email/" + this.newUser.user.email).then((data => {
-        let res = JSON.parse(data.body);
-        console.log(res);
-        if (res.errors) {
-          validEmail = true;
-
-        } else {
-          validEmail = false;
-
+      if(this.billing_shipping_same){
+        shipping = billing;
+      }
+      let customer = {
+        "email": user.email,
+        "first_name": user.firstName,
+        "last_name": user.lastName,
+        "username": auth.username,
+        "password": auth.password,
+        "billing": {
+          "first_name": user.firstName,
+          "last_name": user.lastName,
+          "address_1": billing.rua,
+          "address_2": billing.complemento,
+          "city": billing.cidade,
+          "state": billing.estado,
+          "postcode": billing.cep,
+          "country": billing.pais,
+          "email": user.email,
+          "phone": "("+billing.ddd+")"+ billing.telefone
+        },
+        "shipping": {
+          "first_name": user.firstName,
+          "last_name": user.lastName,
+          "address_1": shipping.rua,
+          "address_2": shipping.complemento,
+          "city": shipping.cidade,
+          "state": shipping.estado,
+          "postcode": shipping.cep,
+          "country": shipping.pais,
+         
+        },
+        "meta_data" : [
+          {
+            "key": "shipping_number",
+            "value": shipping.numero
+          },
+          {
+            "key":"shipping_neighborhood",
+            "value": shipping.bairro
+          },
+          {
+            "key": "number",
+            "value" :billing.numero,
+          },
+          {
+            "key": "neighborhood",
+            "value": billing.bairro
+          },
+          {
+            "key": "cpf",
+            "value": user.cpf
+          },
+          {
+            "key": "birthdate",
+            "value": user.birthDate
+          },
+          {
+            "key": "sex",
+            "value": user.sex
+          }]
+      }
+  
+      let loading = this.loadingCtrl.create({
+        content: "Aguarde..."
+      });
+      loading.present()
+  
+      this.http.get("http://paranoidlab.xyz/storeApi.php?opt=2&endpoint=customers&data=" + JSON.stringify(customer)).subscribe((data) => {
+        loading.dismiss();
+        let rep = data.json();
+  
+        if (rep.error) {
           this.toastCtrl.create({
-            message: "Email Já Cadastrado",
+            message: rep.error,
+            dismissOnPageChange: true,
             showCloseButton: true,
-            closeButtonText: "OK"
-
+            closeButtonText: "OK",
+            duration: 2000
+  
           }).present()
+        } else {
+          this.alertCtrl.create({
+            title: "Sucesso",
+            message: "Sua Conta foi Criada com Sucesso",
+            buttons: [{
+              text: "Login",
+              handler: () => {
+                if (this.navCtrl.getPrevious().component.name == "LoginPage") {
+                  this.navCtrl.pop();
+                }else{
+                  this.navCtrl.push(LoginPage,{"cartData":this.navParams.get("cartData")});
+                }
+              }
+            }]
+          }).present();
         }
-      }));
-
-
-    } else {
-
-      this.toastCtrl.create({
-        message: "Email Inválido",
-        showCloseButton: true,
-        closeButtonText: "OK"
-      }).present()
+  
+      });
+  
     }
-  }
-
-  format(valString) {
-    if (!valString) {
-      return '';
+    emailCheck() {
+      let validEmail = false;
+      
+      let reg = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      
+      if (reg.test(this.user.value.email)) {
+        this.WooCommerce.getAsync("customers/email/" + this.user.value.email).then((data => {
+          let res = JSON.parse(data.body);
+          console.log(res);
+          if (res.errors) {
+            validEmail = true;
+  
+          } else {
+            validEmail = false;
+  
+            this.toastCtrl.create({
+              message: "Email Já Cadastrado",
+              showCloseButton: true,
+              closeButtonText: "OK"
+  
+            }).present()
+          }
+        }));
+  
+  
+      } else {
+  
+        this.toastCtrl.create({
+          message: "Email Inválido",
+          showCloseButton: true,
+          closeButtonText: "OK"
+        }).present()
+      }
     }
-    let val = valString.toString();
-    const parts = this.unFormat(val).split(this.DECIMAL_SEPARATOR);
-    this.pureResult = parts;
-    if (parts[0].length <= 11) {
-      this.maskedId = this.cpf_mask(parts[0]);
-      return this.maskedId;
-    }
-  };
-
-  unFormat(val) {
-    if (!val) {
-      return '';
-    }
-    val = val.replace(/\D/g, '');
-
-    if (this.GROUP_SEPARATOR === ',') {
-      return val.replace(/,/g, '');
-    } else {
-      return val.replace(/\./g, '');
-    }
-  };
-
-  cpf_mask(v) {
-    v = v.replace(/\D/g, ''); //Remove tudo o que não é dígito
-    v = v.replace(/(\d{3})(\d)/, '$1.$2'); //Coloca um ponto entre o terceiro e o quarto dígitos
-    v = v.replace(/(\d{3})(\d)/, '$1.$2'); //Coloca um ponto entre o terceiro e o quarto dígitos
-    //de novo (para o segundo bloco de números)
-    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); //Coloca um hífen entre o terceiro e o quarto dígitos
-    return v;
-  }
-
+  
+    
 }

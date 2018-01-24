@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {MenuPage} from '../pages/menu/menu'
 import { Http } from '@angular/http';
 
+
 declare var PagSeguroDirectPayment;
 
 @Component({
@@ -23,14 +24,14 @@ export class MyApp {
   }
 
   initializeApp() {
-    this.http.get("http://192.168.0.7/api.php?opt=session"
+    this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=session"
     ).subscribe( (data)=>{
         let session = data.json();
         PagSeguroDirectPayment.setSessionId(session.id);
     });
     this.platform.ready().then(() => {
       
-      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#72b817');
       this.splashScreen.hide();
     });
   }

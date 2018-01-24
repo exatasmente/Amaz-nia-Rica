@@ -21,13 +21,13 @@ export class ProductDetailsPage {
   related : any[] = [];
   ready:any 
   atual = "Visão Geral";
-
+  reviews : any[];
   constructor(public zone : NgZone ,public loadingCtrl : LoadingController, public WC : WooProvider, public modalCtrl : ModalController, public navCtrl: NavController, public navParams: NavParams, public storage : Storage, public toastCtrl : ToastController) {
     this.ready = false;
     
     this.WooCommerce = WC.init();
     this.product =this.navParams.get("product");
-    
+    console.log(this.product);
     let temp = this.navParams.get("modal");
     
     if(temp != null){
@@ -36,6 +36,15 @@ export class ProductDetailsPage {
       this.modal = false;
     }
     
+    this.WooCommerce.getAsync("products/"+this.product.id+"/reviews").then ( (data)=>{
+        this.zone.run( ()=>{
+          this.reviews = JSON.parse(data.body).product_reviews;
+          console.log(this.reviews);
+        });
+        
+        
+    });
+
   }
 
   loadRelated(event){

@@ -19,13 +19,14 @@ export class DestaquesPage {
   products : any[];
   WooCommerce : any;
   tabBar : any;
+  loadEvent : any;
   constructor(public zone : NgZone, public WC : WooProvider, public navCtrl: NavController, public loadingCrtl: LoadingController , public toastCtrl : ToastController, public modalCtrl : ModalController ) {
     this.WooCommerce = this.WC.init();
     
     let loading = this.loadingCrtl.create({content:'Carregando Produtos'});
     loading.present();
     
-    loading.dismiss();
+    
     this.WooCommerce.getAsync("products").then ( (data)=>{
         try{
         this.zone.run(()=>{
@@ -60,6 +61,8 @@ export class DestaquesPage {
 
 
   doRefresh(event){
+    if(this.loadEvent)
+      this.loadEvent.enable(true);
     this.WooCommerce.getAsync("products").then ( (data)=>{
     
       this.zone.run( ()=>{
@@ -93,7 +96,7 @@ export class DestaquesPage {
       try{
         this.moreProducts =JSON.parse(data.body).products;
         event.complete();   
-        event.enable(false);    
+        
       }catch(e){
           event.complete();   
           this.toastCtrl.create({
@@ -126,9 +129,10 @@ export class DestaquesPage {
           this.moreProducts = this.moreProducts.concat(JSON.parse(data.body).products);
           if(event != null){
             event.complete();
-            
+            if(this.loadEvent == null)
+              this.loadEvent = event;
             if(JSON.parse(data.body).products.length < 10){
-              
+              this.loadEvent.enable(false);
               this.toastCtrl.create({
                 message:"Sem mais Produtos",
                 duration:2000}).present();
