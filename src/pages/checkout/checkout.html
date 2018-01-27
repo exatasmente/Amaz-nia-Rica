@@ -3,23 +3,9 @@
   <ion-navbar color="amazonia">
     <ion-title>Pedido</ion-title>
   </ion-navbar>
-  <ion-toolbar color="amazonia">
-    <ion-segment [(ngModel)]="atual" color="amazoniaText">
-      <ion-segment-button value="aba1">
-        Dados Pessoais
-      </ion-segment-button>
-      <ion-segment-button value="aba2">
-        Entrega
-      </ion-segment-button>
-      <ion-segment-button value="aba3">
-        Pagamento
-      </ion-segment-button>
-    </ion-segment>
-
-  </ion-toolbar>
 </ion-header>
-<ion-content *ngIf="!editar"></ion-content>
-<ion-content class="page-checkout" *ngIf="editar">
+
+<ion-content  class="page-checkout" *ngIf="editar">
   <div [ngSwitch]="atual">
     <div *ngSwitchCase="'aba1'">
       <ion-item-divider color="dark">Dados Pessoais</ion-item-divider>
@@ -366,7 +352,7 @@
         <div *ngIf="paymentMethod.payment_id == 'boleto'">
           <ion-item>
             <ion-label>CPF :</ion-label>
-            <ion-label>{{newOrder.user.cpf}}</ion-label>
+            <ion-label>{{user.value.cpf}}</ion-label>
           </ion-item>
           <button ion-button block outline color="dark" (click)="paymentMethod.payment_id = 'nan' ">Trocar Forma Pagamento </button>
         </div>
@@ -386,14 +372,11 @@
     </div>
     <div *ngSwitchCase="'aba2'">
       <button ion-button block color="amazonia" (click)="prosseguir('aba3')">Continuar</button>
-      <button ion-button block outline color="dark" (click)="atual= 'aba1' ">Voltar</button>
+      <button ion-button block  color="dark" (click)="atual= 'aba1' ">Voltar</button>
     </div>
     <div *ngSwitchCase="'aba3'">
       <button ion-button block color="amazonia" (click)="placeOrder()">Concluir</button>
-      <button ion-button block outline color="dark" (click)="atual= 'aba2' ">Voltar</button>
+      <button ion-button block  color="dark" (click)="atual= 'aba2' ">Voltar</button>
     </div>
-  </div>
-  <div style="height: 17px; text-align: center;">
-    <ion-note>Pagamento Processado por PagSeguro </ion-note>
   </div>
 </ion-footer>

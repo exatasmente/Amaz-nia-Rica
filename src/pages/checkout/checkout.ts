@@ -29,7 +29,7 @@ export class CheckoutPage implements OnInit {
   paymentMethods: any[];
   paymentMethod: any = {};
   shippingMethods: any[];
-  shippingMethod: any = {};
+  shippingMethod: any = "";
   billing_shipping_same: boolean;
   
   cardBrandImage: any;
@@ -153,6 +153,14 @@ export class CheckoutPage implements OnInit {
 
 
   placeOrder() {
+    if(this.paymentMethod.payment_id =='nan'){
+      this.toastCtrl.create({
+        message : "Verifique todos os campos e tente novamente",
+        duration : 2000,
+        closeButtonText : "OK",
+        showCloseButton : true
+      })
+    }
     let user = this.user.value;
     let billing = this.billing.value;
     let shipping = this.shipping.value;
@@ -263,8 +271,8 @@ export class CheckoutPage implements OnInit {
       
       console.log(comprador.senderHash);
       comprador.cobranca.phone = { 
-        area : user.ddd, 
-        number : user.telefone
+        area : billing.ddd, 
+        number : billing.telefone
       };
       comprador.birthDate  = user.birthDate;
       comprador.cpf = user.cpf;
@@ -296,10 +304,10 @@ export class CheckoutPage implements OnInit {
       };
       console.log(comprador);
       console.log(valueData);
-      this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=transactions/boleto&produtos="+
-      JSON.stringify(produtos)+
-      "&comprador="+JSON.stringify(comprador)+
-      "&valueData="+JSON.stringify(valueData)
+      this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=transactions/boleto&comprador="+
+      JSON.stringify(comprador)+
+      "&valueData="+JSON.stringify(valueData)+
+      "&produtos="+JSON.stringify(produtos)
       ).subscribe( data =>{
         loading.dismiss();
         this.storage.remove("cart");
@@ -348,8 +356,14 @@ export class CheckoutPage implements OnInit {
 
 
   calculateShipment(){
-    
-    if(!this.shipping.value.cep || !this.shippingMethod){
+    let cep : any;
+    if(this.billing_shipping_same){
+      cep = this.billing.value.cep;
+    }else{
+      cep = this.shipping.value.cep;
+    }
+    if(!cep){
+      console.log("Aki2");
       return ;
     }
     this.newOrder.tipoEntrega = this.shippingMethod;
@@ -368,7 +382,7 @@ export class CheckoutPage implements OnInit {
     this.http.get("http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdServico="+
         (this.shippingMethod == "pac" ? '41106' : '40010')
         +"&nCdEmpresa&sDsSenha&sCepDestino="+
-        this.shipping.value.cep+
+        cep+
         "&sCepOrigem=66065310&nVlAltura="
         +(height >= 2 ? height : 2)+
         "&nVlLargura="+(width >= 11 ? width : 11)+

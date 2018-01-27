@@ -18,7 +18,7 @@
       
     <ion-list>
         
-      <ion-item text-wrap menuClose="" (click)="openHomePage">
+      <ion-item text-wrap menuClose="" (click)="openHomePage()">
         <ion-icon name="home" item-left color="amazonia" large></ion-icon>
         <h2> Inicio </h2>
       </ion-item>
@@ -34,15 +34,19 @@
         <ion-icon name="log-out" item-left color="amazonia" large></ion-icon>
           <h2> Sair </h2>
       </ion-item>
+      <ion-item text-wrap menuClose="" (click)="openAboutPage()">
+        <ion-icon name="information-circle" item-left color="amazonia" large></ion-icon>
+        <h2> Sobre </h2>
+      </ion-item>
     </ion-list>
     <div style="margin-left: 20%;margin-top:100%;">
-        <ion-note>
-          Versão : 0.0.1.0 ALFA
-        </ion-note>
-  
-    </div>  
+      <ion-note>
+        Versão : 0.0.2.0 ALFA
+      </ion-note>
+  </div>  
+
   </ion-content>
-  
+
 </ion-menu>
 
 <ion-nav [root]="homePage" #content ></ion-nav>

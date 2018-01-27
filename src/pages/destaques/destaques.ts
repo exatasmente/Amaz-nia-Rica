@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import {NavController} from 'ionic-angular';
 import { WooProvider } from '../../providers/woo/woo';
-import { ToastController } from 'ionic-angular/components/toast/toast-controller';
-import { ModalController } from 'ionic-angular/components/modal/modal-controller';
-import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
+import { ToastController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
+import { LoadingController } from 'ionic-angular';
 import { ProductDetailsPage } from '../product-details/product-details';
 
 import { CartPage } from '../cart/cart';

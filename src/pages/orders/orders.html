@@ -12,7 +12,8 @@
       <h1>Sem Encomendas</h1>
     
     </div>
-<ion-content *ngIf="userOrders.length > 0" >
+</ion-content>
+<ion-content  fullscreen hide-fab>
     <ion-fab right bottom  >
         <button ion-fab  color="amazonia">
           <ion-icon name="more"></ion-icon>
@@ -37,7 +38,7 @@
                      <p>QTD Produtos:</p>
                   </ion-col>
                   <ion-col col-6 style="text-align:right !important;">
-                     <p>{{order.total_line_items_quantity}}</p>
+                     <p>{{order.line_items.length}}</p>
                   </ion-col>
               </ion-row>
               <ion-row>
@@ -45,7 +46,7 @@
                        <p>Valor Produtos:</p>
                     </ion-col>
                     <ion-col col-6 style="text-align:right !important;">
-                       <p>{{order.subtotal}}</p>
+                       <p>{{(order.total - order.shipping_total).toFixed(2)}}</p>
                     </ion-col>
               </ion-row>
               <ion-row>
@@ -53,7 +54,7 @@
                      <p>Valor de Entrega:</p>
                   </ion-col>
                   <ion-col col-6 style="text-align:right !important;">
-                     <p>{{order.total_shipping}}</p>
+                     <p>{{order.shipping_total}}</p>
                   </ion-col>
               </ion-row>
               <ion-row>

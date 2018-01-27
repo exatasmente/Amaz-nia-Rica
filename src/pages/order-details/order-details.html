@@ -23,7 +23,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content class="page-product-details" >
+  <ion-content class="page-product-details" fullscreen hide-fab>
       <ion-fab right bottom  >
           <button ion-fab  color="amazonia">
             <ion-icon name="more"></ion-icon>
@@ -44,40 +44,41 @@
           <p>
               Status : {{order.status == 'prossessing' ? 'Em Processamento' : order.status == '' }}
           </p>
-            <ion-grid>
-                <ion-row>
-                    <ion-col col-6 style="text-align:left !important;">
-                       <h2>QTD Produtos:</h2>
-                    </ion-col>
-                    <ion-col col-6 style="text-align:right !important;">
-                       <p>{{order.total_line_items_quantity}}</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
-                      <ion-col col-6 style="text-align:left !important;">
-                         <h2>Valor Produtos:</h2>
-                      </ion-col>
-                      <ion-col col-6 style="text-align:right !important;">
-                         <p>{{order.subtotal}}</p>
-                      </ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col col-6 style="text-align:left !important;">
-                       <h2>Valor de Entrega:</h2>
-                    </ion-col>
-                    <ion-col col-6 style="text-align:right !important;">
-                       <p>{{order.total_shipping}}</p>
-                    </ion-col>
-                </ion-row>
-                <ion-row>
+          <ion-grid>
+            <ion-row>
+                <ion-col col-6 style="text-align:left !important;">
+                   <p>QTD Produtos:</p>
+                </ion-col>
+                <ion-col col-6 style="text-align:right !important;">
+                   <p>{{order.line_items.length}}</p>
+                </ion-col>
+            </ion-row>
+            <ion-row>
                   <ion-col col-6 style="text-align:left !important;">
-                     <h2>Valor Total:</h2>
+                     <p>Valor Produtos:</p>
                   </ion-col>
                   <ion-col col-6 style="text-align:right !important;">
-                     <p>{{order.total}}</p>
+                     <p>{{(order.total - order.shipping_total).toFixed(2)}}</p>
                   </ion-col>
-                </ion-row>
-              </ion-grid>
+            </ion-row>
+            <ion-row>
+                <ion-col col-6 style="text-align:left !important;">
+                   <p>Valor de Entrega:</p>
+                </ion-col>
+                <ion-col col-6 style="text-align:right !important;">
+                   <p>{{order.shipping_total}}</p>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6 style="text-align:left !important;">
+                 <p>Valor Total:</p>
+              </ion-col>
+              <ion-col col-6 style="text-align:right !important;">
+                 <p>{{order.total}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        
         </ion-card-content>
       </ion-card>
       <button *ngIf="!ready" ion-button block outline large color="amazonia" (click)="loadProducts()">
@@ -148,49 +149,49 @@
             <h2>Nome :</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.first_name}}</p>
+            <p>{{order.shipping.first_name}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>Sobre Nome:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.last_name}}</p>
+            <p>{{order.shipping.last_name}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>Endereço Linha 1:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.address_1}}</p>
+            <p>{{order.shipping.address_1}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>Endereço Linha 2:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.address_2}}</p>
+            <p>{{order.shipping.address_2}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>Cidade:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.city}}</p>
+            <p>{{order.shipping.city}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>Estado:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;"> 
-            <p>{{order.shipping_address.state}}</p>
+            <p>{{order.shipping.state}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>CEP:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.postcode}}</p>
+            <p>{{order.shipping.postcode}}</p>
           </ion-row>
           <ion-row style="text-align:left !important;">
             <h2>País:</h2>
           </ion-row>
           <ion-row style="text-align:left !important;">
-            <p>{{order.shipping_address.country}}</p>
+            <p>{{order.shipping.country}}</p>
           </ion-row>
         </ion-grid>
       </ion-item>
@@ -206,13 +207,13 @@
               <h2>Forma de Pagamento :</h2>
             </ion-row>
             <ion-row style="text-align:left !important;">
-              <p>{{order.payment_details.method_title}}</p>
+              <p>{{order.payment_method_title}}</p>
             </ion-row>
             <ion-row style="text-align:left !important;">
               <h2>Pagamento:</h2>
             </ion-row>
             <ion-row style="text-align:left !important;">
-              <p>{{order.payment_details.paid ? "Aceito" : "Em Processamento" }}</p>
+              <p>{{order.status}}</p>
             </ion-row>
             <ion-row style="text-align:left !important;">
               <h2>Moeda:</h2>

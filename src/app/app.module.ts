@@ -33,11 +33,13 @@ import { CheckoutModalPage } from '../pages/checkout-modal/checkout-modal';
 
 import { Ionic2RatingModule } from "ionic2-rating";
 
-
+import { AboutPage } from '../pages/about/about';
+import { AbsoluteDrag } from '../directives/absolute-drag/absolute-drag';
 
 
 @NgModule({
   declarations: [
+    AbsoluteDrag,
     MyApp,
     HomePage,
     MenuPage,
@@ -52,7 +54,8 @@ import { Ionic2RatingModule } from "ionic2-rating";
     OrderDetailsPage,
     CheckoutPage,
     CheckoutModalPage,
-    PaymentModalPage
+    PaymentModalPage,
+    AboutPage
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,8 @@ import { Ionic2RatingModule } from "ionic2-rating";
     OrderDetailsPage,
     CheckoutPage,
     CheckoutModalPage,
-    PaymentModalPage
+    PaymentModalPage,
+    AboutPage
   ],
   providers: [
     StatusBar,

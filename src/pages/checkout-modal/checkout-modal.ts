@@ -78,12 +78,16 @@ export class CheckoutModalPage {
                 'total': this.data.shipping.cost
               }]
               ,
-              "cart_hash": this.data.code,
               "meta_data": [
                 {
                   "key": "pagsegurourl",
                   "value": this.data.paymentLink
                 },
+                {
+                  "key": "pagsegurocode",
+                  "value": this.data.code
+
+                }
   
               ],
               'line_items': []
@@ -131,7 +135,7 @@ export class CheckoutModalPage {
 
   closeModal() {
     if(this.navCtrl.canSwipeBack){
-      this.navCtrl.pop();
+      
       this.navCtrl.popToRoot();
     }
     

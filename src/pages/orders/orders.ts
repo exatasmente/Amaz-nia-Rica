@@ -8,6 +8,7 @@ import { ModalController } from 'ionic-angular/components/modal/modal-controller
 import { CartPage } from '../cart/cart';
 import { NgZone } from '@angular/core';
 import { OrderDetailsPage } from '../order-details/order-details';
+import { Http } from '@angular/http';
 
 
 @Component({
@@ -17,22 +18,27 @@ import { OrderDetailsPage } from '../order-details/order-details';
 export class OrdersPage {
   WooCommerce : any;
   userOrders : any[];
-  constructor(public zone : NgZone, public modalCtrl : ModalController, public storage : Storage ,public WC : WooProvider,public loadingCtrl : LoadingController , public  toastCtrl : ToastController  , public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public http : Http, public zone : NgZone, public modalCtrl : ModalController, public storage : Storage ,public WC : WooProvider,public loadingCtrl : LoadingController , public  toastCtrl : ToastController  , public navCtrl: NavController, public navParams: NavParams) {
     this.WooCommerce = this.WC.init();
     this.userOrders = [];
     let loading = this.loadingCtrl.create({
       content: "Aguarde..."
     });
     loading.present();
-    this.WooCommerce.getAsync("orders").then( (data)=>{
+    this.http.get("http://paranoidlab.xyz/storeApi.php?opt=1&endpoint=orders").subscribe( (rep)=>{
       try{
+        let data = rep;
 
         this.storage.get("userLoginInfo").then( (userInfo)=>{        
-        let resp = JSON.parse(data.body).orders;
+        let resp = data.json();
         for(let i = 0 ; i < resp.length ; i++){
           
           if(resp[i].customer_id == userInfo.id){
-              this.userOrders.push(resp[i]);
+              this.zone.run( ()=>{
+                console.log(resp[1]);
+                this.userOrders.push(resp[i]);
+              });
+              
             
           }
         }

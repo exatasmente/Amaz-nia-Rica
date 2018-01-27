@@ -8,6 +8,7 @@ import { CartPage } from '../cart/cart';
 import { Storage } from '@ionic/storage/dist/storage';
 import { LoginPage } from '../login/login';
 import { OrdersPage } from '../orders/orders';
+import { AboutPage } from '../about/about';
 
 
 @Component({
@@ -37,7 +38,9 @@ export class MenuPage {
       })
     })
   }
-
+  openAboutPage(){
+    this.navCtrl.push(AboutPage);
+  }
   openPageAvatar(){
     if(!this.hasLogin){
       this.navCtrl.push(LoginPage);
