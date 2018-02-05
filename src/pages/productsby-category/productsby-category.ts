@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import {IonicPage,NavController, NavParams } from 'ionic-angular';
 import { ProductDetailsPage } from '../product-details/product-details';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 
 
-
-import {CartPage} from '../cart/cart';
 import { WooProvider } from '../../providers/woo/woo';
 
-
+@IonicPage()
 @Component({
   selector: 'page-productsby-category',
   templateUrl: 'productsby-category.html',
@@ -28,7 +26,7 @@ export class ProductsbyCategoryPage {
 
     this.WooCommerce.getAsync("products?filter[category]="+this.cat.slug).then ( (data)=>{
         console.log(JSON.parse(data.body));
-        this.categoryProducts = JSON.parse(data.body).products;
+        this.categoryProducts = JSON.parse(data.body);
         loading.dismiss();
     },(err)=>{
       console.log(err);
@@ -46,9 +44,8 @@ export class ProductsbyCategoryPage {
     
   } 
   
-
-  openCart(){
-    this.modalCtrl.create(CartPage).present();
-  }
+  openCart(){     
+    this.navCtrl.push('CartPage');   
+  }  
 
 }

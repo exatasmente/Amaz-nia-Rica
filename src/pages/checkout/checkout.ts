@@ -31,7 +31,9 @@ export class CheckoutPage implements OnInit {
   shippingMethods: any[];
   shippingMethod: any = "";
   billing_shipping_same: boolean;
-  
+  empresa;
+  cnpj;
+  company = false;
   cardBrandImage: any;
   user: FormGroup;
   atual: any = 'aba1';
@@ -48,13 +50,43 @@ export class CheckoutPage implements OnInit {
       username: ['', Validators.compose([Validators.required,Validators.minLength(8)])],
       password: ['', Validators.compose([Validators.required,Validators.minLength(8)])]
     });
+    this.billing = this.formBuilder.group({
+      rua: ['', Validators.compose([Validators.required])],
+      numero: ['', Validators.compose([Validators.required])],
+      complemento: ['', Validators.compose([Validators.required])],
+      pais: ['', Validators.compose([Validators.required])],
+      estado: ['', Validators.compose([Validators.required])],
+      cidade: ['', Validators.compose([Validators.required])],
+      bairro: ['', Validators.compose([Validators.required])],
+      cep: ['', Validators.compose([Validators.required,Validators.maxLength(8),Validators.minLength(8)])],
+      ddd: ['', Validators.compose([Validators.required])],
+      telefone: ['', Validators.compose([Validators.required])]
+    });
+    this.user = this.formBuilder.group({
+      firstName: ['', Validators.compose([Validators.required])],
+      lastName: ['', Validators.compose([Validators.required])],
+      email: ['', Validators.compose([Validators.required, Validators.email])],
+      cpf: ['', Validators.compose([Validators.required])],
+      birthDate: ['', Validators.compose([Validators.required])],
+      sex: ['', Validators.compose([Validators.required])]
+    });
     
-    this.billing_shipping_same = false;
+    this.shipping = this.formBuilder.group({
+      rua: ['', Validators.compose([Validators.required])],
+      numero: ['', Validators.compose([Validators.required])],
+      complemento: ['', Validators.compose([Validators.required])],
+      pais: ['', Validators.compose([Validators.required])],
+      estado: ['', Validators.compose([Validators.required])],
+      cidade: ['', Validators.compose([Validators.required])],
+      bairro: ['', Validators.compose([Validators.required])],
+      cep: ['', Validators.compose([Validators.required,Validators.maxLength(8),Validators.minLength(8)])]
+    });
 
+
+    
     this.zone.run( ()=>{
       this.paymentMethod.payment_id = 'nan';
     })
-    
     this.WooCommerce = WC.init();
     this.billing_shipping_same = false;
 
@@ -103,41 +135,48 @@ export class CheckoutPage implements OnInit {
   
 
   ngOnInit(): any {
-    this.storage.get("userLoginInfo").then( userData =>{
-      this.billing = this.formBuilder.group({
-        rua: [userData.billing.address_1, Validators.compose([Validators.required])],
-        numero: [, Validators.compose([Validators.required])],
-        complemento: [userData.billing.address_2, Validators.compose([Validators.required])],
-        pais: [userData.billing.country, Validators.compose([Validators.required])],
-        estado: [userData.billing.state, Validators.compose([Validators.required])],
-        cidade: [userData.billing.city, Validators.compose([Validators.required])],
-        bairro: ['', Validators.compose([Validators.required])],
-        cep: [userData.billing.postcode, Validators.compose([Validators.required])],
-        ddd: ['', Validators.compose([Validators.required])],
-        telefone: ['', Validators.compose([Validators.required])]
-      });
-      this.user = this.formBuilder.group({
-        firstName: [userData.first_name, Validators.compose([Validators.required])],
-        lastName: [userData.last_name, Validators.compose([Validators.required])],
-        email: [userData.email, Validators.compose([Validators.required, Validators.email])],
-        cpf: ['', Validators.compose([Validators.required])],
-        birthDate: ['', Validators.compose([Validators.required])],
-        sex: ['', Validators.compose([Validators.required])]
-      });
+    this.storage.get("userLogin").then( userData =>{
+      let billing = this.billing.value;
+      let shipping = this.shipping.value;
+      let user = this.user.value;
+
+      billing.rua = userData.billing.address_1;
+      billing.complemento = userData.billing.address_2;
+      billing.cidade = userData.billing.city;
+      billing.pais = userData.billing.country;
+      billing.bairro = userData.billing.neighborhood;
+      billing.estado = userData.billing.state;
+      billing.numero = userData.billing.number;
+      billing.cep = userData.billing.postcode;
+      billing.ddd = userData.billing.phone.split(')')[0].replace('(','');
+      billing.telefone = userData.billing.phone.split(')')[1];
+
+      shipping.rua = userData.shipping.address_1;
+      shipping.complemento = userData.shipping.address_2;
+      shipping.cidade = userData.shipping.city;
+      shipping.pais = userData.shipping.country;
+      shipping.bairro = userData.shipping.neighborhood;
+      shipping.estado = userData.shipping.state;
+      shipping.numero = userData.shipping.number;
+      shipping.cep = userData.shipping.postcode;
       
-      this.shipping = this.formBuilder.group({
-        rua: ['', Validators.compose([Validators.required])],
-        numero: ['', Validators.compose([Validators.required])],
-        complemento: ['', Validators.compose([Validators.required])],
-        pais: ['', Validators.compose([Validators.required])],
-        estado: ['', Validators.compose([Validators.required])],
-        cidade: ['', Validators.compose([Validators.required])],
-        bairro: ['', Validators.compose([Validators.required])],
-        cep: ['', Validators.compose([Validators.required])],
-        ddd: ['', Validators.compose([Validators.required])],
-        telefone: ['', Validators.compose([Validators.required])]
-      });
-      this.editar = true;
+
+      user.firstName = userData.first_name;
+      user.lastName = userData.billing.last_name
+      user.email = userData.email;
+      user.cpf = userData.billing.cpf;
+      user.birthDate = userData.meta_data[8].value.split('/').reverse().join('-');
+      user.sex = userData.billing.sex;
+
+
+      if(userData.billing.cnpj != ''){
+        this.cnpj = userData.billing.cnpj;
+        this.empresa = userData.billing.company;
+        this.company = true;
+      }
+      this.billing.setValue(billing);
+      this.shipping.setValue(shipping);
+      this.user.setValue(user);
     });
     
     PagSeguroDirectPayment.getPaymentMethods({
@@ -153,7 +192,7 @@ export class CheckoutPage implements OnInit {
 
 
   placeOrder() {
-    if(this.paymentMethod.payment_id =='nan'){
+    if(this.paymentMethod.payment_id == 'nan'){
       this.toastCtrl.create({
         message : "Verifique todos os campos e tente novamente",
         duration : 2000,
@@ -181,6 +220,7 @@ export class CheckoutPage implements OnInit {
     loading.present();
     comprador.senderHash = PagSeguroDirectPayment.getSenderHash();
     console.log(this.paymentMethod.payment_id);
+
     if(this.paymentMethod.payment_id == 'card'){
       let param = {
         cardNumber: this.paymentMethod.cardNumber,
@@ -247,16 +287,20 @@ export class CheckoutPage implements OnInit {
         valorEntrega : this.newOrder.valorEntrega
       };      
       console.log(JSON.stringify(cardData));
-      this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=transactions/cartao&produtos="+
+      this.http.get("http://amazoniarica.store/api.php?opt=transactions/cartao&produtos="+
       JSON.stringify(produtos)+
       "&comprador="+JSON.stringify(comprador)+
       "&valueData="+JSON.stringify(valueData)+
       "&cardData="+JSON.stringify(cardData)
       ).subscribe( data =>{
         loading.dismiss();
-        this.storage.remove("cart");
-        console.log(data.json());
-        this.navCtrl.push(CheckoutModalPage,{data: data.json()});
+
+        let modal = this.modalCtrl.create(CheckoutModalPage,{cartData: this.cartData.cartItens,data: data.json(),valueData: valueData,billing: billing,shipping:shipping,user: user});
+        modal.onWillDismiss( ()=>{
+          this.navCtrl.popToRoot();
+        });
+        modal.present();
+
       
       })
         },
@@ -270,6 +314,7 @@ export class CheckoutPage implements OnInit {
     }else if(this.paymentMethod.payment_id == 'boleto'){
       
       console.log(comprador.senderHash);
+
       comprador.cobranca.phone = { 
         area : billing.ddd, 
         number : billing.telefone
@@ -281,7 +326,7 @@ export class CheckoutPage implements OnInit {
       this.cartData.cartItens.forEach(p => {
         produtos.push({
           id : p.product.id, 
-          title : p.product.title , 
+          title : p.product.name, 
           amount: p.amount.toFixed(2) , 
           qty : p.qty 
         });
@@ -299,19 +344,25 @@ export class CheckoutPage implements OnInit {
         
       };
       valueData = { 
-        tipoEntrega : this.newOrder.tipoEntrega,
+        tipoEntrega :  this.newOrder.tipoEntrega,
         valorEntrega : this.newOrder.valorEntrega
       };
       console.log(comprador);
       console.log(valueData);
-      this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=transactions/boleto&comprador="+
+      user.cnpj = this.cnpj;
+      user.empresa = this.empresa;
+      this.http.get("http://amazoniarica.store/api.php?opt=transactions/boleto&comprador="+
       JSON.stringify(comprador)+
       "&valueData="+JSON.stringify(valueData)+
       "&produtos="+JSON.stringify(produtos)
       ).subscribe( data =>{
         loading.dismiss();
-        this.storage.remove("cart");
-        this.modalCtrl.create(CheckoutModalPage,{data: data.json()}).present();
+        let modal = this.modalCtrl.create(CheckoutModalPage,{cartData: this.cartData.cartItens,data: data.json(),valueData: valueData,billing: billing,shipping:shipping,user: user});
+        modal.onWillDismiss( ()=>{
+          this.navCtrl.popToRoot();
+        });
+        modal.present();
+        
       })
     }
 
@@ -440,6 +491,53 @@ export class CheckoutPage implements OnInit {
       });
       
   }
-  
+
+  pegaEndereco(i) {
+    if (i == '1') {
+      if (!this.billing.controls.cep.hasError('minLength')) {
+        this.http.get('http://api.postmon.com.br/v1/cep/' + this.billing.value.cep).subscribe(data => {
+          let resp = data.json();
+          let bill = this.billing.value;
+          bill.rua = resp.logradouro || '';
+          bill.cidade = resp.cidade || '';
+          bill.bairro = resp.bairro || '';
+          bill.estado = resp.estado;
+          bill.pais = 'BR' || '';
+          this.billing.setValue(bill);
+
+        }, (err => {
+          console.log(err);
+        }));
+      } else {
+        this.toastCtrl.create({
+          message: "verifique o CEP digitado",
+          duration: 3000,
+          dismissOnPageChange: true
+        }).present();
+      }
+    } else {
+      if (!this.shipping.controls.cep.hasError('minLength')) {
+        this.http.get('http://api.postmon.com.br/v1/cep/' + this.shipping.value.cep).subscribe(data => {
+          let resp = data.json();
+          let bill = this.shipping.value;
+          bill.rua = resp.logradouro || '';
+          bill.cidade = resp.cidade || '';
+          bill.bairro = resp.bairro || '';
+          bill.estado = resp.estado;
+          bill.pais = 'BR' || '';
+          this.shipping.setValue(bill);
+
+        }, (err => {
+          console.log(err);
+        }));
+      } else {
+        this.toastCtrl.create({
+          message: "verifique o CEP digitado",
+          duration: 3000,
+          dismissOnPageChange: true
+        }).present();
+      }
+    }
+  }
 }
 

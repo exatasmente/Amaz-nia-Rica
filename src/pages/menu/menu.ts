@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import {IonicPage,NavController, NavParams } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
-import { CartPage } from '../cart/cart';
+
 
 import { Storage } from '@ionic/storage/dist/storage';
-import { LoginPage } from '../login/login';
-import { OrdersPage } from '../orders/orders';
-import { AboutPage } from '../about/about';
 
-
+@IonicPage()
 @Component({
   selector: 'page-menu',
   templateUrl: 'menu.html',
@@ -27,7 +24,7 @@ export class MenuPage {
   ionViewDidEnter(){
     
     this.storage.ready().then(()=>{
-      this.storage.get("userLoginInfo").then( (userInfo)=>{
+      this.storage.get("userLogin").then( (userInfo)=>{
         if(userInfo != null){
           this.userData = userInfo;
           console.log(this.userData);
@@ -39,11 +36,13 @@ export class MenuPage {
     })
   }
   openAboutPage(){
-    this.navCtrl.push(AboutPage);
+    this.navCtrl.push('AboutPage');
   }
   openPageAvatar(){
     if(!this.hasLogin){
-      this.navCtrl.push(LoginPage);
+      this.navCtrl.push('LoginPage');
+    }else{
+      this.navCtrl.push('UserInfoPage');
     }
   }
   openHomePage(){
@@ -51,14 +50,14 @@ export class MenuPage {
 
   }
   openCartPage(){
-    this.navCtrl.push(CartPage);
+    this.navCtrl.push('CartPage');
   }
   openOrdersPage(){
-    this.navCtrl.push(OrdersPage);
+    this.navCtrl.push('OrdersPage');
   }
 
   logout(){
-    this.storage.remove("userLoginInfo").then( ()=>{
+    this.storage.remove("userLogin").then( ()=>{
       this.userData = null;
       this.hasLogin = false;
     });

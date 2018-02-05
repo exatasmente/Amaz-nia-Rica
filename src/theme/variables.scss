@@ -39,7 +39,7 @@ $colors: (
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222,
-  amazonia:  #72b817,
+  amazonia:  #205b3d,
   amazoniaText:#ffffff,
   paranoid : #484848
 );
@@ -56,7 +56,9 @@ $colors: (
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
+.ion-page > ion-content {
+  position: relative !important;
+}
 
 
 

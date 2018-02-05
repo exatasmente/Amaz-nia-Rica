@@ -6,15 +6,11 @@ import { LoadingController } from 'ionic-angular';
 import { Http } from '@angular/http';
 
 import xml2js from 'xml2js';
-import { CheckoutPage } from '../checkout/checkout';
-import { CheckoutModalPage } from '../checkout-modal/checkout-modal';
 import { AlertController } from 'ionic-angular';
-import { LoginPage } from '../login/login';
-import { SignupPage } from '../signup/signup';
 
 
 
-
+@IonicPage()
 @Component({
   selector: 'page-cart',
   templateUrl: 'cart.html',
@@ -26,6 +22,7 @@ export class CartPage {
   cep: string;
   shipmentValue: any = null;
   shipmentDate: any;
+
   constructor(public alertCtrl: AlertController, public http: Http, public toastCtrl: ToastController, public navCtrl: NavController, public navParams: NavParams, public storage: Storage, public loadingCtrl: LoadingController) {
     this.total = 0;
 
@@ -112,7 +109,7 @@ export class CartPage {
     let loading = this.loadingCtrl.create({
       content: "Aguarde..."
     });
-    loading.present();
+    //loading.present();
     this.cartItens.forEach(item => {
       height += item.height ? parseFloat(item.height) * item.qty : 0;
       width += item.width ? parseFloat(item.width) * item.qty : 0;
@@ -120,9 +117,11 @@ export class CartPage {
 
       qts += item.qty;
     });
+    let cep = "66823064";
+    console.log(cep);
     this.http.get("http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdServico=04510&nCdEmpresa&sDsSenha&sCepDestino=" +
       this.cep +
-      "&sCepOrigem=66065310&nVlAltura="
+      "&sCepOrigem=" + cep + "&nVlAltura="
       + (height >= 2 ? height : 2) +
       "&nVlLargura=" + (width >= 11 ? width : 11) +
       "&nVlDiametro=0" +
@@ -144,7 +143,7 @@ export class CartPage {
                 this.total += this.shipmentValue;
               } else {
                 this.total -= this.shipmentValue;
-                this.shipmentValue = parseFloat(response['Valor'][0]);
+                this.shipmentValue += parseFloat(response['Valor'][0]);
                 this.total += this.shipmentValue;
               }
             } else {
@@ -166,7 +165,7 @@ export class CartPage {
         });
 
       }, (error) => {
-        loading.dismiss();
+         loading.dismiss();
         this.toastCtrl.create({
           message: "Algo inesperado aconteceu, Estamos Tentando Resolver",
           closeButtonText: "Ok",
@@ -178,10 +177,10 @@ export class CartPage {
   }
 
   checkout() {
-    this.storage.ready().then( () => {
-      this.storage.get("userLoginInfo").then(data => {
+    this.storage.ready().then(() => {
+      this.storage.get("userLogin").then(data => {
         if (data != null) {
-          this.navCtrl.push(CheckoutPage, {
+          this.navCtrl.push("CheckoutPage", {
             cartData: {
               cartItens: this.cartItens,
               shippingData: { price: this.shipmentValue, date: this.shipmentDate },
@@ -196,9 +195,9 @@ export class CartPage {
               {
                 cssClass: "color: #72b817",
                 text: 'Login',
-                
+
                 handler: () => {
-                  this.navCtrl.push(LoginPage, {
+                  this.navCtrl.push('LoginPage', {
                     cartData: {
                       cartItens: this.cartItens,
                       shippingData: { price: this.shipmentValue, date: this.shipmentDate },
@@ -211,7 +210,7 @@ export class CartPage {
                 cssClass: "color: #72b817",
                 text: 'Cadastro',
                 handler: () => {
-                  this.navCtrl.push(SignupPage, {
+                  this.navCtrl.push('SignupPage', {
                     cartData: {
                       cartItens: this.cartItens,
                       shippingData: { price: this.shipmentValue, date: this.shipmentDate },
@@ -227,5 +226,5 @@ export class CartPage {
       });
     });
   }
-  
+
 }

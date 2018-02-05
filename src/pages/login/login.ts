@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage/dist/storage';
 import { Http } from '@angular/http';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
-import { MenuPage } from '../menu/menu';
-import { SignupPage } from '../signup/signup';
+
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
-import { CheckoutPage } from '../checkout/checkout';
+
 import { MyApp } from '../../app/app.component';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
-
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -38,7 +37,7 @@ export class LoginPage {
       content: "Aguarde..."
     });
     loading.present();
-    this.http.get("http://paranoidlab.xyz/amazoniarica/api/user/generate_auth_cookie?insecure=cool&username=" + username + "&password=" + password).subscribe((data1) => {
+    this.http.get("http://amazoniarica.store/api/api/user/generate_auth_cookie?insecure=cool&username=" + username + "&password=" + password).subscribe((data1) => {
       if (data1.json().status == "error") {
         loading.dismiss().then(() => {
           this.toastCtrl.create({
@@ -49,7 +48,7 @@ export class LoginPage {
 
         });
       } else {
-        this.http.get("http://paranoidlab.xyz/storeApi.php?opt=1&endpoint=customers/" + data1.json().user.id).subscribe(rep => {
+        this.http.get("http://amazoniarica.store/storeApi.php?opt=1&endpoint=customers/" + data1.json().user.id).subscribe(rep => {
           let response = rep.json();
           if (response.error) {
             loading.dismiss().then(() => {
@@ -62,10 +61,10 @@ export class LoginPage {
 
           } else {
 
-            this.storage.set("userLoginInfo", response);
+            this.storage.set("userLogin", response);
             loading.dismiss().then(() => {
               if (this.navParams.get("cartData")) {
-                this.navCtrl.push(CheckoutPage, { "cartData": this.navParams.get("cartData") });
+                this.navCtrl.push('CheckoutPage', { "cartData": this.navParams.get("cartData") });
               } else {
                 this.navCtrl.popToRoot();
 
@@ -82,7 +81,7 @@ export class LoginPage {
 
   }
   signup() {
-    this.navCtrl.push(SignupPage);
+    this.navCtrl.push('SignupPage');
   }
 
 }

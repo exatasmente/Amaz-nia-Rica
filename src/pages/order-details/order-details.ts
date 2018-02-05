@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import {IonicPage,NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
-import { CartPage } from '../cart/cart';
+
 import { WooProvider } from '../../providers/woo/woo';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { NgZone } from '@angular/core';
-
+@IonicPage()
 @Component({
   selector: 'page-order-details',
   templateUrl: 'order-details.html',
@@ -26,9 +26,9 @@ export class OrderDetailsPage {
   closeModal(){
     this.navCtrl.pop();
   }
-  openCart(){
-    this.modalCtrl.create(CartPage).present();
-  }
+  openCart(){     
+    this.navCtrl.push('CartPage');   
+  }  
 loadProducts(){
   let loading = this.loadingCtrl.create({
     content:"Carregando..."
@@ -37,19 +37,19 @@ loadProducts(){
   try{
     for(let i = 0 ; i < this.order.line_items.length ;i ++){
       this.WooCommerce.getAsync("products/"+this.order.line_items[i].product_id).then( (data)=>{
-        
+        loading.dismiss();
             this.zone.run( ()=>{
-              let aux = JSON.parse(data.body).product;
+              let aux = JSON.parse(data.body);
               console.log(aux);
               this.products.push({
-                featured_src :aux.featured_src,
+                image :aux.images[0].src,
                 name :aux.title,
                 price : aux.price,
                 quantity : this.order.line_items[i].quantity
                 
               });
               if(i+1 == this.order.line_items.length){
-                loading.dismiss();
+                
                 this.ready = true;
               }
             })
@@ -73,5 +73,11 @@ loadProducts(){
     }).present();
   }
   }
-  
+  sellerContact(){
+    this.toastCtrl.create({
+      message :"Funcionalidade não disponivél",
+      closeButtonText :"OK",
+      showCloseButton : true
+    }).present();
+  }
 }

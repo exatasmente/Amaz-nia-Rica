@@ -3,16 +3,26 @@
   <ion-navbar color="amazonia">
     <ion-title>Pedido</ion-title>
   </ion-navbar>
+  <ion-toolbar color ="amazonia" *ngIf="atual != 'aba3'">
+      <ion-item color="amazonia" >
+          <ion-label>Editar</ion-label>
+          <ion-toggle [(ngModel)]="editar" color="amazonia"></ion-toggle>
+        </ion-item>
+  
+  </ion-toolbar>
 </ion-header>
 
-<ion-content  class="page-checkout" *ngIf="editar">
+<ion-content class="page-checkout">
   <div [ngSwitch]="atual">
+      
     <div *ngSwitchCase="'aba1'">
       <ion-item-divider color="dark">Dados Pessoais</ion-item-divider>
-      <form [formGroup]="user" >
+      
+
+      <form [formGroup]="user">
         <ion-item [ngClass]="{'error-border':!user.controls.firstName.valid && user.controls.firstName.touched}">
           <ion-label stacked>Nome </ion-label>
-          <ion-input formControlName="firstName" type="text"></ion-input>
+          <ion-input formControlName="firstName" [readonly]='!editar' type="text"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="user.controls.firstName.hasError('required') && user.controls.firstName.touched">
@@ -20,7 +30,7 @@
         </ion-item>
         <ion-item [ngClass]="{'error-border':!user.controls.lastName.valid && user.controls.lastName.touched}">
           <ion-label stacked>Sobre Nome</ion-label>
-          <ion-input formControlName="lastName" type="text"></ion-input>
+          <ion-input [readonly]='!editar' formControlName="lastName" type="text"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="user.controls.lastName.hasError('required') && user.controls.lastName.touched">
@@ -29,17 +39,15 @@
 
         <ion-item [ngClass]="{'error-border':!user.controls.email.valid && user.controls.email.touched}">
           <ion-label stacked>Email</ion-label>
-          <ion-input formControlName="email" type="email"></ion-input>
+          <ion-input [readonly]='!editar' formControlName="email" type="email" (ionBlur)="emailCheck()"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="user.controls.email.hasError('required') && user.controls.email.touched">
           <p>Campo Obrigatório!</p>
         </ion-item>
-
-
         <ion-item [ngClass]="{'error-border':!user.controls.cpf.valid && user.controls.cpf.touched}">
           <ion-label stacked>CPF</ion-label>
-          <ion-input formControlName="cpf" type="number"></ion-input>
+          <ion-input [readonly]='!editar' formControlName="cpf" type="number"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="user.controls.cpf.hasError('required') && user.controls.cpf.touched">
@@ -48,7 +56,7 @@
 
         <ion-item [ngClass]="{'error-border':!user.controls.birthDate.valid && user.controls.birthDate.touched}">
           <ion-label stacked>Data de Nascimento</ion-label>
-          <ion-input formControlName="birthDate" type="date" min="1900-01-02" min="2000-01-02"></ion-input>
+          <ion-input [readonly]='!editar' formControlName="birthDate" type="date" min="1900-01-01" max="2000-01-01"></ion-input>
         </ion-item>
         <ion-item *ngIf="user.controls.birthDate.hasError('required') && user.controls.birthDate.touched">
           <p>Campo Obrigatório!</p>
@@ -62,17 +70,45 @@
             <ion-option value="F">Feminino</ion-option>
             <ion-option value="NaN">Prefiro não delarar</ion-option>
           </ion-select>
-      </ion-item>
-      
+        </ion-item>
       </form>
-      
+      <ion-item>
+        <ion-label>Pessoa Jurídica</ion-label>
+        <ion-checkbox [(ngModel)]="company"></ion-checkbox>
+      </ion-item>
+      <div *ngIf="company">
+        <ion-item>
+          <ion-label  stacked>CNPJ</ion-label>
+          <ion-input [readonly]='!editar' [(ngModel)]="cnpj" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>Empresa</ion-label>
+          <ion-input [readonly]='!editar' [(ngModel)]="empresa" type="text"></ion-input>
+        </ion-item>
+      </div>
+
+      <button [disabled]="!user.valid" (click)="prosseguir('aba2')" ion-button color="amazonia" block large>
+        Continuar
+      </button>
+
     </div>
     <div *ngSwitchCase="'aba2'">
       <ion-item-divider color="dark">Endereço de Cobrança</ion-item-divider>
       <form [formGroup]="billing" (ngSubmit)="prosseguir('aba3')">
+        <ion-item [ngClass]="{'error-border':!billing.controls.cep.valid && billing.controls.cep.touched}">
+          <ion-label stacked>CEP</ion-label>
+          <ion-input [readonly]='!editar' formControlName="cep" type="number" (ionBlur)="pegaEndereco()"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="billing.controls.cep.hasError('required') && billing.controls.cep.touched">
+          <p>Campo Obrigatório!</p>
+        </ion-item>
+        <ion-item *ngIf="billing.controls.cep.hasError('maxLength') && billing.controls.cep.touched">
+          <p>CEP Inválido!</p>
+        </ion-item>
         <ion-item [ngClass]="{'error-border':!billing.controls.rua.valid && billing.controls.rua.touched}">
           <ion-label stacked>Rua </ion-label>
-          <ion-textarea formControlName="rua" type="text"></ion-textarea>
+          <ion-textarea  [readonly]='!editar' formControlName="rua" type="text"></ion-textarea>
         </ion-item>
 
         <ion-item *ngIf="billing.controls.rua.hasError('required') && billing.controls.rua.touched">
@@ -80,7 +116,7 @@
         </ion-item>
         <ion-item [ngClass]="{'error-border':!billing.controls.numero.valid && billing.controls.numero.touched}">
           <ion-label stacked>Numero</ion-label>
-          <ion-input formControlName="numero" type="text" maxlength="7"></ion-input>
+          <ion-input [readonly]='!editar' formControlName="numero" type="text" maxlength="7"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="billing.controls.numero.hasError('required') && billing.controls.numero.touched">
@@ -95,33 +131,18 @@
         <ion-item *ngIf="billing.controls.complemento.hasError('required') && billing.controls.complemento.touched">
           <p>Campo Obrigatório!</p>
         </ion-item>
-
-        <ion-item [ngClass]="{'error-border':!billing.controls.cep.valid && billing.controls.cep.touched}">
-          <ion-label stacked>CEP</ion-label>
-          <ion-textarea formControlName="cep" type="number"></ion-textarea>
-        </ion-item>
-
-        <ion-item *ngIf="billing.controls.cep.hasError('required') && billing.controls.cep.touched">
-          <p>Campo Obrigatório!</p>
-        </ion-item>
-
-
         <ion-item>
-          <ion-label>Pais</ion-label>
-          <ion-select formControlName="pais" doneText="OK" cancelText="Cancela" color="amazonia">
-            <ion-option value="BRA">Brasil</ion-option>
-          </ion-select>
+          <ion-label stacked>Pais</ion-label>
+          <ion-input [readonly]='!editar' formControlName="pais" type="text"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label>Estado</ion-label>
-          <ion-select formControlName="estado" doneText="OK" cancelText="Cancela" color="amazonia">
-            <ion-option value="PA">Pará</ion-option>
-          </ion-select>
+          <ion-label stacked>Estado</ion-label>
+          <ion-input [readonly]='!editar' formControlName="estado" type="text"></ion-input>
         </ion-item>
 
         <ion-item [ngClass]="{'error-border':!billing.controls.cidade.valid && billing.controls.cidade.touched}">
           <ion-label stacked>Cidade</ion-label>
-          <ion-textarea formControlName="cidade" type="text"></ion-textarea>
+          <ion-input  [readonly]='!editar' formControlName="cidade" type="text"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="billing.controls.cidade.hasError('required') && shipping.controls.cidade.touched">
@@ -129,7 +150,7 @@
         </ion-item>
         <ion-item [ngClass]="{'error-border':!billing.controls.bairro.valid && billing.controls.bairro.touched}">
           <ion-label stacked>Bairro</ion-label>
-          <ion-textarea formControlName="bairro" type="text"></ion-textarea>
+          <ion-input  [readonly]='!editar' formControlName="bairro" type="text"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="billing.controls.cidade.hasError('required') && shipping.controls.cidade.touched">
@@ -138,7 +159,7 @@
         <ion-item-divider color="dark">Telefone</ion-item-divider>
         <ion-item [ngClass]="{'error-border':!billing.controls.ddd.valid && billing.controls.ddd.touched}">
           <ion-label stacked>DDD</ion-label>
-          <ion-textarea formControlName="ddd" type="number" maxlength="3"></ion-textarea>
+          <ion-input  [readonly]='!editar' formControlName="ddd" type="number" maxlength="3"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="billing.controls.ddd.hasError('required') && shipping.controls.telefone.touched">
@@ -146,7 +167,7 @@
         </ion-item>
         <ion-item [ngClass]="{'error-border':!billing.controls.telefone.valid && billing.controls.telefone.touched}">
           <ion-label stacked>Número</ion-label>
-          <ion-textarea formControlName="telefone" type="number" maxlength="9"></ion-textarea>
+          <ion-input  [readonly]='!editar' formControlName="telefone" type="number" maxlength="9"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="billing.controls.telefone.hasError('required') && shipping.controls.telefone.touched">
@@ -163,7 +184,7 @@
         <form [formGroup]="shipping">
           <ion-item [ngClass]="{'error-border':!shipping.controls.rua.valid && shipping.controls.rua.touched}">
             <ion-label stacked>Rua </ion-label>
-            <ion-textarea formControlName="rua" type="text"></ion-textarea>
+            <ion-textarea  [readonly]='!editar' formControlName="rua" type="text"></ion-textarea>
           </ion-item>
 
           <ion-item *ngIf="shipping.controls.rua.hasError('required') && shipping.controls.rua.touched">
@@ -171,7 +192,7 @@
           </ion-item>
           <ion-item [ngClass]="{'error-border':!shipping.controls.numero.valid && shipping.controls.numero.touched}">
             <ion-label stacked>Numero</ion-label>
-            <ion-input formControlName="numero" type="text" maxlength="7"></ion-input>
+            <ion-input [readonly]='!editar' formControlName="numero" type="text" maxlength="7"></ion-input>
           </ion-item>
 
           <ion-item *ngIf="shipping.controls.numero.hasError('required') && shipping.controls.numero.touched">
@@ -180,7 +201,7 @@
 
           <ion-item [ngClass]="{'error-border':!shipping.controls.complemento.valid && shipping.controls.complemento.touched}">
             <ion-label stacked>Complemento</ion-label>
-            <ion-textarea formControlName="complemento" type="text"></ion-textarea>
+            <ion-textarea  [readonly]='!editar' formControlName="complemento" type="text"></ion-textarea>
           </ion-item>
 
           <ion-item *ngIf="shipping.controls.complemento.hasError('required') && shipping.controls.complemento.touched">
@@ -189,51 +210,27 @@
 
           <ion-item [ngClass]="{'error-border':!shipping.controls.cep.valid && shipping.controls.cep.touched}">
             <ion-label stacked>CEP</ion-label>
-            <ion-textarea formControlName="cep" type="number"></ion-textarea>
+            <ion-input  [readonly]='!editar' formControlName="cep" type="number"></ion-input>
           </ion-item>
 
           <ion-item *ngIf="shipping.controls.cep.hasError('required') && shipping.controls.cep.touched">
             <p>Campo Obrigatório!</p>
           </ion-item>
-
-
           <ion-item>
-            <ion-label>Pais</ion-label>
-            <ion-select formControlName="pais" doneText="OK" cancelText="Cancela" color="amazonia">
-              <ion-option value="BRA">Brasil</ion-option>
-            </ion-select>
+            <ion-label stacked>Pais</ion-label>
+            <ion-input [readonly]='!editar' formControlName="pais" type="text"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label>Estado</ion-label>
-            <ion-select formControlName="estado" doneText="OK" cancelText="Cancela" color="amazonia">
-              <ion-option value="PA">Pará</ion-option>
-            </ion-select>
+            <ion-label stacked>Estado</ion-label>
+            <ion-input [readonly]='!editar' formControlName="estado" type="text"></ion-input>
           </ion-item>
 
-          <ion-item [ngClass]="{'error-border':!shipping.controls.cidade.valid && shipping.controls.cidade.touched}">
+          <ion-item [ngClass]="{'error-border':!shipping.controls.cidade.valid && billing.controls.cidade.touched}">
             <ion-label stacked>Cidade</ion-label>
-            <ion-textarea formControlName="cidade" type="text"></ion-textarea>
+            <ion-input  [readonly]='!editar' formControlName="cidade" type="text"></ion-input>
           </ion-item>
 
           <ion-item *ngIf="shipping.controls.cidade.hasError('required') && shipping.controls.cidade.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-
-          <ion-item-divider color="dark">Telefone</ion-item-divider>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.ddd.valid && shipping.controls.ddd.touched}">
-            <ion-label stacked>DDD</ion-label>
-            <ion-textarea formControlName="ddd" type="number" maxlength="3"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.ddd.hasError('required') && shipping.controls.telefone.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.telefone.valid && shipping.controls.telefone.touched}">
-            <ion-label stacked>Número</ion-label>
-            <ion-textarea formControlName="telefone" type="number" maxlength="9"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.telefone.hasError('required') && shipping.controls.telefone.touched">
             <p>Campo Obrigatório!</p>
           </ion-item>
         </form>
@@ -296,6 +293,8 @@
         </ion-list>
 
       </div>
+      <button ion-button block color="amazonia" (click)="prosseguir('aba3')">Continuar</button>
+      <button ion-button block color="dark" (click)="atual= 'aba1' ">Voltar</button>
     </div>
     <div *ngSwitchCase="'aba3'">
       <ion-list>
@@ -359,24 +358,10 @@
 
       </ion-list>
 
-
+      <button [disabled]="paymentMethod.payment_id == 'nan' " ion-button block color="amazonia" (click)="placeOrder()">Concluir</button>
+      <button ion-button block color="dark" (click)="atual= 'aba2' ">Voltar</button>
     </div>
-
+    
   </div>
-  <div style="height: 50px; text-align: center;"></div>
+  
 </ion-content>
-<ion-footer>
-  <div [ngSwitch]="atual">
-    <div *ngSwitchCase="'aba1'">
-      <button ion-button block color="amazonia" (click)="prosseguir('aba2')">Continuar</button>
-    </div>
-    <div *ngSwitchCase="'aba2'">
-      <button ion-button block color="amazonia" (click)="prosseguir('aba3')">Continuar</button>
-      <button ion-button block  color="dark" (click)="atual= 'aba1' ">Voltar</button>
-    </div>
-    <div *ngSwitchCase="'aba3'">
-      <button ion-button block color="amazonia" (click)="placeOrder()">Concluir</button>
-      <button ion-button block  color="dark" (click)="atual= 'aba2' ">Voltar</button>
-    </div>
-  </div>
-</ion-footer>

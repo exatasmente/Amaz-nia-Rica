@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams } from 'ionic-angular';
+import {IonicPage,NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 
-import {CartPage} from '../cart/cart';
 import { WooProvider } from '../../providers/woo/woo';
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { NgZone } from '@angular/core';
 
-
+@IonicPage()
 @Component({
   selector: 'page-product-details',
   templateUrl: 'product-details.html',
@@ -19,6 +18,7 @@ export class ProductDetailsPage {
   product :any;
   WooCommerce : any;
   related : any[] = [];
+  variations : any[] = [];
   ready:any 
   atual = "Visão Geral";
   reviews : any[];
@@ -38,30 +38,31 @@ export class ProductDetailsPage {
     
     this.WooCommerce.getAsync("products/"+this.product.id+"/reviews").then ( (data)=>{
         this.zone.run( ()=>{
-          this.reviews = JSON.parse(data.body).product_reviews;
+          this.reviews = JSON.parse(data.body);
           console.log(this.reviews);
         });
         
         
     });
-
+      
+  
   }
 
   loadRelated(event){
     let i= 0;
     let aux : any[];
     aux = [];
-
+    event.complete();
     this.product.related_ids.forEach(id => {
       i++;
       
       this.WooCommerce.getAsync("products/"+id).then ( (data2)=>{        
-      aux.push( (JSON.parse(data2.body)).product );
+      aux.push( (JSON.parse(data2.body)));
       if(i == this.product.related_ids.length){
         this.zone.run(()=>{
           this.ready = true;
           this.related = aux;
-          event.complete();
+          
           event.enable(false);
         });
         
@@ -82,11 +83,17 @@ export class ProductDetailsPage {
       
       if(data == null || data.length == 0){
         data = [];
-
+        let seller_id;
+        product.attributes.forEach(att => {
+          if(att.name == "seller_id"){
+            seller_id = att.options[0];
+          }
+        });
         data.push({
           product: product,
           qty: 1,
-          amount: parseFloat(product.price)
+          amount: parseFloat(product.price),
+          seller_id : seller_id
         })
         this.storage.set("cart",data).then(()=>{
           this.toastCtrl.create({
@@ -133,11 +140,10 @@ export class ProductDetailsPage {
     }))
   }
   openDetails(item){
-    this.navCtrl.push(ProductDetailsPage,{product:item});
+    this.navCtrl.push('ProductDetailsPage',{product:item});
   }
-
-  openCart(){
-    this.modalCtrl.create(CartPage).present();
-  }
+  openCart(){     
+    this.navCtrl.push('CartPage');   
+  }  
 
 }

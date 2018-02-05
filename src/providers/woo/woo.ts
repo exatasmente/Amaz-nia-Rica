@@ -6,13 +6,27 @@ export class WooProvider {
   wooCommerce : any;
   constructor() {
     this.wooCommerce = WC({
-      url:"http://paranoidlab.xyz/amazoniarica/",
-      consumerKey:"ck_96a8b9b00a27b30508ce7d300df990d489e1b5d8",
-      consumerSecret:"cs_0e9ab93f40e26ac82febf970ea6c1138223b5488"
-      
+      url:"http://amazoniarica.store/api",
+      consumerKey:"ck_001788083c0242f737be6e77560a01e4e779b7b7",
+      consumerSecret:"cs_81123f40e617c475c750714a22cdefe6cb38959c",
+      wpAPI: true,
+      version: 'wc/v2'
     });
   }
   init(){
     return this.wooCommerce;
   }
+  status(value) {
+    let val = {
+      'pending': 'Pendente',
+      'processing': 'Processando',
+      'on-hold': 'Em Espera',
+      'completed': 'Finalizada',
+      'cancelled': 'Cancelado',
+      'refunded': 'Reembolsado',
+      'failed': 'Falha'
+    }
+    return val[value];
+  }
+ 
 }

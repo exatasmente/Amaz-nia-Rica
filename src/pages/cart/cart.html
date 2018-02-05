@@ -25,9 +25,9 @@
   
     <ion-item>
         <ion-thumbnail item-left>
-          <img [src]="item.product.featured_src" style="width: : 60px !important; height : 60px !important;">
+          <img [src]="item.product.images[0].src" style="width: : 60px !important; height : 60px !important;">
       </ion-thumbnail>
-    <h2>{{item.product.title}}</h2>
+    <h2>{{item.product.name}}</h2>
     <p [innerHTML]="item.product.short_description"></p>
     <ion-grid>
       <ion-row>

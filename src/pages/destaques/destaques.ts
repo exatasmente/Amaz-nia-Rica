@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {IonicPage,NavController} from 'ionic-angular';
 import { WooProvider } from '../../providers/woo/woo';
 import { ToastController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
-import { ProductDetailsPage } from '../product-details/product-details';
-
-import { CartPage } from '../cart/cart';
 import { NgZone } from '@angular/core';
 
+@IonicPage()
 @Component({
   selector: 'page-destaques',
   templateUrl: 'destaques.html',
@@ -30,7 +28,7 @@ export class DestaquesPage {
     this.WooCommerce.getAsync("products").then ( (data)=>{
         try{
         this.zone.run(()=>{
-          this.products = JSON.parse(data.body).products;
+          this.products = JSON.parse(data.body);
           loading.dismiss();
         });
         
@@ -67,7 +65,7 @@ export class DestaquesPage {
     
       this.zone.run( ()=>{
         try{
-          this.products = JSON.parse(data.body).products;  
+          this.products = JSON.parse(data.body);
           
         }catch(e){
           
@@ -94,7 +92,7 @@ export class DestaquesPage {
   this.WooCommerce.getAsync("products?page="+2).then ( (data)=>{
     this.zone.run ( ()=>{
       try{
-        this.moreProducts =JSON.parse(data.body).products;
+        this.moreProducts =JSON.parse(data.body);
         event.complete();   
         
       }catch(e){
@@ -126,7 +124,7 @@ export class DestaquesPage {
     this.WooCommerce.getAsync("products?page="+this.page).then ( (data)=>{
       try{
         this.zone.run( ()=>{
-          this.moreProducts = this.moreProducts.concat(JSON.parse(data.body).products);
+          this.moreProducts = this.moreProducts.concat(JSON.parse(data.body));
           if(event != null){
             event.complete();
             if(this.loadEvent == null)
@@ -158,12 +156,12 @@ export class DestaquesPage {
 
   }
   openProductPage(product){
-    this.navCtrl.push(ProductDetailsPage,{product:product});
+    this.navCtrl.push('ProductDetailsPage',{product:product});
   }
 
-  openCart(){
-    this.modalCtrl.create(CartPage).present();
-  }
+  openCart(){     
+    this.navCtrl.push('CartPage');   
+  }  
   swipe(event) {
     if(event.direction === 2) {
       this.navCtrl.parent.select(1);

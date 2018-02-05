@@ -38,11 +38,11 @@
   <div class="menuHeaderSpacer"></div>
   <ion-grid>
     <ion-row>
-      <ion-slides speed="600" effect="fade" pager paginationType="progress" parallax>
+      <ion-slides speed="600" effect="fade" pager paginationType="progress">
         <ion-slide *ngFor="let product of products" (click)="openProductPage(product)">
           <ion-card>
-            <img [src]="product.featured_src">
-            <h1>{{product.title}}</h1>
+            <img [src]="product.images[0].src">
+            <h1>{{product.name}}</h1>
             <p [innerHTML]="product.short_description.substr(0,50)+'...'"></p>
           </ion-card>
         </ion-slide>
@@ -53,7 +53,7 @@
   <ion-list (swipe)="swipe($event)">
     <ion-item *ngFor="let product of moreProducts" (click)="openProductPage(product)">
       <ion-thumbnail item-left>
-        <img [src]="product.featured_src">
+        <img [src]="product.images[0].src">
       </ion-thumbnail>
       <h2>{{product.title}}</h2>
       <p>

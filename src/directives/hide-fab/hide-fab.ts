@@ -8,7 +8,7 @@ import { Content } from "ionic-angular";
   }
 })
 
-export class AbsoluteDrag {
+export class HideFab {
   private fabRef;
   private storedScroll: number = 0;
   private threshold: number = 10;

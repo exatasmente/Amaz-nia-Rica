@@ -11,9 +11,9 @@
   </ion-navbar>
 
 </ion-header>
-<ion-content>
+<ion-content style="background-color: #205b3d !important;">
   <img src="assets/img/logo.png" style="display:block;width:auto;height:auto;margin-left:auto;margin-right:auto;" />
-  
+  <div class="loginform">
   <form [formGroup]="authForm" (ngSubmit)="onSubmit(authForm.value)">
     <ion-item [ngClass]="{'error-border':!authForm.controls.username.valid && authForm.controls.username.touched}">
       <ion-label stacked>Nome de Usuário</ion-label>
@@ -47,16 +47,15 @@
         </ion-item>                
         -->
     <div style="margin-bottom:10px;"></div>
-    <button [disabled]="!authForm.valid" style="margin-top: 20px;" type="submit" ion-button color="amazonia" block large>
+    <button [disabled]="!authForm.valid" style="margin-top: 20px;" type="submit" ion-button color="secondary" block large>
       Login
     </button>
-    <button  ion-button color="amazoniaText" block (click)="signup()">
+  </form>
+  <button  ion-button color="amazoniaText" block (click)="signup()">
       Cadastre-se
     </button>
     <button ion-button color="danger" outline block>
       Esqueceu sua senha ?
     </button>
-    
-  </form>
-
+</div>
 </ion-content>

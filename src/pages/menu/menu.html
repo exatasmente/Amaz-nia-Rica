@@ -1,38 +1,32 @@
 <ion-menu [content]="content">
   <ion-content>
-    <div class="menuHeader">
-      <ion-item color="amazonia" (click) ="openPageAvatar()">
-          <ion-thumbnail item-left>
-              <img *ngIf="userData" [src]="userData.avatar_url === null ?'assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png' : userData.avatar_url" />
-            <img *ngIf="!userData" src="assets/img/Yd0pGe0zSmKewOfZam3B_img_avatar.png" />
-          </ion-thumbnail>
-          
-            <h2 *ngIf="hasLogin" >Olá {{userData.first_name}}</h2>                
-            <h2 *ngIf="!hasLogin">Bem Vindo(a)</h2>
-          <p *ngIf="!hasLogin">Toque Para Entrar</p>
-          
-        </ion-item>
+    <div class="menuHeader" (click)="openPageAvatar()">
+      <img class="image" src="assets/img/logo.png">
       
-      </div>
-      <div class="menuHeaderSpacer2"></div>
-      
+        <div class="card-title" *ngIf="hasLogin">Olá {{userData.first_name}}</div>
+        <div class="card-title" *ngIf="!hasLogin">Bem Vindo(a)</div>
+        <div class="card-subtitle" *ngIf="!hasLogin">Toque Para Entrar</div>
+
+    </div>
+    <div class="menuHeaderSpacer2"></div>
+
     <ion-list>
-        
+
       <ion-item text-wrap menuClose="" (click)="openHomePage()">
         <ion-icon name="home" item-left color="amazonia" large></ion-icon>
         <h2> Inicio </h2>
       </ion-item>
       <ion-item text-wrap menuClose="" (click)="openCartPage()">
-          <ion-icon name="cart" item-left color="amazonia" large></ion-icon>
-          <h2> Carrinho </h2>
+        <ion-icon name="cart" item-left color="amazonia" large></ion-icon>
+        <h2> Carrinho </h2>
       </ion-item>
-      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="openOrdersPage()" >
-          <ion-icon name="cube" item-left color="amazonia" large></ion-icon>
-          <h2> Pedidos </h2>
-        </ion-item>
-      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="logout()" >
+      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="openOrdersPage()">
+        <ion-icon name="cube" item-left color="amazonia" large></ion-icon>
+        <h2> Pedidos </h2>
+      </ion-item>
+      <ion-item *ngIf="hasLogin" text-wrap menuClose="" (click)="logout()">
         <ion-icon name="log-out" item-left color="amazonia" large></ion-icon>
-          <h2> Sair </h2>
+        <h2> Sair </h2>
       </ion-item>
       <ion-item text-wrap menuClose="" (click)="openAboutPage()">
         <ion-icon name="information-circle" item-left color="amazonia" large></ion-icon>
@@ -41,12 +35,12 @@
     </ion-list>
     <div style="margin-left: 20%;margin-top:100%;">
       <ion-note>
-        Versão : 0.0.2.0 ALFA
+        Versão : 0.0.5.0 ALFA
       </ion-note>
-  </div>  
+    </div>
 
   </ion-content>
 
 </ion-menu>
 
-<ion-nav [root]="homePage" #content ></ion-nav>
+<ion-nav [root]="homePage" #content></ion-nav>

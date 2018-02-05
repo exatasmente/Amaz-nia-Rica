@@ -48,11 +48,11 @@
 
         <ion-card-content>
           <ion-card-title>
-            {{product.title}} &nbsp;
+            {{product.name}} &nbsp;
 
             <ion-chip *ngFor="let cat of product.categories" style="margin-left:5px;">
               <ion-label color="amazonia">
-                {{cat}}
+                {{cat.name}}
               </ion-label>
             </ion-chip>
             <ion-label style="margin-left: 10%;">
@@ -61,6 +61,8 @@
               </h1>
             </ion-label>
           </ion-card-title>
+          
+          
           <button ion-button icon-left block outline large color="amazonia" (click)="addToCart(product)">
             <ion-icon name="cart"></ion-icon> Adicionar
           </button>
@@ -68,14 +70,11 @@
       </ion-card>
       <div class="relatedItens">
         <ion-card>
-          <ion-card-title>
-            Produtos Relacionados
-          </ion-card-title>
           <ion-slides>
             <ion-slide *ngFor="let item of related" (click)="openDetails(item)">
               <ion-card>
                 <ion-item>
-                  <img [src]="item.featured_src">
+                  <img [src]="item.images[0].src">
                 </ion-item>
                 <ion-card-title>
                   <b>{{item.title}}</b>
@@ -106,19 +105,23 @@
           </ion-card-title>
 
           <ion-grid *ngIf="product.attributes.length > 0">
-            <ion-row *ngFor="let att of product.attributes">
-              <ion-col col-4 style="text-align:left !important;">
-                <b> {{att.name}} </b>
-              </ion-col>
-              <ion-col col-8 style="text-align:right !important;">
-                <ion-row *ngFor="let option of att.options" style="text-align:right !important;">
-                  <span>
-                    <b> {{option}} </b>
-                  </span>
-                </ion-row>
+            <div *ngFor="let att of product.attributes">
+              <ion-row *ngIf="att.visible">
 
-              </ion-col>
-            </ion-row>
+                <ion-col col-4 style="text-align:left !important;">
+                  <b> {{att.name}} </b>
+                </ion-col>
+                <ion-col col-8 style="text-align:right !important;">
+                  <ion-row *ngFor="let option of att.options" style="text-align:right !important;">
+                    <span>
+                      <b> {{option}} </b>
+                    </span>
+                  </ion-row>
+
+                </ion-col>
+
+              </ion-row>
+            </div>
           </ion-grid>
         </ion-card-content>
       </ion-card>
@@ -131,33 +134,33 @@
 
     <div *ngSwitchCase="'Avaliações'">
       <ion-list>
-        
-          <ion-card *ngFor="let review of reviews">
 
-            <ion-grid>
+        <ion-card *ngFor="let review of reviews">
+
+          <ion-grid>
+            <ion-row>
+              <h2>{{review.reviewer_name}}</h2>
               <ion-row>
-                <h2>{{review.reviewer_name}}</h2>
-                <ion-row>
-                  <ion-col>
-                    <ion-icon *ngIf="review.rating > 0" name="star" color="amazonia"></ion-icon>
-                    <ion-icon *ngIf="review.rating > 1" name="star" color="amazonia"></ion-icon>
-                    <ion-icon *ngIf="review.rating > 2" name="star" color="amazonia"></ion-icon>
-                    <ion-icon *ngIf="review.rating > 3" name="star" color="amazonia"></ion-icon>
-                    <ion-icon *ngIf="review.rating > 4" name="star" color="amazonia"></ion-icon>
-                  </ion-col>
-                </ion-row>
-              </ion-row>
-              <ion-row>
-                <ion-col style="text-align:left !important;">
-                  <p>
-                    {{review.review}}
-                  </p>
+                <ion-col>
+                  <ion-icon *ngIf="review.rating > 0" name="star" color="amazonia"></ion-icon>
+                  <ion-icon *ngIf="review.rating > 1" name="star" color="amazonia"></ion-icon>
+                  <ion-icon *ngIf="review.rating > 2" name="star" color="amazonia"></ion-icon>
+                  <ion-icon *ngIf="review.rating > 3" name="star" color="amazonia"></ion-icon>
+                  <ion-icon *ngIf="review.rating > 4" name="star" color="amazonia"></ion-icon>
                 </ion-col>
               </ion-row>
+            </ion-row>
+            <ion-row>
+              <ion-col style="text-align:left !important;">
+                <p>
+                  {{review.review}}
+                </p>
+              </ion-col>
+            </ion-row>
 
-            </ion-grid>
-          </ion-card>
-      
+          </ion-grid>
+        </ion-card>
+
       </ion-list>
 
     </div>

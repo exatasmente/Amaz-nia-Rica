@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import {MenuPage} from '../pages/menu/menu'
 import { Http } from '@angular/http';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 
 declare var PagSeguroDirectPayment;
@@ -17,21 +18,25 @@ export class MyApp {
 
   rootPage :any = MenuPage;
   
-  constructor(public http : Http, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public screenOrientation: ScreenOrientation,public http : Http, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     
     this.initializeApp();
     
   }
 
   initializeApp() {
-    this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=session"
+    this.http.get("http://amazoniarica.store/api.php?opt=session"
     ).subscribe( (data)=>{
         let session = data.json();
         PagSeguroDirectPayment.setSessionId(session.id);
     });
     this.platform.ready().then(() => {
       
-      this.statusBar.backgroundColorByHexString('#72b817');
+        if (this.platform.is('android')) {
+          this.statusBar.backgroundColorByHexString("#33000000");
+          this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+        }
+        this.splashScreen.hide();
       this.splashScreen.hide();
     });
   }

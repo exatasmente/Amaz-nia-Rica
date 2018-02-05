@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { MenuPage } from '../menu/menu';
 import { MyApp } from '../../app/app.component';
-
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 @Component({
   selector: 'page-checkout-modal',
   templateUrl: 'checkout-modal.html',
@@ -14,10 +14,20 @@ export class CheckoutModalPage {
   boleto: any;
   userInfo: any;
   status : any;
-  constructor(public storage: Storage, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
+  billing;
+  shipping;
+  user;
+  valueData;
+  cartData;
+  constructor(public photoViewer : PhotoViewer,public storage: Storage, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
     this.data = this.navParams.get('data');
+    this.cartData = this.navParams.get('cartData');
+    this.billing = this.navParams.get('billing');
+    this.shipping = this.navParams.get('shipping');
+    this.user = this.navParams.get('user');
+    this.valueData = this.navParams.get('valueData');
     this.status = "processing";
-    this.http.get("http://paranoidlab.xyz/amazoniarica/api.php?opt=getTransaction&code="+this.data.code).subscribe( resp =>{
+    this.http.get("http://amazoniarica.store/api.php?opt=getTransaction&code="+this.data.code).subscribe( resp =>{
       let pagseguro = resp.json();
 
       this.data = pagseguro;
@@ -26,12 +36,14 @@ export class CheckoutModalPage {
          this.status = "Negado Pela Operadora";
       }
       this.storage.ready().then(() => {
-        this.storage.get("userLoginInfo").then((userLoginInfo) => {
+        this.storage.get("userLogin").then((userLoginInfo) => {
           
           this.userInfo = userLoginInfo;
           console.log(this.data)
           console.log(this.userInfo);
+        
           if (!this.data.error) {
+            
             let wooData = {
               "customer_id": this.userInfo.id,
               'payment_method': this.data.paymentMethod.type,
@@ -39,46 +51,61 @@ export class CheckoutModalPage {
               'set_paid': false,
               "status": (this.status == 'processing' ? this.status : 'failed'),
               "billing": {
-                'first_name': this.userInfo.first_name,
-                'last_name': this.userInfo.last_name,
-                "address_1": this.data.shipping.address.street,
-                "address_2": this.data.shipping.address.complement,
-                'city': this.data.shipping.address.city,
-                'state': this.data.shipping.address.state,
-                'postcode': this.data.shipping.address.postcode,
-                'country': this.data.shipping.address.country,
-                "number": this.data.shipping.address.number,
-                "neighborhood": this.data.shipping.address.district,
-                "email": this.data.sender.email,
-                'phone': "(" + this.data.sender.phone.areaCode+ ")" + this.data.sender.phone.number,
-                "persontype": "NaN",
-                "cpf": this.userInfo.cpf,
-                "rg": this.userInfo.rg,
-                "cnpj": "",
-                "birthdate": this.userInfo.birthdate,
-                "sex": this.userInfo.sex,
-                "cellphone": this.userInfo.cellphone
+                "first_name": this.user.firstName,
+                "last_name": this.user.lastName,
+                "address_1": this.billing.rua,
+                "address_2": this.billing.complemento,
+                "city": this.billing.cidade,
+                "state": this.billing.estado,
+                "postcode": this.billing.cep,
+                "country": this.billing.pais,
+                "email": this.user.email,
+                "phone": "(" + this.billing.ddd + ")" + this.billing.telefone
               },
               "shipping": {
-                'first_name': this.userInfo.first_name,
-                'last_name': this.userInfo.last_name,
-                "address_1": this.data.shipping.address.street,
-                "address_2": this.data.shipping.address.complement,
-                'city': this.data.shipping.address.city,
-                'state': this.data.shipping.address.state,
-                'postcode': this.data.shipping.address.postcode,
-                'country': this.data.shipping.address.country,
-                "number": this.data.shipping.address.number,
-                "neighborhood": this.data.shipping.address.district
-              
+                "first_name": this.user.firstName,
+                "last_name": this.user.lastName,
+                "address_1": this.shipping.rua,
+                "address_2": this.shipping.complemento,
+                "city": this.shipping.cidade,
+                "state": this.shipping.estado,
+                "postcode": this.shipping.cep,
+                "country": this.shipping.pais,
+        
               },
-              'shipping_lines': [{
-                'method_id': this.data.shipping.type,
-                'method_title': 'Correios',
-                'total': this.data.shipping.cost
-              }]
-              ,
               "meta_data": [
+                {
+                  "key": "_shipping_number",
+                  "value": this.shipping.numero
+                },
+                {
+                  "key": "_shipping_neighborhood",
+                  "value": this.shipping.bairro
+                },
+                {
+                  "key": "_billing_number",
+                  "value": this.billing.numero,
+                },
+                {
+                  "key": "_billing_neighborhood",
+                  "value": this.billing.bairro
+                },
+                {
+                  "key": "_billing_cpf",
+                  "value": this.user.cpf
+                },
+                {
+                  "key": "_billing_birthdate",
+                  "value": this.user.birthDate
+                },
+                {
+                  "key": "_billing_sex",
+                  "value": this.user.sex
+                },
+                {
+                  "key": "role",
+                  "value": "customer"
+                }, 
                 {
                   "key": "pagsegurourl",
                   "value": this.data.paymentLink
@@ -87,9 +114,21 @@ export class CheckoutModalPage {
                   "key": "pagsegurocode",
                   "value": this.data.code
 
-                }
-  
-              ],
+                },
+                {
+                  "key": "_billing_cnpj",
+                  "value": this.user.cnpj
+                },
+                {
+                  "key": "_billing_company",
+                  "value": this.user.empresa
+                }],
+              'shipping_lines': [{
+                'method_id': this.data.shipping.type,
+                'method_title': 'Correios '+this.valueData.tipoEntrega,
+                'total': this.data.shipping.cost
+              }]
+              ,
               'line_items': []
   
             };
@@ -116,11 +155,15 @@ export class CheckoutModalPage {
   
   
             console.log(wooData);
-  
-            this.http.get("http://paranoidlab.xyz/storeApi.php?opt=2&endpoint=orders&data=" + JSON.stringify(wooData)).subscribe(rep => {
+            this.http.get("http://amazoniarica.store/storeApi.php?opt=2&endpoint=orders&data=" + JSON.stringify(wooData)).subscribe(rep => {
               console.log(rep.json());
+              this.http.post("http://amazoniarica.store/sendPush.php",this.cartData).subscribe(push=>{
+                console.log(push.text());
+                this.storage.remove('cart');
+              });
+      
             });
-  
+
           }
         });
       })
@@ -134,16 +177,15 @@ export class CheckoutModalPage {
   }
 
   closeModal() {
-    if(this.navCtrl.canSwipeBack){
+      this.navCtrl.pop();
       
-      this.navCtrl.popToRoot();
-    }
+    
     
   }
   getBoleto() {
-    this.http.get('http://paranoidlab.xyz/amazoniarica/api.php?opt=getBoleto&code=' + this.data.code).subscribe(data => {
-      this.boleto = data;
-      console.log(data);
+    this.http.get('http://amazoniarica.store/api.php?opt=getBoleto&code=' + this.data.code).subscribe(data => {
+      this.boleto = data.text();
+      this.photoViewer.show(this.boleto, 'Seu Boleto', {share: true});
     });
   }
 }
