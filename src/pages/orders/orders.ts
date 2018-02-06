@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 
 import { NgZone } from '@angular/core';
-import { OrderDetailsPage } from '../order-details/order-details';
+
 import { Http } from '@angular/http';
 
 @IonicPage()
@@ -66,12 +66,14 @@ export class OrdersPage {
       }).present();
     });
   }
-
+  openSearch(){
+    this.navCtrl.push('SearchPage');
+  }
   openCart(){     
     this.navCtrl.push('CartPage');   
   }  
   openOrderDetails(order) {
-    this.modalCtrl.create(OrderDetailsPage, { "order": order }).present();
+    this.modalCtrl.create('OrderDetailsPage', { "order": order }).present();
   }
 
 }

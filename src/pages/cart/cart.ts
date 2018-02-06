@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular/';
 import { LoadingController } from 'ionic-angular';
@@ -58,7 +58,6 @@ export class CartPage {
     let qty = item.qty;
     if (qty - 1 > 0) {
       this.cartItens[i].qty = qty - 1;
-
       this.cartItens[i].amount = parseFloat(this.cartItens[i].amount) - parseFloat(this.cartItens[i].product.price);
       this.total -= parseFloat(this.cartItens[i].product.price);
     }

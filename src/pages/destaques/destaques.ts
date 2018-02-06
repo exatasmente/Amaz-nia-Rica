@@ -159,6 +159,9 @@ export class DestaquesPage {
     this.navCtrl.push('ProductDetailsPage',{product:product});
   }
 
+  openSearch(){
+    this.navCtrl.push('SearchPage');
+  }
   openCart(){     
     this.navCtrl.push('CartPage');   
   }  

@@ -1,0 +1,51 @@
+<ion-header>
+<ion-navbar color="amazonia">
+  <ion-buttons end>
+    <button ion-button icon-only (click)="closeModal()">
+      <ion-icon item-left name="close"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-title>Contato do Vendedor</ion-title>
+</ion-navbar>
+<!--
+<ion-toolbar color="amazonia">
+  <ion-segment [(ngModel)]="atual" color="amazoniaText">
+    <ion-segment-button value="aba1">
+      Informações
+    </ion-segment-button>
+    <ion-segment-button value="aba2">
+      Enviar Menssagem
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
+-->
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let product of products">
+      <ion-card>
+        <ion-thumbnail item-left>
+          <img [src]="product.image">
+        </ion-thumbnail>
+        <h2>{{product.name}} &nbsp;</h2>
+      </ion-card>
+      <ion-item>
+        <ion-grid>
+          <ion-row style="text-align:left !important;">
+            <h2>Email do Vendedor :</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{getSeller(product).email}}</p>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <h2>Telefone:</h2>
+          </ion-row>
+          <ion-row style="text-align:left !important;">
+            <p>{{getSeller(product).billing.phone}}</p>
+          </ion-row>
+
+        </ion-grid>
+      </ion-item>
+    </ion-item>
+  </ion-list>
+</ion-content>

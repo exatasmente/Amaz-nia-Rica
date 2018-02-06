@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import {IonicPage,NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
-
-
 import { Storage } from '@ionic/storage/dist/storage';
+//import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -13,53 +12,59 @@ import { Storage } from '@ionic/storage/dist/storage';
   templateUrl: 'menu.html',
 })
 export class MenuPage {
-  homePage : any;
-  hasLogin : any;
-  userData : any;
-  constructor(public storage : Storage , public modalCrtl : ModalController , public navCtrl: NavController, public navParams: NavParams) {
-    this.homePage = HomePage;
-    
+  homePage: any;
+  hasLogin: any;
+  userData: any;
+  constructor(public storage: Storage, public modalCrtl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
+    this.homePage = 'HomePage';
+
   }
 
-  ionViewDidEnter(){
-    
-    this.storage.ready().then(()=>{
-      this.storage.get("userLogin").then( (userInfo)=>{
-        if(userInfo != null){
+  ionViewDidEnter() {
+
+    this.storage.ready().then(() => {
+      this.storage.get("userLogin").then((userInfo) => {
+        if (userInfo != null) {
           this.userData = userInfo;
           console.log(this.userData);
           this.hasLogin = true;
-        }else{
+        } else {
           this.hasLogin = false;
         }
       })
     })
   }
-  openAboutPage(){
+  openAboutPage() {
     this.navCtrl.push('AboutPage');
   }
-  openPageAvatar(){
-    if(!this.hasLogin){
+  openPageAvatar() {
+    if (!this.hasLogin) {
       this.navCtrl.push('LoginPage');
-    }else{
+    } else {
       this.navCtrl.push('UserInfoPage');
     }
   }
-  openHomePage(){
-      this.navCtrl.popToRoot();
+  openHomePage() {
+    this.navCtrl.popToRoot();
 
   }
-  openCartPage(){
+  openCartPage() {
     this.navCtrl.push('CartPage');
   }
-  openOrdersPage(){
+  openOrdersPage() {
     this.navCtrl.push('OrdersPage');
   }
 
-  logout(){
-    this.storage.remove("userLogin").then( ()=>{
+  logout() {
+    this.storage.clear().then(()=>{
       this.userData = null;
       this.hasLogin = false;
+      /*firebase.auth().signOut().then(() => {
+        this.navCtrl.parent.parent.setRoot('LoginPage');
+      })*/
+
+
+
     });
   }
 }

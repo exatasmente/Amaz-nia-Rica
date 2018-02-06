@@ -28,7 +28,7 @@
             <ion-icon name="more"></ion-icon>
           </button>
           <ion-fab-list side="top">
-              <button ion-fab color="amazonia" ><ion-icon name="search"></ion-icon></button>
+              <button ion-fab color="amazonia" (click)="openSearch()" ><ion-icon name="search"></ion-icon></button>
               <button ion-fab color="amazonia" (click)="openCart()"><ion-icon name="cart"></ion-icon></button>
           </ion-fab-list>
       </ion-fab>
@@ -80,10 +80,11 @@
         
         </ion-card-content>
       </ion-card>
+      <!--
       <button ion-button block outline large color="amazonia" (click)="sellerContact()">
           Contato com o Vendedor
       </button>
-      
+    -->
       <button *ngIf="!ready" ion-button block outline large color="amazonia" (click)="loadProducts()">
           Mostrar Produtos
       </button>
@@ -216,7 +217,7 @@
               <h2>Pagamento:</h2>
             </ion-row>
             <ion-row style="text-align:left !important;">
-              <p>{{order.status}}</p>
+              <p> {{WC.status(order.status)}}</p>
             </ion-row>
             <ion-row style="text-align:left !important;">
               <h2>Moeda:</h2>
@@ -226,7 +227,8 @@
             </ion-row>
             
           </ion-grid>
-        </ion-item>          
+        </ion-item>  
+        <button *ngIf="order.payment_method_title == ''" ion-button block color="amazonia" (click)="getBoleto()">Baixar Boleto</button>        
     </div>
     
 

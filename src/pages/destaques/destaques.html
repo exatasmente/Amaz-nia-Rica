@@ -3,7 +3,11 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    
+    <ion-buttons end>
+        <button ion-button icon-only  color="light" (click)="openSearch()">
+            <ion-icon name="search"></ion-icon>
+          </button>
+    </ion-buttons>
     <ion-title>
       Amazônia Rica
     </ion-title>
@@ -19,7 +23,7 @@
         <ion-icon name="more"></ion-icon>
       </button>
       <ion-fab-list side="top">
-        <button ion-fab color="amazonia">
+        <button ion-fab color="amazonia" (click)="openSearch()">
           <ion-icon name="search"></ion-icon>
         </button>
         <button ion-fab color="amazonia" (click)="openCart()">
@@ -41,7 +45,7 @@
       <ion-slides speed="600" effect="fade" pager paginationType="progress">
         <ion-slide *ngFor="let product of products" (click)="openProductPage(product)">
           <ion-card>
-            <img [src]="product.images[0].src">
+            <img [src]="product.images[0].src" style="width: 100% !important; height: 360px !important ;">
             <h1>{{product.name}}</h1>
             <p [innerHTML]="product.short_description.substr(0,50)+'...'"></p>
           </ion-card>

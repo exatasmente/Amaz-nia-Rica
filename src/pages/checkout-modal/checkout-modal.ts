@@ -5,6 +5,9 @@ import { Storage } from '@ionic/storage';
 import { MenuPage } from '../menu/menu';
 import { MyApp } from '../../app/app.component';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
+import { IonicPage } from 'ionic-angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+@IonicPage()
 @Component({
   selector: 'page-checkout-modal',
   templateUrl: 'checkout-modal.html',
@@ -19,7 +22,7 @@ export class CheckoutModalPage {
   user;
   valueData;
   cartData;
-  constructor(public photoViewer : PhotoViewer,public storage: Storage, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private iab: InAppBrowser, public photoViewer : PhotoViewer,public storage: Storage, public http: Http, public navCtrl: NavController, public navParams: NavParams) {
     this.data = this.navParams.get('data');
     this.cartData = this.navParams.get('cartData');
     this.billing = this.navParams.get('billing');
@@ -183,9 +186,9 @@ export class CheckoutModalPage {
     
   }
   getBoleto() {
-    this.http.get('http://amazoniarica.store/api.php?opt=getBoleto&code=' + this.data.code).subscribe(data => {
-      this.boleto = data.text();
-      this.photoViewer.show(this.boleto, 'Seu Boleto', {share: true});
-    });
+      let browser =  this.iab.create(this.data.paymentLink);
+      browser.show();
+
+    
   }
 }

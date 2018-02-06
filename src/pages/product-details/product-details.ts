@@ -142,6 +142,9 @@ export class ProductDetailsPage {
   openDetails(item){
     this.navCtrl.push('ProductDetailsPage',{product:item});
   }
+  openSearch(){
+    this.navCtrl.push('SearchPage');
+  }
   openCart(){     
     this.navCtrl.push('CartPage');   
   }  

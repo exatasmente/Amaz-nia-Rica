@@ -9,15 +9,16 @@ import { OnInit } from '@angular/core';
 
 import xml2js from 'xml2js';
 import { ModalController } from 'ionic-angular';
-import { PaymentModalPage } from '../payment-modal/payment-modal';
+
 import { ToastController } from 'ionic-angular';
-import { CheckoutModalPage } from '../checkout-modal/checkout-modal';
+
 import { LoadingController } from 'ionic-angular';
 
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { IonicPage } from 'ionic-angular';
 
 declare var PagSeguroDirectPayment;
-
+@IonicPage()
 @Component({
   selector: 'page-checkout',
   templateUrl: 'checkout.html',
@@ -295,7 +296,7 @@ export class CheckoutPage implements OnInit {
       ).subscribe( data =>{
         loading.dismiss();
 
-        let modal = this.modalCtrl.create(CheckoutModalPage,{cartData: this.cartData.cartItens,data: data.json(),valueData: valueData,billing: billing,shipping:shipping,user: user});
+        let modal = this.modalCtrl.create('CheckoutModalPage',{cartData: this.cartData.cartItens,data: data.json(),valueData: valueData,billing: billing,shipping:shipping,user: user});
         modal.onWillDismiss( ()=>{
           this.navCtrl.popToRoot();
         });
@@ -327,7 +328,7 @@ export class CheckoutPage implements OnInit {
         produtos.push({
           id : p.product.id, 
           title : p.product.name, 
-          amount: p.amount.toFixed(2) , 
+          amount: p.price.toFixed(2) , 
           qty : p.qty 
         });
       });
@@ -357,7 +358,7 @@ export class CheckoutPage implements OnInit {
       "&produtos="+JSON.stringify(produtos)
       ).subscribe( data =>{
         loading.dismiss();
-        let modal = this.modalCtrl.create(CheckoutModalPage,{cartData: this.cartData.cartItens,data: data.json(),valueData: valueData,billing: billing,shipping:shipping,user: user});
+        let modal = this.modalCtrl.create('CheckoutModalPage',{cartData: this.cartData.cartItens,data: data.json(),valueData: valueData,billing: billing,shipping:shipping,user: user});
         modal.onWillDismiss( ()=>{
           this.navCtrl.popToRoot();
         });
@@ -370,7 +371,7 @@ export class CheckoutPage implements OnInit {
   setPaymentMethod(value) {
     
     if (value == 'card') {
-      let modal = this.modalCtrl.create(PaymentModalPage,{total:this.cartData.total});
+      let modal = this.modalCtrl.create('PaymentModalPage',{total:this.cartData.total});
       modal.onDidDismiss(() => {
         this.storage.get("CardData").then((cardData) => {
           this.zone.run( ()=>{

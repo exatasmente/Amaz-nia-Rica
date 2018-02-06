@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {IonicPage,NavController, NavParams } from 'ionic-angular';
-import { ProductDetailsPage } from '../product-details/product-details';
+
 import { LoadingController } from 'ionic-angular/components/loading/loading-controller';
 import { ModalController } from 'ionic-angular/components/modal/modal-controller';
 
@@ -38,7 +38,7 @@ export class ProductsbyCategoryPage {
 
   openProductPage(product){
     
-    let profileModal = this.modalCtrl.create(ProductDetailsPage,{product:product,modal:"modal"});
+    let profileModal = this.modalCtrl.create('ProductDetailsPage',{product:product,modal:"modal"});
     profileModal.present();
   
     
@@ -47,5 +47,7 @@ export class ProductsbyCategoryPage {
   openCart(){     
     this.navCtrl.push('CartPage');   
   }  
-
+  openSearch(){
+    this.navCtrl.push('SearchPage');
+  }
 }

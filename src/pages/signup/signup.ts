@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { FormControl } from '@angular/forms';
 import { NgZone } from '@angular/core';
 
+
 @IonicPage()
 @Component({
   selector: 'page-signup',
@@ -229,6 +230,7 @@ export class SignupPage {
             buttons: [{
               text: "Login",
               handler: () => {
+                //this.userProvider.adduser({email: user.email,password :user.password,displayName: user.firstName});
                 if (this.navCtrl.getPrevious().component.name == "LoginPage") {
                   this.navCtrl.pop();
                 } else {
@@ -258,7 +260,7 @@ export class SignupPage {
       this.WooCommerce.getAsync("customers/email/" + this.user.value.email).then((data => {
         let res = JSON.parse(data.body);
         console.log(res);
-        if (res.errors) {
+        if (res.status == 404) {
           validEmail = true;
 
         } else {

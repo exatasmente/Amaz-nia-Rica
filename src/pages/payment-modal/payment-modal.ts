@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import {NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { NgZone } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 
 declare var PagSeguroDirectPayment;
 
+@IonicPage()
 @Component({
   selector: 'page-payment-modal',
   templateUrl: 'payment-modal.html',

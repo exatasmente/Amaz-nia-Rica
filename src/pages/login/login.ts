@@ -9,6 +9,7 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 import { MyApp } from '../../app/app.component';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 
+
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -60,7 +61,7 @@ export class LoginPage {
             });
 
           } else {
-
+            //this.authProvider.login({email: response.email,senha : this.authForm.value.password});
             this.storage.set("userLogin", response);
             loading.dismiss().then(() => {
               if (this.navParams.get("cartData")) {

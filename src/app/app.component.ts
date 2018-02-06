@@ -3,7 +3,7 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import {MenuPage} from '../pages/menu/menu'
+
 import { Http } from '@angular/http';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
@@ -16,7 +16,7 @@ declare var PagSeguroDirectPayment;
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage :any = MenuPage;
+  rootPage :any = 'MenuPage';
   
   constructor(public screenOrientation: ScreenOrientation,public http : Http, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     
@@ -36,7 +36,7 @@ export class MyApp {
           this.statusBar.backgroundColorByHexString("#33000000");
           this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
         }
-        this.splashScreen.hide();
+       
       this.splashScreen.hide();
     });
   }

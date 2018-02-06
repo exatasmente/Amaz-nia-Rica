@@ -4,6 +4,7 @@
       <img class="image" src="assets/img/logo.png">
       
         <div class="card-title" *ngIf="hasLogin">Olá {{userData.first_name}}</div>
+        <div class="card-subtitle" *ngIf="hasLogin">Toque Para Acessar o Perfil</div>
         <div class="card-title" *ngIf="!hasLogin">Bem Vindo(a)</div>
         <div class="card-subtitle" *ngIf="!hasLogin">Toque Para Entrar</div>
 
@@ -28,10 +29,12 @@
         <ion-icon name="log-out" item-left color="amazonia" large></ion-icon>
         <h2> Sair </h2>
       </ion-item>
+      <!--
       <ion-item text-wrap menuClose="" (click)="openAboutPage()">
         <ion-icon name="information-circle" item-left color="amazonia" large></ion-icon>
         <h2> Sobre </h2>
       </ion-item>
+    -->
     </ion-list>
     <div style="margin-left: 20%;margin-top:100%;">
       <ion-note>

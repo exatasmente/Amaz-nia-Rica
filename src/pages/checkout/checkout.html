@@ -304,7 +304,7 @@
             <ion-row>
               <ion-col col-6 (click)="setPaymentMethod('card')">
                 <ion-row>
-                  <ion-icon large color="amazonia" name="ios-card"></ion-icon>
+                  <ion-icon style="font-size: 6.2em !important;" large color="amazonia" name="ios-card"></ion-icon>
                 </ion-row>
                 <ion-row>
                   <p>Cartão de Crédito</p>
@@ -313,7 +313,7 @@
 
               <ion-col col-6 (click)="setPaymentMethod('boleto')">
                 <ion-row>
-                  <ion-icon large color="amazonia" name="document"></ion-icon>
+                  <ion-icon style="font-size: 6.2em !important;" large color="amazonia" name="document"></ion-icon>
                 </ion-row>
                 <ion-row>
                   <p>Boleto Bancário</p>
@@ -327,7 +327,7 @@
 
           <ion-list>
             <ion-item>
-              <ion-thumbnail *ngIf="cardBrandImage" item-end style="min-width : 72px  !important; min-height:0px !important; ">
+              <ion-thumbnail *ngIf="cardBrandImage" item-end style="min-width : 72px  !important; min-height:0px !important;  ">
                 <img [src]="cardBrandImage" style="width:auto !important; height: auto !important; ">
               </ion-thumbnail>
               <ion-label>{{paymentMethod.cardNumber}} </ion-label>

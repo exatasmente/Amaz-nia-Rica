@@ -15,9 +15,11 @@
       <ion-segment-button value="Informações">
         Informações
       </ion-segment-button>
+      <!--
       <ion-segment-button value="Avaliações">
         Avaliações
       </ion-segment-button>
+    -->
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -28,9 +30,10 @@
       <ion-icon name="more"></ion-icon>
     </button>
     <ion-fab-list side="top">
-      <button ion-fab color="amazonia">
+      <button ion-fab color="amazonia" (click)="openSearch()" >
         <ion-icon name="search"></ion-icon>
       </button>
+      
       <button ion-fab color="amazonia" (click)="openCart()">
         <ion-icon name="cart"></ion-icon>
       </button>
@@ -42,7 +45,7 @@
       <ion-card>
         <ion-slides autoplay="3000" pager>
           <ion-slide *ngFor="let image of product.images">
-            <img [src]="image.src">
+            <img [src]="image.src" style="width: 100% !important; height: 360px !important ;">
           </ion-slide>
         </ion-slides>
 

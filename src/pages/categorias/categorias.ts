@@ -57,6 +57,9 @@ export class CategoriasPage {
     }
     
   }
+  openSearch(){
+    this.navCtrl.push('SearchPage');
+  }
   openCart(){
     this.navCtrl.push('CartPage');   
   }  

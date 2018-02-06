@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { CategoriasPage } from '../categorias/categorias';
-import { DestaquesPage } from '../destaques/destaques';
+import { IonicPage } from 'ionic-angular';
 
 
 
 
-
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -13,9 +12,9 @@ import { DestaquesPage } from '../destaques/destaques';
 export class HomePage {
   
 
-  categorias = CategoriasPage;
-  destaques = DestaquesPage;
-  
+  categorias = 'CategoriasPage';
+  destaques ='DestaquesPage';
+  produtores = 'ProdutoresPage';
   constructor() {
   
   }

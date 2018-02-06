@@ -1,0 +1,78 @@
+<ion-header [class.opaque]="showToolbar">
+  <!--Navbar-->
+  <ion-navbar color="amazonia">
+    <ion-title [hidden]="!showToolbar">
+      {{ seller.billing.company }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content (ionScroll)="onScroll($event)"  hide-fab>
+  <!--
+  <ion-fab right bottom>
+    <button ion-fab color="amazonia">
+      <ion-icon name="more"></ion-icon>
+    </button>
+    <ion-fab-list side="top">
+      <button ion-fab color="amazonia" (click)="openSearch()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+      <button ion-fab color="amazonia" (click)="openCart()">
+        <ion-icon name="cart"> </ion-icon>
+      </button>
+    </ion-fab-list>
+  </ion-fab>
+-->
+  <div class="cover header-md">
+    <div class="cover" style="background-color: #205b3d; height: 250px;" alt="cover"></div>
+    <div class="seller-title">{{ seller.billing.company }}</div>
+    <div class="seller-subtitle">{{seller.billing.email}}</div>
+    <div class="seller-subtitle2">{{seller.billing.phone}}</div>
+  </div>
+  <div style="background-color: #205b3d" margin-top>
+        <ion-list>
+          <ion-item-divider color="amazonia">Produtos</ion-item-divider>
+          <ion-item *ngFor="let product of sellerProducts" (click)="openProductPage(product)">
+            <ion-thumbnail item-left>
+              <img [src]="product.images[0].src">
+            </ion-thumbnail>
+            <h2>{{product.name}}</h2>
+            <p>
+              <span [innerHTML]="product.short_description.substr(0,30)+'...'"></span>
+              <span [innerHTML]="product.price_html"></span>
+            </p>
+            <button ion-button icon clear item-right color="amazonia">
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-item>
+        </ion-list>
+      </div>
+<!--
+  <div style="background-color: #f4f4f4" margin-top>
+    <ion-card>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header text-uppercase>
+        {{ seller.billing.company }}
+      </ion-card-header>
+      <ion-card-content>
+        Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula
+        tate urna. Maecenas massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt.
+        Vivamus et sagittis libero. Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus
+        condimentum sem. In efficitur ligula tate urna. Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna
+        sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa vel lacinia pellentesque lorem ipsum
+        dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Nullam et orci eu lorem consequat
+        tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Nullam et orci
+        eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate
+        urna. Maecenas massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus
+        et sagittis libero. Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum
+        sem. In efficitur ligula tate urna. Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc
+        rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa vel lacinia pellentesque lorem ipsum dolor.
+        Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Nullam et orci eu lorem consequat tincidunt
+        vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna.
+      </ion-card-content>
+    </ion-card>
+  </div>
+-->
+</ion-content>

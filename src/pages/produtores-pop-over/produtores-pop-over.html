@@ -1,0 +1,30 @@
+<ion-list>
+  <ion-title>Filtrar</ion-title>
+  <ion-item>
+    <ion-label>Categorias</ion-label>
+    <ion-select interface="popover" multiple="true" [(ngModel)]="categorias" doneText="OK" cancelText="Cancela" color="amazonia">
+      <ion-option *ngFor="let cat of categories " [value]="cat.id">{{cat.name}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item *ngIf="categorias.length > 0">
+    <ion-label>Sub Categorias</ion-label>
+    <ion-select multiple="true" interface="popover" [(ngModel)]="subcategorias" doneText="OK" cancelText="Cancela" color="amazonia">
+      <div *ngFor="let id of categorias">
+        <ion-option *ngFor="let cat of sub.get(id)" [value]="cat.id">{{cat.name}}</ion-option>
+      </div>
+    </ion-select>
+  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+          <button ion-button  color="amazonia" outline (click)="closePopOver(true)">Concluir</button>
+      </ion-col>
+      <ion-col col-6>
+          <button ion-button  color="danger" outline (click)="closePopOver(false)">Cancelar</button>
+      </ion-col>
+    </ion-row>
+      
+      
+    </ion-grid>
+
+</ion-list>
