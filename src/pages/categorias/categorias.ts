@@ -62,8 +62,11 @@ export class CategoriasPage {
   }
   openCart(){
     this.navCtrl.push('CartPage');   
-  }  
+  } 
   swipe(event) {
+    if(event.direction === 2) {
+      this.navCtrl.parent.select(2);
+    }
     if(event.direction === 4) {
       this.navCtrl.parent.select(0);
     }

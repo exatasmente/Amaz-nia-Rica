@@ -6,7 +6,7 @@ export class WooProvider {
   wooCommerce : any;
   constructor() {
     this.wooCommerce = WC({
-      url:"http://amazoniarica.store/api",
+      url:"http://amazoniaricaapi.000webhostapp.com/api",
       consumerKey:"ck_001788083c0242f737be6e77560a01e4e779b7b7",
       consumerSecret:"cs_81123f40e617c475c750714a22cdefe6cb38959c",
       wpAPI: true,

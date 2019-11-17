@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { Http } from '@angular/http';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { MenuPage } from '../pages/menu/menu';
 
 
 declare var PagSeguroDirectPayment;
@@ -16,7 +17,7 @@ declare var PagSeguroDirectPayment;
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage :any = 'MenuPage';
+  rootPage :any = MenuPage;
   
   constructor(public screenOrientation: ScreenOrientation,public http : Http, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     
@@ -25,7 +26,7 @@ export class MyApp {
   }
 
   initializeApp() {
-    this.http.get("http://amazoniarica.store/api.php?opt=session"
+    this.http.get("http://amazoniaricaapi.000webhostapp.com/api.php?opt=session"
     ).subscribe( (data)=>{
         let session = data.json();
         PagSeguroDirectPayment.setSessionId(session.id);

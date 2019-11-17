@@ -25,8 +25,13 @@ export class ProdutoresPage {
       });
       loading.present();
       this.WooCommerce.getAsync("customers?role=author&per_page=20").then((searchData) => {
+       
+        JSON.parse(searchData.body).forEach(seller => {
+          let aux = seller;
+          aux.image =  this.getImage(seller);
+          this.sellers.push(aux)  
+        });
         loading.dismiss();
-        this.sellers = this.sellers.concat(JSON.parse(searchData.body));
       },err=>{
         loading.dismiss();
       });
@@ -88,5 +93,19 @@ export class ProdutoresPage {
   openPopOver(event) {
     let popover = this.popOverCtrl.create('ProdutoresPopOverPage');
     popover.present();
+  }
+  swipe(event) {
+    if(event.direction === 4) {
+      this.navCtrl.parent.select(1);
+    }
+  }
+  getImage(seller){
+
+    for(let i = 0 ; i < seller.meta_data.length ; i++){
+      if(seller.meta_data[i].key=='company_image'){
+        console.log(seller.meta_data[i]);  
+        return seller.meta_data[i].value;
+      }
+    }
   }
 }

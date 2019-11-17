@@ -94,7 +94,8 @@ export class OrderDetailsPage {
   }
 
   getBoleto() {
-    let browser = this.iab.create(this.pagsegurourl);
-    browser.show();
+
+    const browser = this.iab.create(this.pagsegurourl,'_system');
+
   }
 }

@@ -62,28 +62,14 @@
           </ion-select>
         </ion-item>
       </form>
-      <ion-item>
-        <ion-label>Pessoa Jurídica</ion-label>
-        <ion-checkbox [(ngModel)]="company"></ion-checkbox>
-      </ion-item>
-      <div *ngIf="company">
-        <ion-item>
-          <ion-label stacked>CNPJ</ion-label>
-          <ion-input [(ngModel)]="cnpj" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>Empresa</ion-label>
-          <ion-input [(ngModel)]="empresa" type="text"></ion-input>
-        </ion-item>
-      </div>
-
+      
       <button [disabled]="!user.valid" (click)="prosseguir('aba2')" ion-button color="amazonia" block large>
         Continuar
       </button>
 
     </div>
     <div *ngSwitchCase="'aba2'">
-      <ion-item-divider color="dark">Endereço de Cobrança</ion-item-divider>
+      <ion-item-divider color="dark">Endereço</ion-item-divider>
       <form [formGroup]="billing" (ngSubmit)="prosseguir('aba3')">
         <ion-item [ngClass]="{'error-border':!billing.controls.cep.valid && billing.controls.cep.touched}">
           <ion-label stacked>CEP</ion-label>
@@ -146,111 +132,8 @@
         <ion-item *ngIf="billing.controls.cidade.hasError('required') && billing.controls.cidade.touched">
           <p>Campo Obrigatório!</p>
         </ion-item>
-        <ion-item-divider color="dark">Telefone</ion-item-divider>
-        <ion-item [ngClass]="{'error-border':!billing.controls.ddd.valid && billing.controls.ddd.touched}">
-          <ion-label stacked>DDD</ion-label>
-          <ion-textarea formControlName="ddd" type="number" maxlength="3"></ion-textarea>
-        </ion-item>
-
-        <ion-item *ngIf="billing.controls.ddd.hasError('required') && billing.controls.telefone.touched">
-          <p>Campo Obrigatório!</p>
-        </ion-item>
-        <ion-item [ngClass]="{'error-border':!billing.controls.telefone.valid && billing.controls.telefone.touched}">
-          <ion-label stacked>Número</ion-label>
-          <ion-textarea formControlName="telefone" type="number" maxlength="9"></ion-textarea>
-        </ion-item>
-
-        <ion-item *ngIf="billing.controls.telefone.hasError('required') && billing.controls.telefone.touched">
-          <p>Campo Obrigatório!</p>
-        </ion-item>
       </form>
-      <ion-item>
-        <ion-label>Mesmo Endereço de Entrega</ion-label>
-        <ion-checkbox [(ngModel)]="billing_shipping_same"></ion-checkbox>
-      </ion-item>
 
-      <div *ngIf="!billing_shipping_same">
-        <ion-item-divider color="dark">Endereço de Entrega</ion-item-divider>
-        <form [formGroup]="shipping">
-          <ion-item [ngClass]="{'error-border':!shipping.controls.cep.valid && shipping.controls.cep.touched}">
-            <ion-label stacked>CEP</ion-label>
-            <ion-input formControlName="cep" type="number" (ionBlur)="pegaEndereco('2')"></ion-input>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.cep.hasError('required') && shipping.controls.cep.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item *ngIf="(shipping.controls.cep.hasError('minLength') || shipping.controls.cep.hasError('maxLength')) && shipping.controls.cep.touched">
-            <p>CEP Inválido!</p>
-          </ion-item>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.rua.valid && shipping.controls.rua.touched}">
-            <ion-label stacked>Rua </ion-label>
-            <ion-textarea formControlName="rua" type="text"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.rua.hasError('required') && shipping.controls.rua.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.numero.valid && shipping.controls.numero.touched}">
-            <ion-label stacked>Numero</ion-label>
-            <ion-input formControlName="numero" type="text" maxlength="7"></ion-input>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.numero.hasError('required') && shipping.controls.numero.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-
-          <ion-item [ngClass]="{'error-border':!shipping.controls.complemento.valid && shipping.controls.complemento.touched}">
-            <ion-label stacked>Complemento</ion-label>
-            <ion-textarea formControlName="complemento" type="text"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.complemento.hasError('required') && shipping.controls.complemento.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item>
-            <ion-label stacked>Pais</ion-label>
-            <ion-input formControlName="pais" type="text"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label stacked>Estado</ion-label>
-            <ion-input formControlName="estado" type="text"></ion-input>
-          </ion-item>
-
-          <ion-item [ngClass]="{'error-border':!shipping.controls.cidade.valid && shipping.controls.cidade.touched}">
-            <ion-label stacked>Cidade</ion-label>
-            <ion-textarea formControlName="cidade" type="text"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.cidade.hasError('required') && shipping.controls.cidade.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.bairro.valid && shipping.controls.bairro.touched}">
-            <ion-label stacked>Bairro</ion-label>
-            <ion-textarea formControlName="bairro" type="text"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.cidade.hasError('required') && shipping.controls.cidade.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item-divider color="dark">Telefone</ion-item-divider>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.ddd.valid && shipping.controls.ddd.touched}">
-            <ion-label stacked>DDD</ion-label>
-            <ion-textarea formControlName="ddd" type="number" maxlength="3"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.ddd.hasError('required') && shipping.controls.telefone.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-          <ion-item [ngClass]="{'error-border':!shipping.controls.telefone.valid && shipping.controls.telefone.touched}">
-            <ion-label stacked>Número</ion-label>
-            <ion-textarea formControlName="telefone" type="number" maxlength="9"></ion-textarea>
-          </ion-item>
-
-          <ion-item *ngIf="shipping.controls.telefone.hasError('required') && shipping.controls.telefone.touched">
-            <p>Campo Obrigatório!</p>
-          </ion-item>
-        </form>
       </div>
       <div style="margin-bottom:10px;"></div>
       <button (click)="prosseguir('aba3')" ion-button color="amazonia" block large>

@@ -268,7 +268,7 @@ export class CheckoutPage implements OnInit {
         produtos.push({
           id : p.product.id, 
           title : p.product.title , 
-          amount: p.amount.toFixed(2),
+          amount: parseFloat(p.product.price).toFixed(2), 
           qty : p.qty 
         });
       });
@@ -328,7 +328,7 @@ export class CheckoutPage implements OnInit {
         produtos.push({
           id : p.product.id, 
           title : p.product.name, 
-          amount: p.price.toFixed(2) , 
+          amount: parseFloat(p.product.price).toFixed(2), 
           qty : p.qty 
         });
       });
@@ -408,6 +408,9 @@ export class CheckoutPage implements OnInit {
 
 
   calculateShipment(){
+    if(this.shippingMethod ==''){
+      return;
+    }
     let cep : any;
     if(this.billing_shipping_same){
       cep = this.billing.value.cep;

@@ -24,7 +24,9 @@
   </ion-fab>
 -->
   <div class="cover header-md">
-    <div class="cover" style="background-color: #205b3d; height: 250px;" alt="cover"></div>
+    <div class="cover" style="background-color: #205b3d; height: 200px;" alt="cover">
+      <img class="cover" [src]="seller.image" alt="cover">
+    </div>
     <div class="seller-title">{{ seller.billing.company }}</div>
     <div class="seller-subtitle">{{seller.billing.email}}</div>
     <div class="seller-subtitle2">{{seller.billing.phone}}</div>

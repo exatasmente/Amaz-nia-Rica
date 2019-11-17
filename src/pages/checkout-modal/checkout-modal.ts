@@ -186,8 +186,8 @@ export class CheckoutModalPage {
     
   }
   getBoleto() {
-      let browser =  this.iab.create(this.data.paymentLink);
-      browser.show();
+    const browser =  this.iab.create(this.data.paymentLink,'_system');
+      
 
     
   }

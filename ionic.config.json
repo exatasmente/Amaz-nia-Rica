@@ -1,16 +1,17 @@
 {
-  "name": "Amazonia Rica App",
-  "app_id": "",
-  "type": "ionic-angular",
+  "name": "Amazonia Rica",
   "integrations": {
     "cordova": {}
   },
-  "proxies": [{
-    "path": "/api",
-    "proxyUrl": "http://192.168.0.7/api.php/"
-  },{
-    "path": "/storeApi",
-    "proxyUrl": "http://192.168.0.7/storeApi.php/"
-  }]
-  
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://192.168.0.7/api.php/"
+    },
+    {
+      "path": "/storeApi",
+      "proxyUrl": "http://192.168.0.7/storeApi.php/"
+    }
+  ]
 }

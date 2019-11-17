@@ -6,7 +6,7 @@ import { ModalController } from 'ionic-angular/components/modal/modal-controller
 import { Storage } from '@ionic/storage/dist/storage';
 //import firebase from 'firebase';
 
-@IonicPage()
+
 @Component({
   selector: 'page-menu',
   templateUrl: 'menu.html',
@@ -16,7 +16,7 @@ export class MenuPage {
   hasLogin: any;
   userData: any;
   constructor(public storage: Storage, public modalCrtl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
-    this.homePage = 'HomePage';
+    this.homePage = HomePage;
 
   }
 

@@ -9,13 +9,6 @@
         max-height: 100%;
         -webkit-filter: blur(1px);
         filter:blur(1px);
-        -webkit-animation-name: slideInLeft;
-        animation-name: slideInLeft;
-        animation-iteration-count: infinite;
-        -webkit-animation-duration: 15s;
-        animation-duration: 15s ;
-        -webkit-animation-fill-mode: both;
-        animation-fill-mode: both;
     }
     
     .card-title {
@@ -39,48 +32,6 @@
 }
 
 
-
-@-webkit-keyframes slideInLeft {
-    0% {
-    -webkit-transform: translateX(-10%);
-    transform: translateX(-10%);
-    visibility: visible;
-    }
-    50%{
-        -webkit-transform: translateX(10%);
-        transform: translateX(10%);
-        visibility: visible;
-    }
-    100%{
-        -webkit-transform: translateX(-10%);
-        transform: translateX(-10%);
-        visibility: visible;
-    }
-    
-}
-@keyframes slideInLeft {
-    0% {
-        -webkit-transform: translateX(-10%);
-        transform: translateX(-10%);
-        visibility: visible;
-        }
-        50%{
-            -webkit-transform: translateX(10%);
-            transform: translateX(10%);
-            visibility: visible;
-        }
-        100%{
-            -webkit-transform: translateX(-10%);
-            transform: translateX(-10%);
-            visibility: visible;
-        }
-        
-} 
-
-.menuHeader img:hover {
-    -webkit-filter: blur(3px);
-    filter:blur(3px);
-}
 
 .menuHeaderSpacer{
     height: 10px;

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-
 @Injectable()
-export class AuthProvider {
-
+export class ServiceApi {
+  
   constructor(public http: Http) {
-
   }
-  login(userData) {
+  
+  get(){
     var promise = new Promise((resolve, reject) => {
       this.http.get("url").subscribe((resp) => {
         resolve(true);
@@ -18,20 +17,9 @@ export class AuthProvider {
 
 
     return promise;
+
   }
-  getEmail(email) {
-    var promise = new Promise((resolve, reject) => {
-      this.http.get("url").subscribe((resp) => {
-        resolve();
-
-        reject(false);
-      });
-    });
-
-
-    return promise;
-  }
-  signup(userData) {
+  create(){
     var promise = new Promise((resolve, reject) => {
       this.http.get("url").subscribe((resp) => {
         resolve(true);
@@ -39,7 +27,36 @@ export class AuthProvider {
         reject(false);
       });
     });
+
+
     return promise;
+
   }
-   
+  update(){
+    var promise = new Promise((resolve, reject) => {
+      this.http.get("url").subscribe((resp) => {
+        resolve(true);
+
+        reject(false);
+      });
+    });
+
+
+    return promise;
+
+  }
+  remove(){
+    var promise = new Promise((resolve, reject) => {
+      this.http.get("url").subscribe((resp) => {
+        resolve(true);
+
+        reject(false);
+      });
+    });
+
+
+    return promise;
+
+  }
+ 
 }
